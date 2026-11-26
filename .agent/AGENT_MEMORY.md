@@ -209,3 +209,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 17)
 
 - Router shadow log + SHADOW_GATE=20 before auto; badge/override notes.
+
+### Retrospective — 2026-11-25 (Iris Sprint 18 / post-MVP)
+
+- `@iris/push` APNs/FCM stubs, deep link, background socket → approval thread.

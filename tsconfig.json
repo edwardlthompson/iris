@@ -10,6 +10,7 @@
     { "path": "./packages/adapter-antigravity" },
     { "path": "./packages/wizard" },
     { "path": "./packages/plutus" },
+    { "path": "./packages/push" },
     { "path": "./packages/thread" },
     { "path": "./packages/ledger" },
     { "path": "./packages/pool" },

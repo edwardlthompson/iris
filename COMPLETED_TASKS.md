@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 18 — Push + Capacitor (2026-11-25)
+
+- ✅ [AGENT][LOCAL] APNs/FCM, permission flow, deep link to approval sheet — scope: apps/
+- ✅ [AGENT][LOCAL] Background socket; backgrounded app lands on right thread — scope: apps/
+
 ## Sprint 17 — Shadow → auto (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Shadow logging, 20-prompt gate, auto mode, badge, override notes — scope: packages/router

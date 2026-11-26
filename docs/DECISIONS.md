@@ -137,6 +137,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 |---|---|---|
 | S17-1 | Modes off/suggest/auto/shadow; SHADOW_GATE=20 before auto | B7 |
 | S17-2 | ShadowLog pairs suggested vs actual with optional escalation note | Done-when: paired rows |
+## 2026-11-25 — Sprint 18 push
+
+| # | Decision | Why |
+|---|---|---|
+| S18-1 | `@iris/push` FOSS stubs for APNs/FCM + memory transporter | No proprietary push SDKs on FOSS path |
+| S18-2 | Deep link `iris://approval?thread=&approval=` | Capacitor/phone lands on sheet |
+| S18-3 | BackgroundApprovalSocket records route while backgrounded | Done-when without real APNs in CI |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

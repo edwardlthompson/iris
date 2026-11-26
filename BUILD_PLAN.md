@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 2 · LOCAL 2 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **5 open**
+**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **3 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -108,8 +108,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 18 — Push + Capacitor
 
-1. 🔲 [AGENT][LOCAL] APNs/FCM, permission flow, deep link to approval sheet — scope: apps/
-2. 🔲 [AGENT][LOCAL] Background socket; backgrounded app lands on right thread — scope: apps/
+> **Sprint 18** archived in COMPLETED_TASKS.md @ `pending`.
 
 ### Open PRs (synced)
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 15 — Packaging | 2026-11-25 | Sprint 15 — Packaging |
 | Sprint 16 — Fit report | 2026-11-25 | Sprint 16 — Fit report |
 | Sprint 17 — Shadow → auto | 2026-11-25 | Sprint 17 — Shadow → auto |
+| Sprint 18 — Push + Capacitor | 2026-11-25 | Sprint 18 — Push + Capacitor |
