@@ -11,6 +11,7 @@
     { "path": "./packages/ledger" },
     { "path": "./packages/pool" },
     { "path": "./packages/router" },
-    { "path": "./apps/remote" }
+    { "path": "./apps/remote" },
+    { "path": "./packages/handoff" }
   ]
 }

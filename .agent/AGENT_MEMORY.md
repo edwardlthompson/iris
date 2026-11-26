@@ -185,3 +185,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 11)
 
 - `apps/remote` cost chip + B8 presets; pin survives storage reload.
+
+### Retrospective — 2026-11-25 (Iris Sprint 12)
+
+- `@iris/handoff` quota handoff + resume at next_step boundary.

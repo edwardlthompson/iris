@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 14 · LOCAL 14 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **17 open**
+**Remaining:** AGENT 12 · LOCAL 12 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **15 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -82,8 +82,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 12 — Handoff v1
 
-1. 🔲 [AGENT][LOCAL] handoff.v1 writer, quota-exhausted trigger, confirm, fallback target — scope: packages/protocol
-2. 🔲 [AGENT][LOCAL] Resume at next turn; pool mode may switch model only — scope: packages/
+> **Sprint 12** archived in COMPLETED_TASKS.md @ pending.
 
 ### Sprint 13 — Benchmark refresh
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 9 — Stage 1 classifier | 2026-11-25 | Sprint 9 — Stage 1 classifier |
 | Sprint 10 — Stage 2 + policy gate | 2026-11-25 | Sprint 10 — Stage 2 + policy gate |
 | Sprint 11 — Presets + cost chip | 2026-11-25 | Sprint 11 — Presets + cost chip |
+| Sprint 12 — Handoff v1 | 2026-11-25 | Sprint 12 — Handoff v1 |

@@ -1,11 +1,10 @@
 # State
 
-Last completed: sprint 11 (presets-chip)
-Next: sprint 12 (handoff-v1)
-Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/16 (base: sprint/10-stage2-policy)
+Last completed: sprint 12 (handoff-v1)
+Next: sprint 13 (benchmark-refresh)
+Branch in progress: sprint/12-handoff-v1
 Blockers: none
 Notes for the next agent:
-- `@iris/remote`: B8 presets, CostChipController (400ms debounce), pin store, i18n chip view model.
-- Stack PRs: #5–#16. Merge order matters.
-- Next: handoff.v1. Branch `sprint/12-handoff-v1` from `sprint/11-presets-chip` until #16 merges.
+- `@iris/handoff`: writeHandoff, triggerQuotaHandoff (confirm + pool samePool), planResume.
+- Stack through #16; this branch stacks on `sprint/11-presets-chip`.
+- Next: refresh-benchmarks.mjs. Branch `sprint/13-benchmark-refresh`.

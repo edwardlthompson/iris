@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 12 — Handoff v1 (2026-11-25)
+
+- ✅ [AGENT][LOCAL] handoff.v1 writer, quota-exhausted trigger, confirm, fallback target — scope: packages/protocol
+- ✅ [AGENT][LOCAL] Resume at next turn; pool mode may switch model only — scope: packages/
+
 ## Sprint 11 — Presets + cost chip (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Preset policies, chip debounce/budget colour, pin, leg/topology/pool UI — scope: apps/

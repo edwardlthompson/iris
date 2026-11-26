@@ -95,6 +95,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S11-1 | `apps/remote` holds chip logic + i18n before phone UI absorb | Scope is apps/; cursor-remote-lite comes later (B3) |
 | S11-2 | Semantic `budget-ok|warn|over` classes, no raw hex | DESIGN_GUIDE / ux-ui tokens |
 | S11-3 | 400 ms debounce + LocalStoragePinStore | Sprint done-when: pin survives reload |
+## 2026-11-25 — Sprint 12 handoff
+
+| # | Decision | Why |
+|---|---|---|
+| S12-1 | `packages/handoff` wraps protocol HandoffV1Schema | Writer/trigger/resume stay out of protocol package |
+| S12-2 | Manual `confirmed` required before quota handoff | Sprint sheet: manual confirm |
+| S12-3 | Pool topology prefers `samePool` fallbacks | Model-only switch inside one pool |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

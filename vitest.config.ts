@@ -17,6 +17,7 @@ export default defineConfig({
       "@iris/ledger": iris("ledger"),
       "@iris/pool": iris("pool"),
       "@iris/router": iris("router"),
+      "@iris/handoff": iris("handoff"),
       "@iris/remote": app("remote"),
     },
   },
