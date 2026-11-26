@@ -6,6 +6,7 @@
     { "path": "./packages/host" },
     { "path": "./packages/relay-core" },
     { "path": "./packages/adapter-acp" },
-    { "path": "./packages/adapter-claude" }
+    { "path": "./packages/adapter-claude" },
+    { "path": "./packages/thread" }
   ]
 }

@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 26 · LOCAL 26 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **29 open**
+**Remaining:** AGENT 24 · LOCAL 24 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **27 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -66,8 +66,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 6 — Thread store + replay
 
-1. 🔲 [AGENT][LOCAL] Append-only writer with seq, atomic flush, replay, redaction — scope: packages/thread
-2. 🔲 [AGENT][LOCAL] Rotation at 500 turns; fixture replay + secret redaction tests — scope: packages/thread
+> ✅ Archived in COMPLETED_TASKS.md — NDJSON append, redaction, rotate @ 500.
 
 ### Sprint 7 — Ledger + calibration
 
@@ -187,3 +186,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 3 — LAN transport | 2026-11-25 | Sprint 3 — LAN transport |
 | Sprint 4 — ACP adapter | 2026-11-25 | Sprint 4 — ACP adapter |
 | Sprint 5 — Claude adapter | 2026-11-25 | Sprint 5 — Claude adapter |
+| Sprint 6 — Thread store + replay | 2026-11-25 | Sprint 6 — Thread store + replay |

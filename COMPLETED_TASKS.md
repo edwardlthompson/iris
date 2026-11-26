@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 6 — Thread store + replay (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Append-only writer with seq, atomic flush, replay, redaction — scope: packages/thread
+- ✅ [AGENT][LOCAL] Rotation at 500 turns; fixture replay + secret redaction tests — scope: packages/thread
+
 ## Sprint 5 — Claude adapter (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Agent SDK query + canUseTool approval + quota statusline — scope: packages/adapter-claude

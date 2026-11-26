@@ -53,6 +53,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S5-1 | No `@anthropic-ai/claude-agent-sdk` dependency; `ClaudeRuntime` + `StubClaudeRuntime` | SDK is proprietary (Anthropic Commercial ToS); FOSS path forbids proprietary SDKs |
 | S5-2 | `baseUrl` / `ANTHROPIC_BASE_URL` on session options | Pool mode via LiteLLM at 127.0.0.1; matches B6 baseUrlOverride |
 | S5-3 | Stub refuses `screen`/PTY | Sprint forbids PTY except behind screen flag; FOSS stub stays headless-only |
+## 2026-11-25 — Sprint 6 thread
+
+| # | Decision | Why |
+|---|---|---|
+| S6-1 | NDJSON parts with temp+rename flush | Atomic replace without a DB; Windows-tolerant (fsync best-effort) |
+| S6-2 | Redact sk-/Bearer/PEM/long-b64 on append | Done-when requires no secret-shaped strings on disk |
+| S6-3 | Vitest aliases `@iris/*` → `packages/*/src` | Tests import protocol schemas without requiring a prior `dist` build |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.
