@@ -3,6 +3,7 @@
   "references": [
     { "path": "./packages/workspace" },
     { "path": "./packages/protocol" },
-    { "path": "./packages/host" }
+    { "path": "./packages/host" },
+    { "path": "./packages/relay-core" }
   ]
 }

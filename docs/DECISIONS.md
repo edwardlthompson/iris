@@ -17,7 +17,6 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | A2-9 | Root `BUILD_PLAN.md` keeps template tally/parallel shape; Iris sprints live in `docs/BUILD_PLAN.md` | `validate-bootstrap` requires tally markers and Parallel tables |
 | A2-10 | Iris CI job uses Node `24.22.3` (template pin); `.nvmrc` / engines stay Node 22+ | `tests/test_node_pin.py` forbids `node-version: "22"` in workflows; 24.22.3 satisfies `engines: >=22` |
 | A2-11 | Keep template OpenSSF Best Practices badge (project 14564) on README for now | `tests/test_ci_refs.py` requires it; register Iris separately later |
-
 ## 2026-11-25 — Sprint 1 protocol
 
 | # | Decision | Why |
@@ -26,7 +25,6 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S1-2 | `pool_id` and ledger `pool_id` are nullable (null in direct topology) | Direct mode has no pool; schema must still validate |
 | S1-3 | `parseWithPath` returns the first Zod issue path | Done-when requires malformed rejection with a path |
 | S1-4 | `/build` continues to sprint 1 in the same session after sprint 0 | User invoked `/build`; Iris A1 one-sprint rule yields to explicit `/build` |
-
 ## 2026-11-25 — Sprint 2 host
 
 | # | Decision | Why |
@@ -34,7 +32,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S2-1 | `MemoryKeyStore` for tests; OS keychain deferred | Sprint sheet requires keychain; Node has no portable keychain without native deps; interface is ready |
 | S2-2 | Pairing is fingerprint equality only (no transport) | Sprint 2 forbids transport; sprint 3 adds LAN |
 | S2-3 | Supervisor spawns OS children via `child_process.spawn` | Matches “managed children” without binding a port |
+## 2026-11-25 — Sprint 3 LAN
 
+| # | Decision | Why |
+|---|---|---|
+| S3-1 | `LanDiscovery` is an in-process/localhost registry, not real mDNS yet | Done-when needs paired round-trip in CI; bonjour can swap behind `Discovery` later |
+| S3-2 | Host binds `127.0.0.1` only in tests/server default | B11: host never listens publicly |
+| S3-3 | `gate_scope` treats `packages/` + `apps/` as `node` | Unscoped `packages/` was `full` and broke WSL watch-agent-gates |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

@@ -12,17 +12,11 @@ STACKS = ("android", "blender", "go", "lightroom", "node", "python", "rust", "we
 HINTS = tuple((f"examples/{s}/", (s,)) for s in STACKS) + (
     ("design-tokens/", ("web", "android")),
     ("branding/", ("web", "android")),
+    ("packages/", ("node",)),
+    ("apps/", ("node",)),
 )
-# Cross-stack blast radius only — not every scripts/ edit.
-WIDE_PREFIX = (
-    "modules/", ".github/",
-    ".cursor/hooks", ".cursor/agents",
-    ".cursor-plugin/", ".cursor/plugin",
-)
-# Agent/docs tooling — hygiene/docs gate, not full 8-stack.
-LIGHT_PREFIX = (
-    "scripts/", "tests/", "schemas/", ".cursor/rules/",
-)
+WIDE_PREFIX = ("modules/", ".github/", ".cursor/hooks", ".cursor/agents", ".cursor-plugin/", ".cursor/plugin")
+LIGHT_PREFIX = ("scripts/", "tests/", "schemas/", ".cursor/rules/")
 WIDE_NAMES = frozenset(
     "AGENTS.md CLAUDE.md GEMINI.md CONVENTIONS.md .clinerules/ "
     "bootstrap.config.json bootstrap.config.json.example TEMPLATE_INDEX.json "
@@ -35,6 +29,10 @@ DOCS_NAMES = frozenset(
     "COMPLETED_TASKS.md HUMAN_BACKLOG.md README.md SUPPORT.md CITATION.cff "
     "PROMPT_LIBRARY.md KNOWLEDGE_BASE.md LICENSE CODE_OF_CONDUCT.md "
     "SECURITY.md CODEOWNERS AGENT.md AGENT.md.example".split()
+)
+NODE_ROOT_NAMES = frozenset(
+    "package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json tsconfig.base.json "
+    "vitest.config.ts eslint.config.js prettier.config.js .npmrc .nvmrc .prettierignore".split()
 )
 EPHEMERAL = (
     "/.gradle/", "/node_modules/", "/__pycache__/", "/.pytest_cache/",
@@ -82,6 +80,9 @@ def classify(paths: list[str] | tuple[str, ...]) -> dict[str, object]:
         if hit:
             stacks.update(hit)
             continue
+        if p in NODE_ROOT_NAMES:
+            stacks.add("node")
+            continue
         if p in WIDE_NAMES or any(p.startswith(w) for w in WIDE_PREFIX):
             wide = True
             continue
@@ -127,8 +128,7 @@ def main(argv: list[str] | None = None) -> int:
             paths = [p for p in args[i + 1].split(",") if p]
             i += 1
         elif a.startswith("--paths="):
-            paths = [p for p in a.split("=", 1)[1].split(",")]
-            paths = [p for p in paths if p]
+            paths = [p for p in a.split("=", 1)[1].split(",") if p]
         i += 1
     result = classify(paths) if paths is not None else classify_repo()
     if fmt == "shell":

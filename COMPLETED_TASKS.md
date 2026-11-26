@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 3 — LAN transport (2026-11-25)
+
+- ✅ [AGENT][LOCAL] mDNS discovery + WSS framing with XSalsa20-Poly1305 — scope: packages/relay-core
+- ✅ [AGENT][LOCAL] Reconnect backoff + active-rung reporting; paired round-trip test — scope: packages/relay-core
+
 ## Sprint 2 — Host daemon + pairing (2026-11-25)
 
 - ✅ [AGENT][LOCAL] CLI entry, config, X25519 keypair/fingerprint, pairing handshake — scope: packages/host

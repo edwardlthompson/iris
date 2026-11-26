@@ -28,6 +28,16 @@ class ClassifyTests(unittest.TestCase):
         self.assertEqual(d["mode"], "stacks")
         self.assertEqual(d["stacks"], ["web"])
 
+    def test_packages_are_node(self) -> None:
+        d = classify(["packages/relay-core/src/relay.ts", "apps/phone/src/main.ts"])
+        self.assertEqual(d["mode"], "stacks")
+        self.assertEqual(d["stacks"], ["node"])
+
+    def test_monorepo_root_is_node(self) -> None:
+        d = classify(["package.json", "pnpm-lock.yaml", "tsconfig.json"])
+        self.assertEqual(d["mode"], "stacks")
+        self.assertEqual(d["stacks"], ["node"])
+
     def test_web_and_android(self) -> None:
         d = classify(["examples/web/src/a.ts", "examples/android/app/src/main/java/Foo.kt"])
         self.assertEqual(d["mode"], "stacks")

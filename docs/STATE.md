@@ -1,11 +1,11 @@
 # State
 
-Last completed: sprint 2 (host-daemon-pairing) — PR https://github.com/edwardlthompson/iris/pull/7
-Next: sprint 3 (lan-transport)
-Branch in progress: none
-Blockers: none (template `watch-agent-gates --scope auto` exit 2 on WSL web/typescript-linux-x64 — Iris uses `pnpm lint`/`pnpm test`)
+Last completed: sprint 3 (lan-transport)
+Next: sprint 4 (acp-adapter)
+Branch in progress: sprint/03-lan-transport
+Blockers: none
 Notes for the next agent:
-- `@iris/host` (portunus): X25519 + 6-digit fingerprint pairing, MemoryKeyStore (OS keychain deferred), Supervisor maxConcurrent=4 / idleTtl=90s, SIGTERM shutdown, JSON logs, CLI `iris-host`.
-- Product gates: `pnpm lint` && `pnpm test`. Do not bind ports / transport until sprint 3.
-- Branch stacks on sprint/01 work; open a PR against main after #6 merges or include both.
-- Next: `packages/relay-core` LAN only (docs/BUILD_PLAN.md Sprint 3). Branch `sprint/03-lan-transport`.
+- `@iris/relay-core`: LAN rung only, Memory/LanDiscovery, WSS + XSalsa20-Poly1305 frames, reconnect backoff, active-rung reporting. Tests: round-trip + drop/reconnect.
+- `gate_scope.py` maps `packages/` and `apps/` → node stack (avoids full 8-stack WSL fail).
+- Real multicast DNS deferred; LanDiscovery is localhost registry with the same interface.
+- Next: `packages/adapter-acp`. Branch `sprint/04-acp-adapter`.
