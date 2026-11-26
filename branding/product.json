@@ -1,23 +1,23 @@
 {
-  "mode": "template",
-  "name": "Golden Path",
-  "short_name": "GoldenPath",
-  "tagline": "FOSS apps with a clear path from idea to release",
-  "pitch": "Golden Path is the reference product identity shipped with agent-project-bootstrap: a privacy-respecting FOSS stack with design tokens, CI guardrails, and agent-ready sprints so you can go from template to a shippable app without reinventing the foundation.",
+  "mode": "product",
+  "name": "Iris",
+  "short_name": "Iris",
+  "tagline": "Self-hosted phone remote for coding agents with cost-aware routing",
+  "pitch": "Iris is a self-hosted phone remote (PWA) for coding agents with cost-aware routing: proteus picks the cheapest sufficient leg, chrysaor optionally fronts a litellm pool on localhost, ACP unlocks many CLIs, and e2ee pairing keeps the host off the public internet — no Iris account, no hosted backend.",
   "features": [
-    "Cross-stack design tokens with light, dark, and system themes",
-    "Labeled BUILD_PLAN sprints for humans, agents, and CI",
-    "Web PWA and Android FOSS golden-path stubs ready to prune or extend",
-    "Security defaults: Dependabot, CodeQL, gitleaks, and weekly triage docs",
-    "Replaceable branding kit — swap logos and colors when your identity is ready"
+    "Cost-aware routing (proteus) — cheapest agent that can finish the prompt",
+    "Transparent dollars and tokens on the remote before you send",
+    "Direct or pool topology; chrysaor + litellm bound to 127.0.0.1 only",
+    "ACP multi-agent unlock plus native legs where needed",
+    "E2EE pairing, transport ladder, ledger calibration, handoff on quota exhaustion"
   ],
   "quick_start": [
-    "Clone the repo and run `./scripts/init-project.sh` (or `.\\scripts\\init-project.ps1` on Windows).",
-    "Open your coding agent and follow `docs/START_HERE.md`. First-time walk: `docs/help/TOUR.md` (Cursor: `/tour`).",
-    "Set `branding/product.json` `mode` to `product`, fill name/tagline/pitch, then run `python3 scripts/generate-project-readme.py`."
+    "Clone the repo and run `pnpm install`.",
+    "Read `docs/STATE.md`, then `docs/BUILD_PLAN.md` for the next sprint.",
+    "Run `pnpm lint` and `pnpm test`. Pages demo: https://edwardlthompson.github.io/iris/"
   ],
-  "install": "Requirements depend on your active stack (Node 20+, Python 3.11+, Android SDK). See the active `modules/{stack}/MODULE.md` and `examples/{stack}/README.md`.",
-  "usage": "Use `/bootstrap` for Sprint 0, `/build` for features, and `/verify` before merge. Edit colors in `design-tokens/design-tokens.json` and logos in `branding/assets/`, then run `python3 scripts/sync-design-tokens.py`.",
+  "install": "Node 22+ and pnpm. `pnpm install` at the repo root. Optional LiteLLM for pool topology binds to 127.0.0.1 only — see docs/BUILD_PLAN.md.",
+  "usage": "Start the host daemon, pair the phone PWA over LAN, send prompts with the cost chip visible. Choose direct or pool per repo. Agents: one sprint per session from docs/BUILD_PLAN.md.",
   "urls": {
     "docs": "docs/START_HERE.md",
     "contributing": "CONTRIBUTING.md",

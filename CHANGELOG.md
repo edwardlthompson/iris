@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] — Iris product MVP + post-MVP (2026-11-26)
+
+### Added
+
+* Self-hosted phone remote monorepo (`packages/*`, `apps/phone`, `apps/remote`) with cost-aware routing
+* Cursor adapter with credit-aware best-model selection; exhausted legs skipped
+* Host LAN relay + pairing banner; phone PWA pair sheet for ADB/LAN smoke
+* Packaging dry-run recipes (APK/MSI/deb stubs), plutus fit report, shadow→auto, push stubs
+
 ## [1.13.2](https://github.com/edwardlthompson/agent-project-bootstrap/compare/v1.13.1...v1.13.2) (2026-11-22)
 
 

@@ -23,3 +23,4 @@ export {
 } from "./modes.js";
 export { ShadowLog, pairShadow, type ShadowPair } from "./shadow.js";
 export { buildBadge, modeAllowsAutoRoute, type AutoBadge } from "./badge.js";
+export { pickBestAvailable, type RankedLeg } from "./available.js";

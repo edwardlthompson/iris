@@ -14,6 +14,7 @@ export default defineConfig({
       "@iris/adapter-acp": iris("adapter-acp"),
       "@iris/adapter-claude": iris("adapter-claude"),
       "@iris/adapter-antigravity": iris("adapter-antigravity"),
+      "@iris/adapter-cursor": iris("adapter-cursor"),
       "@iris/thread": iris("thread"),
       "@iris/ledger": iris("ledger"),
       "@iris/pool": iris("pool"),

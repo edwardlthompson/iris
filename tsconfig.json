@@ -8,6 +8,7 @@
     { "path": "./packages/adapter-acp" },
     { "path": "./packages/adapter-claude" },
     { "path": "./packages/adapter-antigravity" },
+    { "path": "./packages/adapter-cursor" },
     { "path": "./packages/wizard" },
     { "path": "./packages/plutus" },
     { "path": "./packages/push" },

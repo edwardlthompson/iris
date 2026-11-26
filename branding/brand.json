@@ -1,7 +1,7 @@
 {
   "icon": "branding/assets/app-icon-1024.png",
-  "icon_sha256": "ec5e9f9a50291c3e9833cfc1e7bcda87954097bebe26726bb63b0922a9461f99",
+  "icon_sha256": "f3a6249252fef86f4cf592bc6a603f873d38fd4abe0cdd7a0cfc537a0f23fbd0",
   "source": "owned",
-  "brand_name": "Golden Path",
+  "brand_name": "Iris",
   "tokens": "config/tokens.json"
 }

@@ -13,6 +13,7 @@ export default tseslint.config(
       "modules/**",
       "branding/**",
       "packaging/**",
+      "apps/phone/www/**",
       "argus/**",
       "scripts/**",
       "state/**",

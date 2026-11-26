@@ -16,7 +16,10 @@
     "test:benchmarks": "node --test scripts/refresh-benchmarks.test.mjs",
     "test:packaging": "node --test packaging/verify-artifacts.test.mjs",
     "typecheck": "tsc -b",
-    "build": "pnpm -r run build"
+    "build": "pnpm -r run build",
+    "host": "pnpm --filter @iris/host build && pnpm --filter @iris/host start",
+    "phone": "node scripts/serve-phone.mjs",
+    "dev:pair": "node scripts/dev-pair.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

@@ -6,12 +6,100 @@
     <meta name="theme-color" content="#1a1a1a" />
     <title>Iris</title>
     <link rel="manifest" href="./manifest.webmanifest" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #12141a;
+        --fg: #e8eaef;
+        --muted: #9aa3b2;
+        --accent: #5b8cff;
+        --ok: #1a7f37;
+        --err: #cf222e;
+        font-family: "Segoe UI", system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(1200px 600px at 20% -10%, #1e2a44, var(--bg));
+        color: var(--fg);
+        min-height: 100dvh;
+      }
+      main {
+        max-width: 28rem;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 3rem;
+      }
+      h1 {
+        font-size: 2rem;
+        letter-spacing: 0.04em;
+        margin: 0 0 0.35rem;
+      }
+      .lede {
+        color: var(--muted);
+        margin: 0 0 1.5rem;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 0.35rem;
+      }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.85rem 0.9rem;
+        border-radius: 0.6rem;
+        border: 1px solid #2a3140;
+        background: #0e1117;
+        color: var(--fg);
+        font-size: 1.25rem;
+        letter-spacing: 0.2em;
+        text-align: center;
+      }
+      button {
+        margin-top: 0.9rem;
+        width: 100%;
+        padding: 0.9rem;
+        border: 0;
+        border-radius: 0.6rem;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      button:disabled {
+        opacity: 0.5;
+      }
+      #status {
+        margin-top: 1rem;
+        min-height: 1.5rem;
+        color: var(--muted);
+      }
+      #status.ok {
+        color: var(--ok);
+      }
+      #status.err {
+        color: var(--err);
+      }
+      .meta {
+        margin-top: 2rem;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+    </style>
   </head>
   <body>
-    <main id="app">
+    <main>
       <h1>Iris</h1>
-      <p>Self-hosted phone remote for coding agents.</p>
-      <div id="wizard-root" data-step="welcome"></div>
+      <p class="lede">Self-hosted phone remote. Routes to the best leg you still have credits for — Cursor first when that is what you hold.</p>
+      <form id="pair-form">
+        <label for="code">Host pairing code</label>
+        <input id="code" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required autocomplete="one-time-code" />
+        <label for="host" style="margin-top: 0.9rem">Host WebSocket (LAN)</label>
+        <input id="host" name="host" style="letter-spacing: normal; font-size: 0.95rem; text-align: left" placeholder="ws://192.168.x.x:7842" />
+        <button type="submit">Pair</button>
+      </form>
+      <p id="status" role="status"></p>
+      <p class="meta">After pair: approvals and prompts flow through the host. Exhausted models are skipped automatically.</p>
     </main>
     <script type="module" src="./boot.js"></script>
   </body>
