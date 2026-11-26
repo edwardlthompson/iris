@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: "24.22.3"
       - name: Refresh benchmarks
@@ -31,7 +31,7 @@ jobs:
           exit 0
       - name: Open needs-review PR when guardrails fail
         if: hashFiles('docs/BENCHMARKS.needs-review.md') != ''
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "chore(benchmarks): needs review after refresh guardrail"
           title: "chore(benchmarks): needs review"
@@ -42,7 +42,7 @@ jobs:
           labels: needs-review
       - name: Open update PR when table changed
         if: hashFiles('docs/BENCHMARKS.needs-review.md') == ''
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "chore(benchmarks): refresh CursorBench table"
           title: "chore(benchmarks): refresh CursorBench"
