@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 1 · HUMAN 0 · ADB 0 · **1 open**
+**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 0 · **0 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -115,7 +115,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 > Auto-managed. Do not hand-edit rows inside the markers.
 
 <!-- open-prs-sync:begin -->
-- 🔲 [AUTO] Merge Dependabot [#4](https://github.com/edwardlthompson/iris/pull/4) (Bump the github-actions group with 3 updates)
+_No open Dependabot or Release Please PRs._
 <!-- open-prs-sync:end -->
 
 ### Template gaps (synced)
