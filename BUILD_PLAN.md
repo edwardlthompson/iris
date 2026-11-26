@@ -30,14 +30,12 @@ Self-hosted phone remote for coding agents with cost-aware routing (direct or po
 Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysaor
 <!-- product-brief-sync:end -->
 
-> **Sprint 0–3** archived in COMPLETED_TASKS.md (bootstrap → protocol → host → LAN).
+> **Sprint 0–4** archived in COMPLETED_TASKS.md (bootstrap → protocol → host → LAN → ACP).
 
-### Sprint 4 — ACP adapter
+### Sprint 5 — Claude adapter
 
-<!-- parallel_exception: single package packages/adapter-acp; see docs/BUILD_PLAN.md Sprint 4 -->
-
-1. 🔲 [AGENT][LOCAL] JSON-RPC stdio ACP: initialise, session, prompt, tools, cancel — scope: packages/adapter-acp
-2. 🔲 [AGENT][LOCAL] Fixture agent + streaming/approval/cancel tests; baseUrlOverride flag — scope: packages/adapter-acp
+1. 🔲 [AGENT][LOCAL] Agent SDK query + canUseTool approval + quota statusline — scope: packages/adapter-claude
+2. 🔲 [AGENT][LOCAL] Headless session tests; ANTHROPIC_BASE_URL / baseUrlOverride — scope: packages/adapter-claude
 
 ### Open PRs (synced)
 
@@ -93,3 +91,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 1 — Protocol + schemas | 2026-11-25 | Sprint 1 — Protocol + schemas |
 | Sprint 2 — Host daemon + pairing | 2026-11-25 | Sprint 2 — Host daemon + pairing |
 | Sprint 3 — LAN transport | 2026-11-25 | Sprint 3 — LAN transport |
+| Sprint 4 — ACP adapter | 2026-11-25 | Sprint 4 — ACP adapter |

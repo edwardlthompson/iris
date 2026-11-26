@@ -149,3 +149,11 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-09 (Argus Parts 1–5)
 
 - Argus foundation: `brand.json` + `app-icon-1024.png`, contract v2, five hygiene gates; rules SoT + `rules.manifest.json`; fleet/briefs planner; YOLO off by default; remote console `enabled: false`. Template does not ship `yolo.on`.
+
+### Retrospective — 2026-11-25 (Iris Sprint 3)
+
+- `@iris/relay-core`: LAN WSS + XSalsa20-Poly1305, LanDiscovery stub, reconnect backoff; `gate_scope` maps `packages/`+`apps/` → node.
+
+### Retrospective — 2026-11-25 (Iris Sprint 4)
+
+- `@iris/adapter-acp`: NDJSON JSON-RPC + FixtureAgent (stream/approval/cancel); `baseUrlOverride` on Iris capabilities.

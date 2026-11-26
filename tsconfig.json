@@ -4,6 +4,7 @@
     { "path": "./packages/workspace" },
     { "path": "./packages/protocol" },
     { "path": "./packages/host" },
-    { "path": "./packages/relay-core" }
+    { "path": "./packages/relay-core" },
+    { "path": "./packages/adapter-acp" }
   ]
 }

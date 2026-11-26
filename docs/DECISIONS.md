@@ -39,6 +39,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S3-1 | `LanDiscovery` is an in-process/localhost registry, not real mDNS yet | Done-when needs paired round-trip in CI; bonjour can swap behind `Discovery` later |
 | S3-2 | Host binds `127.0.0.1` only in tests/server default | B11: host never listens publicly |
 | S3-3 | `gate_scope` treats `packages/` + `apps/` as `node` | Unscoped `packages/` was `full` and broke WSL watch-agent-gates |
+## 2026-11-25 — Sprint 4 ACP
+
+| # | Decision | Why |
+|---|---|---|
+| S4-1 | In-process PassThrough fixture instead of spawning a CLI | Sprint done-when is scripted stream/approval/cancel; no real agent binary in CI |
+| S4-2 | Iris `baseUrlOverride` advertised on fixture init + `ACP_CAPABILITIES` | B6 pool gate; not a core ACP field, carried as Iris leg capability |
+| S4-3 | Protocol version `1` in initialize | Matches current agentclientprotocol.com client examples used by CLI agents |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

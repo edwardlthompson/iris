@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 4 — ACP adapter (2026-11-25)
+
+- ✅ [AGENT][LOCAL] JSON-RPC stdio ACP: initialise, session, prompt, tools, cancel — scope: packages/adapter-acp
+- ✅ [AGENT][LOCAL] Fixture agent + streaming/approval/cancel tests; baseUrlOverride flag — scope: packages/adapter-acp
+
 ## Sprint 3 — LAN transport (2026-11-25)
 
 - ✅ [AGENT][LOCAL] mDNS discovery + WSS framing with XSalsa20-Poly1305 — scope: packages/relay-core
