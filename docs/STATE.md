@@ -1,11 +1,11 @@
 # State
 
-Last completed: sprint 18 (push-capacitor)
-Next: none (product AGENT board empty — Dependabot AUTO remains)
+Last completed: sprint 18 (push-capacitor) — all product sprints on `main`
+Next: none (board empty)
 Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/23 (base: sprint/17-shadow-auto)
+PR: none open
 Blockers: none
 Notes for the next agent:
-- Post-MVP 14–18 shipped as stacked PRs #19–#23. Merge order: #5…#23.
-- README pitch edits are in stash `readme-pitch` on the old branch lineage — pop onto a docs branch if desired.
-- Remaining board: Dependabot AUTO rows only.
+- `main` fast-forwarded to sprint/18 tip; Dependabot #1–#4 squash-merged.
+- Stacked sprint PRs #5/#8–#23 closed as superseded by the tip FF.
+- README pitch may still be in stash `readme-pitch` if not yet applied.
