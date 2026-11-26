@@ -86,7 +86,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 13 — Benchmark refresh
 
-> **Sprint 13** archived in COMPLETED_TASKS.md @ pending.
+> **Sprint 13** archived in COMPLETED_TASKS.md @ `83ac224`.
 
 > **MVP cut line** — sprints 0–13 are the usable product. 14–18 are post-MVP.
 
