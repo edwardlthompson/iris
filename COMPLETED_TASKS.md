@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 16 — Fit report (2026-11-25)
+
+- ✅ [AGENT][LOCAL] plutus metrics, dominance, card, report, empty/apply/keep-two — scope: packages/plutus
+- ✅ [AGENT][LOCAL] Per-pool and per-model reporting; B9 acceptance list — scope: packages/plutus
+
 ## Sprint 15 — Packaging (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Capacitor wrapper, unsigned APK, MSI tray, deb+systemd, first-run wizard — scope: apps/

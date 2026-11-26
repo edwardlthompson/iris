@@ -124,6 +124,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S15-2 | Capacitor shell lives in `apps/phone` with config + www | Sprint 18 can deepen push without re-homing |
 | S15-3 | `@iris/wizard` first-run; LiteLLM step only when topology=pool | Optional component disabled unless pool chosen |
 | S15-4 | `gate_scope` maps `packaging/` → node | Keep feature-gate scoped like packages/apps |
+## 2026-11-25 — Sprint 16 plutus
+
+| # | Decision | Why |
+|---|---|---|
+| S16-1 | Dominance needs TASK_GATE (20) + SIGNAL_DAYS (14) + key for winner | B9 anti-noise |
+| S16-2 | Card cooldown one per repo per week; auto-apply off by default | Appendix F #6 |
+| S16-3 | Pool report flags overpriced when $/task > 1 and passRate < 0.5 | Simple worth heuristic for v1 |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

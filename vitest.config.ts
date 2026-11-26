@@ -20,6 +20,7 @@ export default defineConfig({
       "@iris/router": iris("router"),
       "@iris/handoff": iris("handoff"),
       "@iris/wizard": iris("wizard"),
+      "@iris/plutus": iris("plutus"),
       "@iris/remote": app("remote"),
       "@iris/phone": app("phone"),
     },

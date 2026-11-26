@@ -201,3 +201,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 15)
 
 - Capacitor `apps/phone`, packaging dry-run stubs, `@iris/wizard` first-run + optional LiteLLM.
+
+### Retrospective — 2026-11-25 (Iris Sprint 16)
+
+- `@iris/plutus` B9 metrics/dominance/card/pool report; apply tap required.

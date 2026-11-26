@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 6 · LOCAL 6 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **9 open**
+**Remaining:** AGENT 4 · LOCAL 4 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **7 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -100,8 +100,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 16 — Fit report
 
-1. 🔲 [AGENT][LOCAL] plutus metrics, dominance, card, report, empty/apply/keep-two — scope: packages/plutus
-2. 🔲 [AGENT][LOCAL] Per-pool and per-model reporting; B9 acceptance list — scope: packages/plutus
+> **Sprint 16** archived in COMPLETED_TASKS.md @ `pending`.
 
 ### Sprint 17 — Shadow → auto
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 13 — Benchmark refresh | 2026-11-25 | Sprint 13 — Benchmark refresh |
 | Sprint 14 — Antigravity adapter | 2026-11-25 | Sprint 14 — Antigravity adapter |
 | Sprint 15 — Packaging | 2026-11-25 | Sprint 15 — Packaging |
+| Sprint 16 — Fit report | 2026-11-25 | Sprint 16 — Fit report |
