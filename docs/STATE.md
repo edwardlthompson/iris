@@ -2,9 +2,10 @@
 
 Last completed: sprint 13 (benchmark-refresh)
 Next: sprint 14 (antigravity-adapter)
-Branch in progress: sprint/13-benchmark-refresh
+Branch in progress: none
+PR: https://github.com/edwardlthompson/iris/pull/18 (base: sprint/12-handoff-v1)
 Blockers: none
 Notes for the next agent:
-- `scripts/refresh-benchmarks.mjs` + core lib; weekly `.github/workflows/benchmarks.yml`; seed `docs/BENCHMARKS.md`.
-- MVP cut line reached (sprints 0–13). Post-MVP: 14–18.
-- Stack through #17; this branch stacks on `sprint/12-handoff-v1`.
+- MVP cut reached (sprints 0–13). `scripts/refresh-benchmarks.mjs`, weekly workflow, `docs/BENCHMARKS.md`.
+- Stack PRs: #5–#18. Merge order matters.
+- Post-MVP next: Antigravity adapter. Branch `sprint/14-antigravity` from `sprint/13-benchmark-refresh` until #18 merges.
