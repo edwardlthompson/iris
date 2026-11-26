@@ -2,10 +2,11 @@
 
 Last completed: sprint 3 (lan-transport)
 Next: sprint 4 (acp-adapter)
-Branch in progress: sprint/03-lan-transport
+Branch in progress: none
+PR: https://github.com/edwardlthompson/iris/pull/8 (base: sprint/02-host-daemon)
 Blockers: none
 Notes for the next agent:
 - `@iris/relay-core`: LAN rung only, Memory/LanDiscovery, WSS + XSalsa20-Poly1305 frames, reconnect backoff, active-rung reporting. Tests: round-trip + drop/reconnect.
 - `gate_scope.py` maps `packages/` and `apps/` → node stack (avoids full 8-stack WSL fail).
 - Real multicast DNS deferred; LanDiscovery is localhost registry with the same interface.
-- Next: `packages/adapter-acp`. Branch `sprint/04-acp-adapter`.
+- Next: `packages/adapter-acp`. Branch `sprint/04-acp-adapter` from `sprint/03-lan-transport` until #8 merges.
