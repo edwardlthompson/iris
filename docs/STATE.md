@@ -1,11 +1,10 @@
 # State
 
-Last completed: sprint 15 (packaging)
-Next: sprint 16 (fit-report)
+Last completed: sprint 16 (fit-report)
+Next: sprint 17 (shadow-auto)
 Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/20 (base: sprint/14-antigravity)
+PR: https://github.com/edwardlthompson/iris/pull/21 (base: sprint/15-packaging)
 Blockers: none
 Notes for the next agent:
-- Packaging dry-runs write `dist/packaging-artifacts/` (also ignore `packaging/.artifacts/`). Wizard in `@iris/wizard`. Capacitor shell `apps/phone`.
-- Stack PRs through #20. Merge order matters.
-- Next: Sprint 16 plutus fit report. Branch `sprint/16-fit-report` from `sprint/15-packaging` until #20 merges.
+- `@iris/plutus` B9 fit report. Stack PRs through #21. Merge order matters.
+- Next: Sprint 17 shadow→auto. Branch from `sprint/16-fit-report` until merged.
