@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **3 open**
+**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 1 · HUMAN 0 · ADB 0 · **1 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -116,8 +116,6 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 <!-- open-prs-sync:begin -->
 - 🔲 [AUTO] Merge Dependabot [#4](https://github.com/edwardlthompson/iris/pull/4) (Bump the github-actions group with 3 updates)
-- 🔲 [AUTO] Merge Dependabot [#3](https://github.com/edwardlthompson/iris/pull/3) (Bump the android-dependencies group in /examples/android with 3 updates)
-- 🔲 [AUTO] Merge Dependabot [#1](https://github.com/edwardlthompson/iris/pull/1) (Bump the node-dependencies group in /examples/node with 5 updates)
 <!-- open-prs-sync:end -->
 
 ### Template gaps (synced)
