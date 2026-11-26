@@ -1,11 +1,11 @@
 # State
 
-Last completed: sprint 14 (antigravity-adapter)
-Next: sprint 15 (packaging)
-Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/19 (base: sprint/13-benchmark-refresh)
+Last completed: sprint 15 (packaging)
+Next: sprint 16 (fit-report)
+Branch in progress: sprint/15-packaging
+PR: (open after push)
 Blockers: none
 Notes for the next agent:
-- `@iris/adapter-antigravity`: headless:false, IdeProbe, `ide_closed` disables leg; policyGate skips `available: false`.
-- Stack PRs: #5–#19. Merge order matters.
-- Next: Sprint 15 packaging. Branch `sprint/15-packaging` from `sprint/14-antigravity` until #19 merges.
+- Packaging dry-runs write `dist/packaging-artifacts/`. Wizard in `@iris/wizard`. Capacitor shell `apps/phone`.
+- Stack PRs through #19 then this. Merge order matters.
+- Next: Sprint 16 plutus fit report. Branch from `sprint/15-packaging` until merged.

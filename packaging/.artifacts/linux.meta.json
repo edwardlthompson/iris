@@ -1,0 +1,10 @@
+{
+  "kind": "linux-deb-systemd",
+  "unit": "iris.service",
+  "litellmComponent": "optional-disabled",
+  "litellmBind": "127.0.0.1",
+  "dryRun": true,
+  "unitBytes": 319,
+  "controlBytes": 301,
+  "builtAt": "2026-11-26T03:21:05.183Z"
+}

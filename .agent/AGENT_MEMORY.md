@@ -197,3 +197,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 14)
 
 - `@iris/adapter-antigravity` headless:false; ide_closed → gate skips; routing continues.
+
+### Retrospective — 2026-11-25 (Iris Sprint 15)
+
+- Capacitor `apps/phone`, packaging dry-run stubs, `@iris/wizard` first-run + optional LiteLLM.

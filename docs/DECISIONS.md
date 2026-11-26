@@ -116,6 +116,14 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S14-1 | Antigravity is a FOSS custom driver + injectable IdeProbe (not a proprietary SDK) | headless:false; IDE may be absent in CI |
 | S14-2 | Closed IDE → `available: false` + `disabledReason: ide_closed` on LegCandidacy | Policy gate skips the leg; routing continues |
 | S14-3 | Default probe matches process-name substrings `antigravity` | Simple, overridable; tests inject fixed probes |
+## 2026-11-25 — Sprint 15 packaging
+
+| # | Decision | Why |
+|---|---|---|
+| S15-1 | Dry-run stub artifacts under `dist/packaging-artifacts/` | CI has no Android SDK / WiX; `dist/` already gitignored |
+| S15-2 | Capacitor shell lives in `apps/phone` with config + www | Sprint 18 can deepen push without re-homing |
+| S15-3 | `@iris/wizard` first-run; LiteLLM step only when topology=pool | Optional component disabled unless pool chosen |
+| S15-4 | `gate_scope` maps `packaging/` → node | Keep feature-gate scoped like packages/apps |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

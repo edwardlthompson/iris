@@ -1,0 +1,10 @@
+Iris unsigned APK stub
+{
+  "kind": "android-unsigned-apk",
+  "appId": "com.edwardlthompson.iris",
+  "source": "apps/phone",
+  "capacitor": true,
+  "signed": false,
+  "dryRun": true,
+  "builtAt": "2026-11-26T03:21:05.100Z"
+}

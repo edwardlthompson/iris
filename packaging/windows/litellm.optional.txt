@@ -1,0 +1,3 @@
+Optional LiteLLM component for Iris pool topology.
+Bind address: 127.0.0.1:4000 only.
+Disabled unless the first-run wizard selects pool mode.

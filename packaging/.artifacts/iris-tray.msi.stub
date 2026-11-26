@@ -1,0 +1,11 @@
+Iris tray MSI stub
+{
+  "kind": "windows-msi-tray",
+  "product": "Iris",
+  "tray": true,
+  "litellmComponent": "optional-disabled",
+  "litellmBind": "127.0.0.1",
+  "dryRun": true,
+  "wxsBytes": 1146,
+  "builtAt": "2026-11-26T03:21:05.143Z"
+}

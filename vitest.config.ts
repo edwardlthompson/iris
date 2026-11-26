@@ -19,7 +19,9 @@ export default defineConfig({
       "@iris/pool": iris("pool"),
       "@iris/router": iris("router"),
       "@iris/handoff": iris("handoff"),
+      "@iris/wizard": iris("wizard"),
       "@iris/remote": app("remote"),
+      "@iris/phone": app("phone"),
     },
   },
   test: {

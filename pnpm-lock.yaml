@@ -52,6 +52,19 @@ importers:
         specifier: ^3.24.1
         version: 3.25.76
 
+  apps/phone:
+    dependencies:
+      '@iris/remote':
+        specifier: workspace:*
+        version: link:../remote
+      '@iris/wizard':
+        specifier: workspace:*
+        version: link:../../packages/wizard
+    devDependencies:
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.20.7)
+
   apps/remote:
     dependencies:
       '@iris/protocol':
@@ -292,6 +305,28 @@ importers:
         version: 2.1.9(@types/node@22.20.7)
 
   packages/thread:
+    dependencies:
+      '@iris/protocol':
+        specifier: workspace:*
+        version: link:../protocol
+      zod:
+        specifier: ^3.24.1
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.7
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(postcss@8.5.33)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.20.7)
+
+  packages/wizard:
     dependencies:
       '@iris/protocol':
         specifier: workspace:*

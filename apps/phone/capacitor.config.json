@@ -1,0 +1,11 @@
+{
+  "appId": "com.edwardlthompson.iris",
+  "appName": "Iris",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

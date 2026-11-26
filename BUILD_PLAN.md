@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 8 · LOCAL 8 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **11 open**
+**Remaining:** AGENT 6 · LOCAL 6 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **9 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -96,8 +96,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 15 — Packaging
 
-1. 🔲 [AGENT][LOCAL] Capacitor wrapper, unsigned APK, MSI tray, deb+systemd, first-run wizard — scope: apps/
-2. 🔲 [AGENT][LOCAL] Each artifact installs; wizard completes pairing; optional LiteLLM — scope: packaging/
+> **Sprint 15** archived in COMPLETED_TASKS.md @ `pending`.
 
 ### Sprint 16 — Fit report
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 12 — Handoff v1 | 2026-11-25 | Sprint 12 — Handoff v1 |
 | Sprint 13 — Benchmark refresh | 2026-11-25 | Sprint 13 — Benchmark refresh |
 | Sprint 14 — Antigravity adapter | 2026-11-25 | Sprint 14 — Antigravity adapter |
+| Sprint 15 — Packaging | 2026-11-25 | Sprint 15 — Packaging |

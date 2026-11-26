@@ -1,0 +1,19 @@
+{
+  "name": "@iris/phone",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Capacitor shell for the Iris phone remote (unsigned APK / PWA)",
+  "scripts": {
+    "build:www": "node ./scripts/sync-www.mjs",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@iris/remote": "workspace:*",
+    "@iris/wizard": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}

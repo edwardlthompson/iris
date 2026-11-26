@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 15 — Packaging (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Capacitor wrapper, unsigned APK, MSI tray, deb+systemd, first-run wizard — scope: apps/
+- ✅ [AGENT][LOCAL] Each artifact installs; wizard completes pairing; optional LiteLLM — scope: packaging/
+
 ## Sprint 14 — Antigravity adapter (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Custom IDE driver, headless:false, disabled-state when IDE closed — scope: packages/adapter-antigravity

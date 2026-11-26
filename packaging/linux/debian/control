@@ -1,0 +1,9 @@
+Package: iris
+Version: 0.0.0
+Section: devel
+Priority: optional
+Architecture: amd64
+Maintainer: edwardlthompson <edwardleethompson@gmail.com>
+Depends: systemd
+Description: Iris self-hosted phone remote for coding agents
+ Host daemon, tray-less CLI, optional LiteLLM for pool topology (localhost only).
