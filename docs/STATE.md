@@ -1,12 +1,10 @@
 # State
 
-Last completed: sprint 6 (thread-store)
-Next: sprint 7 (ledger)
-Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/11 (base: sprint/05-claude-adapter)
+Last completed: sprint 7 (ledger)
+Next: sprint 8 (topology-pool)
+Branch in progress: sprint/07-ledger
 Blockers: none
 Notes for the next agent:
-- `@iris/thread`: NDJSON append + atomic rename flush, redaction, rotate at 500, replay.
-- Vitest resolves `@iris/*` via `vitest.config.ts` aliases (no dist required for tests).
-- Stack PRs: #5–#11. Merge order matters.
-- Next: `packages/ledger`. Branch `sprint/07-ledger` from `sprint/06-thread-store` until #11 merges.
+- `@iris/ledger`: LedgerWriter + CalibrationTable; actuals override leg reference; shadow skips calibrate.
+- Stack PRs through #11; this branch stacks on `sprint/06-thread-store`.
+- Next: `packages/pool` (chrysaor). Branch `sprint/08-topology-pool`.

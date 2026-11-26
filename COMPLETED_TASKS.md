@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 7 — Ledger + calibration (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Row writer with topology/pool_id, calibration, estimate-versus-actual — scope: packages/ledger
+- ✅ [AGENT][LOCAL] Shadow flag; session row overrides reference estimate — scope: packages/ledger
+
 ## Sprint 6 — Thread store + replay (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Append-only writer with seq, atomic flush, replay, redaction — scope: packages/thread

@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 24 · LOCAL 24 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **27 open**
+**Remaining:** AGENT 22 · LOCAL 22 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **25 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -30,48 +30,39 @@ Self-hosted phone remote for coding agents with cost-aware routing (direct or po
 Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysaor
 <!-- product-brief-sync:end -->
 
-> Full product index also in [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md) §A3. Sprints 0–4 details archived in COMPLETED_TASKS.md.
+> Full product index also in [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md) §A3. Finished rows live in COMPLETED_TASKS.md.
 
 ### Sprint 0 — Bootstrap
 
-1. ✅ [AGENT][LOCAL] Create repo from agent-project-bootstrap; topics; clone — scope: .
-2. ✅ [AGENT][LOCAL] Replace README; write docs/BUILD_PLAN.md, STATE.md, DECISIONS.md — scope: docs/
-3. ✅ [AGENT][LOCAL] Scaffold pnpm monorepo (Node 22, vitest, eslint, prettier, tsup, zod) — scope: packages/workspace
-4. ✅ [AGENT][LOCAL] Add Iris CI job; keep template hygiene gates green — scope: .github/workflows/ci.yml
-5. ✅ [AUTO] Sprint 0 sign-off: `pnpm lint` · `pnpm test` · CI green on PR
+> **Sprint 0** archived in COMPLETED_TASKS.md @ `9054c56`.
 
 ### Sprint 1 — Protocol + schemas
 
-1. ✅ [AGENT][LOCAL] Zod schemas for events, handoff.v1, ledger, capabilities, provenance, Pool, ModelCard — scope: packages/protocol
-2. ✅ [AGENT][LOCAL] Round-trip + rejection tests; full-thread fixture — scope: packages/protocol
+> **Sprint 1** archived in COMPLETED_TASKS.md @ `9054c56`.
 
 ### Sprint 2 — Host daemon + pairing
 
-1. ✅ [AGENT][LOCAL] CLI entry, config, X25519 keypair/fingerprint, pairing handshake — scope: packages/host
-2. ✅ [AGENT][LOCAL] Supervisor maxConcurrent/idleTtl, structured logs, SIGTERM clean — scope: packages/host
+> **Sprint 2** archived in COMPLETED_TASKS.md @ `9054c56`.
 
 ### Sprint 3 — LAN transport
 
-1. ✅ [AGENT][LOCAL] mDNS discovery + WSS framing with XSalsa20-Poly1305 — scope: packages/relay-core
-2. ✅ [AGENT][LOCAL] Reconnect backoff + active-rung reporting; paired round-trip test — scope: packages/relay-core
+> **Sprint 3** archived in COMPLETED_TASKS.md @ `9054c56`.
 
 ### Sprint 4 — ACP adapter
 
-1. ✅ [AGENT][LOCAL] JSON-RPC stdio ACP: initialise, session, prompt, tools, cancel — scope: packages/adapter-acp
-2. ✅ [AGENT][LOCAL] Fixture agent + streaming/approval/cancel tests; baseUrlOverride flag — scope: packages/adapter-acp
+> **Sprint 4** archived in COMPLETED_TASKS.md @ `9054c56`.
 
 ### Sprint 5 — Claude adapter
 
-> ✅ Archived in COMPLETED_TASKS.md — FOSS `ClaudeRuntime` + stub (no proprietary Agent SDK).
+> **Sprint 5** archived in COMPLETED_TASKS.md @ `9054c56`.
 
 ### Sprint 6 — Thread store + replay
 
-> ✅ Archived in COMPLETED_TASKS.md — NDJSON append, redaction, rotate @ 500.
+> **Sprint 6** archived in COMPLETED_TASKS.md @ `9054c56`.
 
 ### Sprint 7 — Ledger + calibration
 
-1. 🔲 [AGENT][LOCAL] Row writer with topology/pool_id, calibration, estimate-versus-actual — scope: packages/ledger
-2. 🔲 [AGENT][LOCAL] Shadow flag; session row overrides reference estimate — scope: packages/ledger
+> **Sprint 7** archived in COMPLETED_TASKS.md @ pending.
 
 ### Sprint 8 — Topology + pool layer
 
@@ -187,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 4 — ACP adapter | 2026-11-25 | Sprint 4 — ACP adapter |
 | Sprint 5 — Claude adapter | 2026-11-25 | Sprint 5 — Claude adapter |
 | Sprint 6 — Thread store + replay | 2026-11-25 | Sprint 6 — Thread store + replay |
+| Sprint 7 — Ledger + calibration | 2026-11-25 | Sprint 7 — Ledger + calibration |

@@ -13,6 +13,7 @@ export default defineConfig({
       "@iris/adapter-acp": iris("adapter-acp"),
       "@iris/adapter-claude": iris("adapter-claude"),
       "@iris/thread": iris("thread"),
+      "@iris/ledger": iris("ledger"),
     },
   },
   test: {

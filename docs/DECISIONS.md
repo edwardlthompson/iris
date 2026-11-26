@@ -60,6 +60,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S6-1 | NDJSON parts with temp+rename flush | Atomic replace without a DB; Windows-tolerant (fsync best-effort) |
 | S6-2 | Redact sk-/Bearer/PEM/long-b64 on append | Done-when requires no secret-shaped strings on disk |
 | S6-3 | Vitest aliases `@iris/*` → `packages/*/src` | Tests import protocol schemas without requiring a prior `dist` build |
+## 2026-11-25 — Sprint 7 ledger
+
+| # | Decision | Why |
+|---|---|---|
+| S7-1 | Calibration keyed by `vendor`+`model` (leg) | Matches ledger row fields; actuals replace reference est for next draft |
+| S7-2 | Shadow rows write but skip calibration | Shadow must not poison live estimates |
+| S7-3 | NDJSON append with temp+rename | Same durability pattern as `@iris/thread` |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.
