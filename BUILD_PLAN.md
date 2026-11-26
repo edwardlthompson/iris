@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 1 · LOCAL 1 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 0 · **1 open**
+**Remaining:** AGENT 1 · LOCAL 1 · CLOUD 0 · AUTO 1 · HUMAN 0 · ADB 0 · **2 open**
 <!-- /remaining-tally -->
 
 ### Product (do not drift)
@@ -88,7 +88,7 @@ _No cloud agent items._
 > **Triage 2026-11-19:** Dependabot #145/#147 and Release Please #148 (v1.13.1) merged — open-PRs lane empty.
 
 <!-- open-prs-sync:begin -->
-_No open Dependabot or Release Please PRs._
+- 🔲 [AUTO] Merge Dependabot [#1](https://github.com/edwardlthompson/iris/pull/1) (Bump the node-dependencies group in /examples/node with 5 updates)
 <!-- open-prs-sync:end -->
 
 ### Template gaps (synced)
