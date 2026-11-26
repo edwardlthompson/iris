@@ -2,9 +2,10 @@
 
 Last completed: sprint 12 (handoff-v1)
 Next: sprint 13 (benchmark-refresh)
-Branch in progress: sprint/12-handoff-v1
+Branch in progress: none
+PR: https://github.com/edwardlthompson/iris/pull/17 (base: sprint/11-presets-chip)
 Blockers: none
 Notes for the next agent:
 - `@iris/handoff`: writeHandoff, triggerQuotaHandoff (confirm + pool samePool), planResume.
-- Stack through #16; this branch stacks on `sprint/11-presets-chip`.
-- Next: refresh-benchmarks.mjs. Branch `sprint/13-benchmark-refresh`.
+- Stack PRs: #5–#17. Merge order matters.
+- Next: refresh-benchmarks.mjs (MVP cut). Branch `sprint/13-benchmark-refresh` from `sprint/12-handoff-v1` until #17 merges.
