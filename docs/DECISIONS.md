@@ -131,6 +131,12 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S16-1 | Dominance needs TASK_GATE (20) + SIGNAL_DAYS (14) + key for winner | B9 anti-noise |
 | S16-2 | Card cooldown one per repo per week; auto-apply off by default | Appendix F #6 |
 | S16-3 | Pool report flags overpriced when $/task > 1 and passRate < 0.5 | Simple worth heuristic for v1 |
+## 2026-11-25 — Sprint 17 shadow→auto
+
+| # | Decision | Why |
+|---|---|---|
+| S17-1 | Modes off/suggest/auto/shadow; SHADOW_GATE=20 before auto | B7 |
+| S17-2 | ShadowLog pairs suggested vs actual with optional escalation note | Done-when: paired rows |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

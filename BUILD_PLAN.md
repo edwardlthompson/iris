@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 4 · LOCAL 4 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **7 open**
+**Remaining:** AGENT 2 · LOCAL 2 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **5 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -104,8 +104,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 17 — Shadow → auto
 
-1. 🔲 [AGENT][LOCAL] Shadow logging, 20-prompt gate, auto mode, badge, override notes — scope: packages/router
-2. 🔲 [AGENT][LOCAL] Shadow paired rows; auto offered only past the gate — scope: packages/router
+> **Sprint 17** archived in COMPLETED_TASKS.md @ `pending`.
 
 ### Sprint 18 — Push + Capacitor
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 14 — Antigravity adapter | 2026-11-25 | Sprint 14 — Antigravity adapter |
 | Sprint 15 — Packaging | 2026-11-25 | Sprint 15 — Packaging |
 | Sprint 16 — Fit report | 2026-11-25 | Sprint 16 — Fit report |
+| Sprint 17 — Shadow → auto | 2026-11-25 | Sprint 17 — Shadow → auto |

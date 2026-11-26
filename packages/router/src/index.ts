@@ -11,3 +11,15 @@ export { Stage2Router, type Stage2Input, type Stage2Outcome } from "./stage2.js"
 export { policyGate, type LegCandidacy, type GateResult } from "./gate.js";
 export { TtlCache } from "./cache.js";
 export * from "./constants.js";
+export {
+  RoutingModeSchema,
+  SHADOW_GATE,
+  initialModeState,
+  recordShadowPrompt,
+  canOfferAuto,
+  setMode,
+  type RoutingMode,
+  type ModeState,
+} from "./modes.js";
+export { ShadowLog, pairShadow, type ShadowPair } from "./shadow.js";
+export { buildBadge, modeAllowsAutoRoute, type AutoBadge } from "./badge.js";

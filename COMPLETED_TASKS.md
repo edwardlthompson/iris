@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 17 — Shadow → auto (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Shadow logging, 20-prompt gate, auto mode, badge, override notes — scope: packages/router
+- ✅ [AGENT][LOCAL] Shadow paired rows; auto offered only past the gate — scope: packages/router
+
 ## Sprint 16 — Fit report (2026-11-25)
 
 - ✅ [AGENT][LOCAL] plutus metrics, dominance, card, report, empty/apply/keep-two — scope: packages/plutus

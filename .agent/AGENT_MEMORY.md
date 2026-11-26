@@ -205,3 +205,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 16)
 
 - `@iris/plutus` B9 metrics/dominance/card/pool report; apply tap required.
+
+### Retrospective — 2026-11-25 (Iris Sprint 17)
+
+- Router shadow log + SHADOW_GATE=20 before auto; badge/override notes.
