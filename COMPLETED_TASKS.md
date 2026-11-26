@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 8 — Topology + pool layer (2026-11-25)
+
+- ✅ [AGENT][LOCAL] chrysaor Pool/ModelCard, health probes, caps, LiteLLM on 127.0.0.1 — scope: packages/pool
+- ✅ [AGENT][LOCAL] Direct + stub-pool routing tests; degraded skip; no pool keys in Iris — scope: packages/pool
+
 ## Sprint 7 — Ledger + calibration (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Row writer with topology/pool_id, calibration, estimate-versus-actual — scope: packages/ledger

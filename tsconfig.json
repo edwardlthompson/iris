@@ -8,6 +8,7 @@
     { "path": "./packages/adapter-acp" },
     { "path": "./packages/adapter-claude" },
     { "path": "./packages/thread" },
-    { "path": "./packages/ledger" }
+    { "path": "./packages/ledger" },
+    { "path": "./packages/pool" }
   ]
 }

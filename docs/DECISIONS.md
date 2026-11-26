@@ -67,6 +67,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S7-1 | Calibration keyed by `vendor`+`model` (leg) | Matches ledger row fields; actuals replace reference est for next draft |
 | S7-2 | Shadow rows write but skip calibration | Shadow must not poison live estimates |
 | S7-3 | NDJSON append with temp+rename | Same durability pattern as `@iris/thread` |
+## 2026-11-25 — Sprint 8 pool
+
+| # | Decision | Why |
+|---|---|---|
+| S8-1 | `packages/pool` exports Chrysaor (chrysaor product name) | B4a naming; one package for topology + pool |
+| S8-2 | LiteLLM YAML uses `os.environ` key refs only | Pool keys never live in Iris |
+| S8-3 | Two failed probes → degraded; injectible probe for tests | Done-when without real HTTP in CI |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

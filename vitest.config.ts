@@ -14,6 +14,7 @@ export default defineConfig({
       "@iris/adapter-claude": iris("adapter-claude"),
       "@iris/thread": iris("thread"),
       "@iris/ledger": iris("ledger"),
+      "@iris/pool": iris("pool"),
     },
   },
   test: {

@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 22 · LOCAL 22 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **25 open**
+**Remaining:** AGENT 20 · LOCAL 20 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **23 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -66,8 +66,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 8 — Topology + pool layer
 
-1. 🔲 [AGENT][LOCAL] chrysaor Pool/ModelCard, health probes, caps, LiteLLM on 127.0.0.1 — scope: packages/pool
-2. 🔲 [AGENT][LOCAL] Direct + stub-pool routing tests; degraded skip; no pool keys in Iris — scope: packages/pool
+> **Sprint 8** archived in COMPLETED_TASKS.md @ pending.
 
 ### Sprint 9 — Stage 1 classifier
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 5 — Claude adapter | 2026-11-25 | Sprint 5 — Claude adapter |
 | Sprint 6 — Thread store + replay | 2026-11-25 | Sprint 6 — Thread store + replay |
 | Sprint 7 — Ledger + calibration | 2026-11-25 | Sprint 7 — Ledger + calibration |
+| Sprint 8 — Topology + pool layer | 2026-11-25 | Sprint 8 — Topology + pool layer |

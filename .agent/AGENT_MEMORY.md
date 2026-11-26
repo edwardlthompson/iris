@@ -169,3 +169,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 7)
 
 - `@iris/ledger`: calibration actuals override leg reference; shadow skips.
+
+### Retrospective — 2026-11-25 (Iris Sprint 8)
+
+- `@iris/pool` chrysaor: direct/pool, health, caps, LiteLLM 127.0.0.1 only.
