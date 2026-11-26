@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 2 — Host daemon + pairing (2026-11-25)
+
+- ✅ [AGENT][LOCAL] CLI entry, config, X25519 keypair/fingerprint, pairing handshake — scope: packages/host
+- ✅ [AGENT][LOCAL] Supervisor maxConcurrent/idleTtl, structured logs, SIGTERM clean — scope: packages/host
+
 ## Sprint 1 — Protocol + schemas (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Zod schemas for events, handoff.v1, ledger, capabilities, provenance, Pool, ModelCard — scope: packages/protocol

@@ -1,0 +1,31 @@
+{
+  "name": "@iris/host",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "iris-host": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/cli.ts --format esm --dts --clean",
+    "test": "vitest run",
+    "lint": "eslint src",
+    "start": "node dist/cli.js"
+  },
+  "dependencies": {
+    "@iris/protocol": "workspace:*",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

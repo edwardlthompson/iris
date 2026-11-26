@@ -27,6 +27,14 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S1-3 | `parseWithPath` returns the first Zod issue path | Done-when requires malformed rejection with a path |
 | S1-4 | `/build` continues to sprint 1 in the same session after sprint 0 | User invoked `/build`; Iris A1 one-sprint rule yields to explicit `/build` |
 
+## 2026-11-25 — Sprint 2 host
+
+| # | Decision | Why |
+|---|---|---|
+| S2-1 | `MemoryKeyStore` for tests; OS keychain deferred | Sprint sheet requires keychain; Node has no portable keychain without native deps; interface is ready |
+| S2-2 | Pairing is fingerprint equality only (no transport) | Sprint 2 forbids transport; sprint 3 adds LAN |
+| S2-3 | Supervisor spawns OS children via `child_process.spawn` | Matches “managed children” without binding a port |
+
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

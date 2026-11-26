@@ -1,13 +1,11 @@
 # State
 
-Last completed: sprint 1 (protocol-schemas) — PR https://github.com/edwardlthompson/iris/pull/6
-Next: sprint 2 (host-daemon-pairing)
-Branch in progress: none
-Blockers: none (template `watch-agent-gates --scope auto` exit 2 locally: multi-stack mypy missing — not Iris product)
+Last completed: sprint 2 (host-daemon-pairing)
+Next: sprint 3 (lan-transport)
+Branch in progress: sprint/02-host-daemon
+Blockers: none (template `watch-agent-gates --scope auto` exit 2 on WSL web/typescript-linux-x64 — Iris uses `pnpm lint`/`pnpm test`)
 Notes for the next agent:
-- `@iris/protocol` ships zod schemas for thread events, handoff.v1, ledger, capabilities, Pool/ModelCard, provenance, repo config. Tests: full-thread fixture + path-aware rejection.
-- Product gates: `pnpm lint` && `pnpm test`. Prefer `--stack node` over full multi until examples are pruned.
-- PR #6 includes rebased sprint 0 + sprint 1; PR #5 is superseded.
-- Never commit to `main`; next branch `sprint/02-host-daemon`.
-- Decisions: `docs/DECISIONS.md`. Work order: `docs/BUILD_PLAN.md`.
-- Stopped after sprint 1 (Iris one-sprint + watch-agent-gates exit 2). Do not auto-chain sprint 2 without a fresh session/`/build`.
+- `@iris/host` (portunus): X25519 + 6-digit fingerprint pairing, MemoryKeyStore (OS keychain deferred), Supervisor maxConcurrent=4 / idleTtl=90s, SIGTERM shutdown, JSON logs, CLI `iris-host`.
+- Product gates: `pnpm lint` && `pnpm test`. Do not bind ports / transport until sprint 3.
+- Branch stacks on sprint/01 work; open a PR against main after #6 merges or include both.
+- Next: `packages/relay-core` LAN only (docs/BUILD_PLAN.md Sprint 3). Branch `sprint/03-lan-transport`.

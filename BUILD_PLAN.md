@@ -30,15 +30,16 @@ Self-hosted phone remote for coding agents with cost-aware routing (direct or po
 Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysaor
 <!-- product-brief-sync:end -->
 
-> **Sprint 0 — Bootstrap** archived in COMPLETED_TASKS.md @ `sprint/01-protocol-schemas`.
-> **Sprint 1 — Protocol + schemas** archived in COMPLETED_TASKS.md @ `sprint/01-protocol-schemas`.
+> **Sprint 0 — Bootstrap** archived in COMPLETED_TASKS.md.
+> **Sprint 1 — Protocol + schemas** archived in COMPLETED_TASKS.md.
+> **Sprint 2 — Host daemon + pairing** archived in COMPLETED_TASKS.md @ `sprint/02-host-daemon`.
 
-### Sprint 2 — Host daemon + pairing
+### Sprint 3 — LAN transport
 
-<!-- parallel_exception: single package packages/host; see docs/BUILD_PLAN.md Sprint 2 -->
+<!-- parallel_exception: single package packages/relay-core; see docs/BUILD_PLAN.md Sprint 3 -->
 
-1. 🔲 [AGENT][LOCAL] CLI entry, config, X25519 keypair/fingerprint, pairing handshake — scope: packages/host
-2. 🔲 [AGENT][LOCAL] Supervisor maxConcurrent/idleTtl, structured logs, SIGTERM clean — scope: packages/host
+1. 🔲 [AGENT][LOCAL] mDNS discovery + WSS framing with XSalsa20-Poly1305 — scope: packages/relay-core
+2. 🔲 [AGENT][LOCAL] Reconnect backoff + active-rung reporting; paired round-trip test — scope: packages/relay-core
 
 ### Open PRs (synced)
 
@@ -92,3 +93,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 |---|---|---|
 | Sprint 0 — Bootstrap | 2026-11-25 | Sprint 0 — Bootstrap |
 | Sprint 1 — Protocol + schemas | 2026-11-25 | Sprint 1 — Protocol + schemas |
+| Sprint 2 — Host daemon + pairing | 2026-11-25 | Sprint 2 — Host daemon + pairing |
