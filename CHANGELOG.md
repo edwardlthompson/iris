@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] — Phone tunnel ladder (2026-11-26)
+
+### Changed
+
+* Phone tries the LAN address and the Cloudflare tunnel before loopback, so it stays paired after `adb reverse` drops
+
 ## [0.2.0] — Desktop window and shared phone shell (2026-11-26)
 
 ### Added

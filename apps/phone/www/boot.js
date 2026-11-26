@@ -454,8 +454,7 @@ function bindSocket(socket) {
     setStatusMsg("Reconnecting…");
     setTimeout(() => {
       if (ws) return;
-      const url = (localStorage.getItem("iris.ws") || hostEl?.value || "ws://127.0.0.1:7842").trim();
-      tryPair("", url, { silent: true, token });
+      void walkRungs(savedRungs(), "", token);
     }, 800);
   });
 }
@@ -600,6 +599,37 @@ form?.addEventListener("submit", async (ev) => {
   await tryPair((codeEl?.value || "").trim(), (hostEl?.value || "").trim());
 });
 
+function savedRungs() {
+  try {
+    const list = JSON.parse(localStorage.getItem("iris.rungs") || "[]");
+    if (Array.isArray(list) && list.length) return list;
+  } catch {
+    /* ignore bad storage */
+  }
+  const url = (localStorage.getItem("iris.ws") || "ws://127.0.0.1:7842").trim();
+  return [{ rung: "lan", ws: url }];
+}
+
+/** On a phone, loopback only works while adb reverse is up, so try it last. */
+function orderedRungs(rungs) {
+  if (!window.Capacitor) return rungs;
+  return [...rungs].sort((a, b) => {
+    const loop = (w) => String(w?.ws || "").includes("127.0.0.1");
+    return Number(loop(a)) - Number(loop(b));
+  });
+}
+
+async function walkRungs(rungs, code, token) {
+  localStorage.setItem("iris.rungs", JSON.stringify(rungs));
+  for (const rung of orderedRungs(rungs)) {
+    if (!rung?.ws) continue;
+    activeRung = rung.rung || "lan";
+    const ok = await tryPair(code, rung.ws, { silent: true, token });
+    if (ok) return true;
+  }
+  return false;
+}
+
 /** Auto-login: prefer live host code, else last saved localStorage pair. */
 (async () => {
   if (localStorage.getItem("iris.deviceToken")) setGateOpen(false);
@@ -614,16 +644,12 @@ form?.addEventListener("submit", async (ev) => {
         if (typeof live.ws === "string" && live.ws.startsWith("ws")) wsUrl = live.ws;
       }
       const ladder = Array.isArray(live.rungs) ? live.rungs : [];
-      for (const rung of ladder) {
-        if (!rung?.ws) continue;
-        activeRung = rung.rung || "lan";
-        const ok = await tryPair(code, rung.ws, { silent: true });
-        if (ok) return;
-      }
+      if (ladder.length && (await walkRungs(ladder, code, ""))) return;
     }
   } catch {
     /* host may not have published yet */
   }
+  if (await walkRungs(savedRungs(), code, localStorage.getItem("iris.deviceToken") || "")) return;
   if (codeEl && code) codeEl.value = code;
   if (hostEl) hostEl.value = wsUrl;
   const token = localStorage.getItem("iris.deviceToken") || "";

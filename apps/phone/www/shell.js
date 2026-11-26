@@ -1,5 +1,5 @@
 /** Shell chrome: mode tabs, sheets, composer (no Screen). UI matches cursor-remote-lite. */
-export const UI_BUILD = 30;
+export const UI_BUILD = 31;
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) =>
