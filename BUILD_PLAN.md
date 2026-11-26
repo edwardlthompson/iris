@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 0 · LOCAL 0 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 0 · **0 open**
+**Remaining:** AGENT 8 · LOCAL 8 · CLOUD 0 · AUTO 0 · HUMAN 1 · ADB 1 · **10 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -109,6 +109,22 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 ### Sprint 18 — Push + Capacitor
 
 > **Sprint 18** archived in COMPLETED_TASKS.md @ `93ba74f`.
+
+### Real-device testing (Cursor first)
+
+> Goal: phone ↔ host ↔ Cursor works for real prompts/approvals on this PC + ADB devices.
+> Smoke today: LAN reachability + JSON pair/status/prompt routing ack. Items below are the remaining blockers.
+
+1. 🔲 [AGENT][LOCAL] Cursor IDE bridge — drive Composer/Agent from host (replace bridge_pending ack) — scope: packages/adapter-cursor
+2. 🔲 [AGENT][LOCAL] Live Cursor credit/model inventory (API or UI scrape), not static composer=funded — scope: packages/adapter-cursor
+3. 🔲 [AGENT][LOCAL] End-to-end sealed relay frames on phone (shared key), drop plaintext control for production — scope: packages/relay-core
+4. 🔲 [AGENT][LOCAL] Absorb cost chip + approval sheet into phone PWA (from apps/remote + cursor-remote-lite) — scope: apps/phone
+5. 🔲 [AGENT][LOCAL] Host tray app (Windows) with always-on relay + pairing QR/code — scope: packaging/windows
+6. 🔲 [AGENT][LOCAL] Unsigned Android APK via Capacitor (needs ANDROID_HOME) — scope: apps/phone
+7. 🔲 [AGENT][LOCAL] Tool-approval round-trip: Cursor canUseTool → phone Allow/Deny → resume — scope: packages/host
+8. 🔲 [AGENT][LOCAL] Persist paired sessions across host restart (OS keychain, not MemoryKeyStore) — scope: packages/host
+9. 🔲 [HUMAN] Confirm Cursor is signed in with remaining credits on this PC; note which models still have quota
+10. 🔲 [ADB] Install APK (or PWA shortcut) on phone + tablet; pair; send one real prompt; approve one tool — scope: devices/
 
 ### Open PRs (synced)
 

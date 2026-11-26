@@ -3,7 +3,7 @@ import type { Logger } from "./logger.js";
 
 export type PairResult =
   | { ok: true; sessionId: string; fingerprint: string }
-  | { ok: false; reason: "fingerprint_mismatch" | "already_paired" };
+  | { ok: false; reason: "fingerprint_mismatch" };
 
 export interface PairingSession {
   sessionId: string;
@@ -31,9 +31,7 @@ export class PairingService {
       this.log.warn("pairing refused", { reason: "fingerprint_mismatch" });
       return { ok: false, reason: "fingerprint_mismatch" };
     }
-    if (this.#paired) {
-      return { ok: false, reason: "already_paired" };
-    }
+    // Re-pair allowed: phones reconnect; multi-device shares the host fingerprint.
     const session: PairingSession = {
       sessionId: `pair_${Date.now().toString(36)}`,
       fingerprint: expected,

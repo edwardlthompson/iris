@@ -7,5 +7,10 @@
     "types": ["node"]
   },
   "include": ["src/**/*.ts"],
-  "references": [{ "path": "../protocol" }, { "path": "../relay-core" }]
+  "references": [
+    { "path": "../protocol" },
+    { "path": "../relay-core" },
+    { "path": "../adapter-cursor" },
+    { "path": "../router" }
+  ]
 }

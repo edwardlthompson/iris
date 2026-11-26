@@ -202,12 +202,18 @@ importers:
 
   packages/host:
     dependencies:
+      '@iris/adapter-cursor':
+        specifier: workspace:*
+        version: link:../adapter-cursor
       '@iris/protocol':
         specifier: workspace:*
         version: link:../protocol
       '@iris/relay-core':
         specifier: workspace:*
         version: link:../relay-core
+      '@iris/router':
+        specifier: workspace:*
+        version: link:../router
       zod:
         specifier: ^3.24.1
         version: 3.25.76

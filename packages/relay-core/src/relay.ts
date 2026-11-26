@@ -11,6 +11,8 @@ export interface RelayServerOpts {
   fingerprint: string;
   port?: number;
   host?: string;
+  /** Optional plaintext JSON control plane (pair/status/prompt) for phone clients. */
+  onText?: (ws: WebSocket, text: string) => void | Promise<void>;
 }
 
 export class RelayServer {
@@ -49,10 +51,25 @@ export class RelayServer {
 
   #onConn(ws: WebSocket): void {
     ws.on("message", (data) => {
+      void this.#handleMessage(ws, data);
+    });
+  }
+
+  async #handleMessage(ws: WebSocket, data: WebSocket.RawData): Promise<void> {
+    if (typeof data === "string") {
+      if (this.opts.onText) {
+        await this.opts.onText(ws, data);
+        return;
+      }
+    } else {
+      const buf = data instanceof Buffer ? data : Buffer.from(data as ArrayBuffer);
+      const asText = buf.toString("utf8");
+      if (asText.trimStart().startsWith("{") && this.opts.onText) {
+        await this.opts.onText(ws, asText);
+        return;
+      }
       try {
-        const buf =
-          data instanceof Buffer ? new Uint8Array(data) : new Uint8Array(data as ArrayBuffer);
-        const frame = decodeFrame(this.opts.key, buf);
+        const frame = decodeFrame(this.opts.key, new Uint8Array(buf));
         if (frame.kind === "ping" || frame.kind === "hello" || frame.kind === "data") {
           const reply: RelayFrame = {
             v: 1,
@@ -62,10 +79,12 @@ export class RelayServer {
           };
           ws.send(encodeFrame(this.opts.key, reply));
         }
+        return;
       } catch {
-        ws.close(1008, "bad frame");
+        /* fall through */
       }
-    });
+    }
+    ws.close(1008, "bad frame");
   }
 
   async stop(): Promise<void> {
