@@ -104,7 +104,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 17 — Shadow → auto
 
-> **Sprint 17** archived in COMPLETED_TASKS.md @ `pending`.
+> **Sprint 17** archived in COMPLETED_TASKS.md @ `a0e11fa`.
 
 ### Sprint 18 — Push + Capacitor
 

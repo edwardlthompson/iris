@@ -1,10 +1,9 @@
 # State
 
-Last completed: sprint 16 (fit-report)
-Next: sprint 17 (shadow-auto)
+Last completed: sprint 17 (shadow-auto)
+Next: sprint 18 (push-capacitor)
 Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/21 (base: sprint/15-packaging)
+PR: https://github.com/edwardlthompson/iris/pull/22 (base: sprint/16-fit-report)
 Blockers: none
 Notes for the next agent:
-- `@iris/plutus` B9 fit report. Stack PRs through #21. Merge order matters.
-- Next: Sprint 17 shadow→auto. Branch from `sprint/16-fit-report` until merged.
+- Router shadow→auto gated at 20. Stack through #22. Next: Sprint 18 push.
