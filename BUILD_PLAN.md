@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 1 · LOCAL 1 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 1 · **2 open**
+**Remaining:** AGENT 3 · LOCAL 3 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 1 · **4 open**
 <!-- /remaining-tally -->
 
 **Sprint state:** [`docs/STATE.md`](docs/STATE.md) · **Decisions:** [`docs/DECISIONS.md`](docs/DECISIONS.md)
@@ -168,7 +168,8 @@ _No UX inventory items._
 Standing queue for This Computer. Rows: `🔲 [AGENT][LOCAL] … — scope: path`.
 
 <!-- local-agent-lane:begin -->
-_No local agent items._
+- 🔲 [AGENT][LOCAL] Upgrade the workspaces from vitest 2.1.8 to vitest 5 so the lockfile drops unsupported vite 5.4.21 — scope: package.json,packages/,apps/,pnpm-lock.yaml (news P2, 2026-11-26) https://vite.dev/releases
+- 🔲 [AGENT][LOCAL] Bump the apps/phone Android Gradle wrapper 8.14.3 → 8.14.8 and commit the regenerated wrapper jar and distributionSha256Sum — scope: apps/phone/android/gradle/wrapper/ (news P2, 2026-11-26) https://docs.gradle.org/8.14.8/release-notes.html
 <!-- local-agent-lane:end -->
 
 ### Cloud agent (Cursor Cloud)

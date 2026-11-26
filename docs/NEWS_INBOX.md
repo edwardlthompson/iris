@@ -132,3 +132,23 @@ Catch-up for Nov 17–18 (the daily brief did not run those mornings).
 - - [ ] Add a template rule that agent and CI Docker builds must use a `.dockerignore` that excludes `.env`, credential files, and agent config, and that `/verify` (or a pre-commit check) flags those paths in image build contexts — `.gitignore` does not apply to `docker build`, and bots are scraping public images for keys in seconds. Label: `[AGENT][LOCAL]` · Priority: P3 · https://blog.gitguardian.com/docker-hub-secrets-ai-agentsuntitled/
 
 - - [ ] Evaluate UI SDK (and its 'needs a person' mark) as an optional recipe for agent-driven settings and approval UIs in the template — useful if descendants start shipping agent-operated interfaces, and the mark is only honored by agents that speak UI SDK. Label: `[AGENT][LOCAL]` · Priority: P3 · https://ui-sdk.dev
+
+## 2026-11-26
+
+**News and updates**
+
+- Vite 8.4.0 shipped Nov 26, and Vite's support policy now covers only 8.x, 7.3 and 6.4. iris resolves vite 5.4.21 through vitest ^2.1.8 in every workspace (pnpm-lock: vite@5.4.21, vitest@2.1.9). Vite 5 is out of support, falls inside the "<= 6.4.3" ranges of the October dev-server advisories (e.g. GHSA-rq7h-c2jc-7f22 fs.allow bypass), and has no patched 5.x. The APB examples (vitest ^5) are already fine. [Vite releases / support](https://vite.dev/releases) · [v8.4.0](https://github.com/vitejs/vite/releases/tag/v8.4.0)
+
+- apps/phone/android's Gradle wrapper is 8.14.3 (verified in gradle-wrapper.properties today), below 8.14.8, which fixes four High-severity issues (SFTP host keys, snapshot dependency verification, TestKit temp dir, daemon registry) from the Nov 20 brief. iris was created after that brief, so it never got the task. examples/android is already on 9.9.2. [8.14.8 release notes](https://docs.gradle.org/8.14.8/release-notes.html)
+
+- Capacitor fixed a high-severity advisory on Nov 25 ([GHSA-jjx3-p5hf-mvvc](https://github.com/ionic-team/capacitor/security/advisories/GHSA-jjx3-p5hf-mvvc), internal proxy routes and path traversal) plus an Android crash bug ([GHSA-2wpp-cw6c-mj9q](https://github.com/ionic-team/capacitor/security/advisories/GHSA-2wpp-cw6c-mj9q)). These are repository-only advisories that Dependabot will not flag. News only for iris: apps/phone already resolves @capacitor/* 8.6.3, the patched release. [8.6.3](https://github.com/ionic-team/capacitor/releases/tag/8.6.3)
+
+- Google Antigravity 2.35.0–2.35.2 (Nov 23–25) adds a built-in Conversation Management API (create/list/inspect/rename/pin/archive/tag/delete local conversations), unlimited local history, auto-resume after restart, and mid-turn model switching. iris's adapter-antigravity drives Antigravity over CDP (:9000); a supported conversation API may be a sturdier path for history and thread listing. [Antigravity changelog](https://antigravity.google/docs/changelog)
+
+- Conductor moved its agent-workspace desktop app from Tauri to Electron (0.95.0, Nov 16; numbers posted Nov 24), keeping its Rust local server: workspaces open 71% faster, startup-to-render is 4.6x faster and RAM is 35% lower, while the download grew from about 200 MB to about 500 MB. A real-world counterpoint to "Tauri is always lighter": measure cold start and RAM on the real WebView (WebKitGTK on Linux, WebView2 on Windows) rather than assume. [Conductor 0.95.0](https://www.conductor.build/changelog/0.95.0-agents-that-manage-your-local-workspaces) · [X post](https://x.com/charlieholtz/status/2125351294965805147)
+
+**Tasks for the planning agent**
+
+- [x] Upgrade the iris workspaces from vitest 2.1.8 to vitest 5 (pulls a supported Vite 8) — The lockfile's vite 5.4.21 is out of support and matches the October Vite dev-server advisories, with no patched 5.x. Label: `[AGENT][LOCAL]` · Priority: P2 · https://vite.dev/releases (synced to BUILD_PLAN)
+- [x] Bump the apps/phone Android Gradle wrapper from 8.14.3 to 8.14.8 and commit the regenerated wrapper jar and distributionSha256Sum — 8.14.8 carries four High-severity fixes from the Nov 20 brief, which predates this repo. Label: `[AGENT][LOCAL]` · Priority: P2 · https://docs.gradle.org/8.14.8/release-notes.html (synced to BUILD_PLAN)
+- [ ] Evaluate Antigravity's Conversation Management API for adapter-antigravity thread listing and history — A documented API is less likely to break with each Antigravity UI release than CDP scraping. Label: `[AGENT][LOCAL]` · Priority: P3 · https://antigravity.google/docs/changelog
