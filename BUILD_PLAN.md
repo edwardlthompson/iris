@@ -70,7 +70,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 9 — Stage 1 classifier
 
-> **Sprint 9** archived in COMPLETED_TASKS.md @ pending.
+> **Sprint 9** archived in COMPLETED_TASKS.md @ `d010bae`.
 
 ### Sprint 10 — Stage 2 + policy gate
 
