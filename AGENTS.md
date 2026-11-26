@@ -14,17 +14,18 @@
 ## Project Overview & Architecture
 
 <!-- bootstrap-project-card -->
-**Product:** agent-project-bootstrap
-**Purpose:** GitHub Template for FOSS coding-agent projects
-**Stack:** multi
+**Product:** iris
+**Purpose:** Self-hosted phone remote for coding agents, with cost-aware routing
+**Stack:** node
 <!-- /bootstrap-project-card -->
 
-This repository is a **GitHub Template** for FOSS projects with coding agents (Cursor, Windsurf, Antigravity, Claude Code, Copilot, Gemini CLI, Aider, Cline). Child repos start from **Use this template**, then `scripts/init-project.sh` (or `.ps1`). Edit `AGENTS.md`, then `bash scripts/bootstrap-lifecycle.sh --sync-adapters`.
+This repository is **Iris** — a self-hosted phone remote for coding agents with cost-aware routing. Work order: [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md). Sprint state: [`docs/STATE.md`](docs/STATE.md).
 
-- **Composition:** stack modules (`modules/{stack}/`) + Golden Path examples (`examples/{stack}/`) + agent routing
-- **Lifecycle:** preflight → init (stack, branding, prune) → post hooks (adapters, checklist, manifest)
-- **Manifest:** `bootstrap.config.json` (schema in `bootstrap.config.json.example`)
-- **Product spec:** `docs/spec.md` · plan stub: `docs/plan.md` · feature slices: `docs/features/`
+- **Composition:** pnpm monorepo (`packages/*`, `apps/*`) on the agent-project-bootstrap hygiene skeleton
+- **Lifecycle:** one sprint per session; `pnpm lint` + `pnpm test` must stay green
+- **Manifest:** `bootstrap.config.json`
+- **Product spec:** `docs/BUILD_PLAN.md` · `AGENT.md` · feature slices later under `docs/features/`
+
 
 ## Environment & Dependency Management
 
