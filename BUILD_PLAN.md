@@ -82,7 +82,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 12 — Handoff v1
 
-> **Sprint 12** archived in COMPLETED_TASKS.md @ pending.
+> **Sprint 12** archived in COMPLETED_TASKS.md @ `79d3033`.
 
 ### Sprint 13 — Benchmark refresh
 
