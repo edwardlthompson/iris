@@ -1,11 +1,10 @@
 # State
 
-Last completed: sprint 9 (stage1-classifier)
-Next: sprint 10 (stage2-policy)
-Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/14 (base: sprint/08-topology-pool)
+Last completed: sprint 10 (stage2-policy)
+Next: sprint 11 (presets-cost-chip)
+Branch in progress: sprint/10-stage2-policy
 Blockers: none
 Notes for the next agent:
-- `@iris/router` stage1: B1 patterns, unsure, overrides; fixtures in `src/fixtures.ts`.
-- Stack PRs: #5–#14. Merge order matters.
-- Next: Venice stage 2 + policy gate. Branch `sprint/10-stage2-policy` from `sprint/09-stage1-classifier` until #14 merges.
+- `@iris/router` stage2: VeniceClient (injectible fetch), Stage2Router, policyGate; 400ms timeout → unclassified.
+- Stack through #14; this branch stacks on `sprint/09-stage1-classifier`.
+- Next: presets + cost chip in apps/. Branch `sprint/11-presets-chip`.

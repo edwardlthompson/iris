@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 18 · LOCAL 18 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **21 open**
+**Remaining:** AGENT 16 · LOCAL 16 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **19 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -74,8 +74,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 10 — Stage 2 + policy gate
 
-1. 🔲 [AGENT][LOCAL] Venice client, schema, cache, timeout/backoff/pause, unclassified — scope: packages/router
-2. 🔲 [AGENT][LOCAL] Gate by credentials/quota/cap/topology/pool health; 400 ms bypass — scope: packages/router
+> **Sprint 10** archived in COMPLETED_TASKS.md @ pending.
 
 ### Sprint 11 — Presets + cost chip
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 7 — Ledger + calibration | 2026-11-25 | Sprint 7 — Ledger + calibration |
 | Sprint 8 — Topology + pool layer | 2026-11-25 | Sprint 8 — Topology + pool layer |
 | Sprint 9 — Stage 1 classifier | 2026-11-25 | Sprint 9 — Stage 1 classifier |
+| Sprint 10 — Stage 2 + policy gate | 2026-11-25 | Sprint 10 — Stage 2 + policy gate |

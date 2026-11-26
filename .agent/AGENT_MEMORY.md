@@ -177,3 +177,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 9)
 
 - `@iris/router` stage1 B1 weights, unsure, overrides + fixtures.
+
+### Retrospective — 2026-11-25 (Iris Sprint 10)
+
+- Venice stage2 + policyGate; 400ms abort → unclassified.

@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 10 — Stage 2 + policy gate (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Venice client, schema, cache, timeout/backoff/pause, unclassified — scope: packages/router
+- ✅ [AGENT][LOCAL] Gate by credentials/quota/cap/topology/pool health; 400 ms bypass — scope: packages/router
+
 ## Sprint 9 — Stage 1 classifier (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Regex/weights + repo signals; unsure emission; override ordering — scope: packages/router
