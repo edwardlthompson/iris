@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 2 · LOCAL 2 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **5 open**
+**Remaining:** AGENT 26 · LOCAL 26 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **29 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -30,12 +30,106 @@ Self-hosted phone remote for coding agents with cost-aware routing (direct or po
 Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysaor
 <!-- product-brief-sync:end -->
 
-> **Sprint 0–4** archived in COMPLETED_TASKS.md (bootstrap → protocol → host → LAN → ACP).
+> Full product index also in [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md) §A3. Sprints 0–4 details archived in COMPLETED_TASKS.md.
+
+### Sprint 0 — Bootstrap
+
+1. ✅ [AGENT][LOCAL] Create repo from agent-project-bootstrap; topics; clone — scope: .
+2. ✅ [AGENT][LOCAL] Replace README; write docs/BUILD_PLAN.md, STATE.md, DECISIONS.md — scope: docs/
+3. ✅ [AGENT][LOCAL] Scaffold pnpm monorepo (Node 22, vitest, eslint, prettier, tsup, zod) — scope: packages/workspace
+4. ✅ [AGENT][LOCAL] Add Iris CI job; keep template hygiene gates green — scope: .github/workflows/ci.yml
+5. ✅ [AUTO] Sprint 0 sign-off: `pnpm lint` · `pnpm test` · CI green on PR
+
+### Sprint 1 — Protocol + schemas
+
+1. ✅ [AGENT][LOCAL] Zod schemas for events, handoff.v1, ledger, capabilities, provenance, Pool, ModelCard — scope: packages/protocol
+2. ✅ [AGENT][LOCAL] Round-trip + rejection tests; full-thread fixture — scope: packages/protocol
+
+### Sprint 2 — Host daemon + pairing
+
+1. ✅ [AGENT][LOCAL] CLI entry, config, X25519 keypair/fingerprint, pairing handshake — scope: packages/host
+2. ✅ [AGENT][LOCAL] Supervisor maxConcurrent/idleTtl, structured logs, SIGTERM clean — scope: packages/host
+
+### Sprint 3 — LAN transport
+
+1. ✅ [AGENT][LOCAL] mDNS discovery + WSS framing with XSalsa20-Poly1305 — scope: packages/relay-core
+2. ✅ [AGENT][LOCAL] Reconnect backoff + active-rung reporting; paired round-trip test — scope: packages/relay-core
+
+### Sprint 4 — ACP adapter
+
+1. ✅ [AGENT][LOCAL] JSON-RPC stdio ACP: initialise, session, prompt, tools, cancel — scope: packages/adapter-acp
+2. ✅ [AGENT][LOCAL] Fixture agent + streaming/approval/cancel tests; baseUrlOverride flag — scope: packages/adapter-acp
 
 ### Sprint 5 — Claude adapter
 
-1. 🔲 [AGENT][LOCAL] Agent SDK query + canUseTool approval + quota statusline — scope: packages/adapter-claude
-2. 🔲 [AGENT][LOCAL] Headless session tests; ANTHROPIC_BASE_URL / baseUrlOverride — scope: packages/adapter-claude
+> ✅ Archived in COMPLETED_TASKS.md — FOSS `ClaudeRuntime` + stub (no proprietary Agent SDK).
+
+### Sprint 6 — Thread store + replay
+
+1. 🔲 [AGENT][LOCAL] Append-only writer with seq, atomic flush, replay, redaction — scope: packages/thread
+2. 🔲 [AGENT][LOCAL] Rotation at 500 turns; fixture replay + secret redaction tests — scope: packages/thread
+
+### Sprint 7 — Ledger + calibration
+
+1. 🔲 [AGENT][LOCAL] Row writer with topology/pool_id, calibration, estimate-versus-actual — scope: packages/ledger
+2. 🔲 [AGENT][LOCAL] Shadow flag; session row overrides reference estimate — scope: packages/ledger
+
+### Sprint 8 — Topology + pool layer
+
+1. 🔲 [AGENT][LOCAL] chrysaor Pool/ModelCard, health probes, caps, LiteLLM on 127.0.0.1 — scope: packages/pool
+2. 🔲 [AGENT][LOCAL] Direct + stub-pool routing tests; degraded skip; no pool keys in Iris — scope: packages/pool
+
+### Sprint 9 — Stage 1 classifier
+
+1. 🔲 [AGENT][LOCAL] Regex/weights + repo signals; unsure emission; override ordering — scope: packages/router
+2. 🔲 [AGENT][LOCAL] Fixtures classify to preset; ambiguous emit unsure — scope: packages/router
+
+### Sprint 10 — Stage 2 + policy gate
+
+1. 🔲 [AGENT][LOCAL] Venice client, schema, cache, timeout/backoff/pause, unclassified — scope: packages/router
+2. 🔲 [AGENT][LOCAL] Gate by credentials/quota/cap/topology/pool health; 400 ms bypass — scope: packages/router
+
+### Sprint 11 — Presets + cost chip
+
+1. 🔲 [AGENT][LOCAL] Preset policies, chip debounce/budget colour, pin, leg/topology/pool UI — scope: apps/
+2. 🔲 [AGENT][LOCAL] Chip shows leg/model/effort/estimate/pool; pin survives reload — scope: apps/
+
+### Sprint 12 — Handoff v1
+
+1. 🔲 [AGENT][LOCAL] handoff.v1 writer, quota-exhausted trigger, confirm, fallback target — scope: packages/protocol
+2. 🔲 [AGENT][LOCAL] Resume at next turn; pool mode may switch model only — scope: packages/
+
+### Sprint 13 — Benchmark refresh
+
+1. 🔲 [AGENT][LOCAL] refresh-benchmarks.mjs, weekly workflow, provenance, guardrails — scope: scripts/
+2. 🔲 [AGENT][LOCAL] Staleness badge; unchanged=no commit; shrink opens needs-review PR — scope: .github/workflows/
+
+> **MVP cut line** — sprints 0–13 are the usable product. 14–18 are post-MVP.
+
+### Sprint 14 — Antigravity adapter
+
+1. 🔲 [AGENT][LOCAL] Custom IDE driver, headless:false, disabled-state when IDE closed — scope: packages/adapter-antigravity
+2. 🔲 [AGENT][LOCAL] Closed-IDE disables leg with reason; routing continues — scope: packages/adapter-antigravity
+
+### Sprint 15 — Packaging
+
+1. 🔲 [AGENT][LOCAL] Capacitor wrapper, unsigned APK, MSI tray, deb+systemd, first-run wizard — scope: apps/
+2. 🔲 [AGENT][LOCAL] Each artifact installs; wizard completes pairing; optional LiteLLM — scope: packaging/
+
+### Sprint 16 — Fit report
+
+1. 🔲 [AGENT][LOCAL] plutus metrics, dominance, card, report, empty/apply/keep-two — scope: packages/plutus
+2. 🔲 [AGENT][LOCAL] Per-pool and per-model reporting; B9 acceptance list — scope: packages/plutus
+
+### Sprint 17 — Shadow → auto
+
+1. 🔲 [AGENT][LOCAL] Shadow logging, 20-prompt gate, auto mode, badge, override notes — scope: packages/router
+2. 🔲 [AGENT][LOCAL] Shadow paired rows; auto offered only past the gate — scope: packages/router
+
+### Sprint 18 — Push + Capacitor
+
+1. 🔲 [AGENT][LOCAL] APNs/FCM, permission flow, deep link to approval sheet — scope: apps/
+2. 🔲 [AGENT][LOCAL] Background socket; backgrounded app lands on right thread — scope: apps/
 
 ### Open PRs (synced)
 
@@ -92,3 +186,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 2 — Host daemon + pairing | 2026-11-25 | Sprint 2 — Host daemon + pairing |
 | Sprint 3 — LAN transport | 2026-11-25 | Sprint 3 — LAN transport |
 | Sprint 4 — ACP adapter | 2026-11-25 | Sprint 4 — ACP adapter |
+| Sprint 5 — Claude adapter | 2026-11-25 | Sprint 5 — Claude adapter |

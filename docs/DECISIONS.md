@@ -46,6 +46,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S4-1 | In-process PassThrough fixture instead of spawning a CLI | Sprint done-when is scripted stream/approval/cancel; no real agent binary in CI |
 | S4-2 | Iris `baseUrlOverride` advertised on fixture init + `ACP_CAPABILITIES` | B6 pool gate; not a core ACP field, carried as Iris leg capability |
 | S4-3 | Protocol version `1` in initialize | Matches current agentclientprotocol.com client examples used by CLI agents |
+## 2026-11-25 — Sprint 5 Claude
+
+| # | Decision | Why |
+|---|---|---|
+| S5-1 | No `@anthropic-ai/claude-agent-sdk` dependency; `ClaudeRuntime` + `StubClaudeRuntime` | SDK is proprietary (Anthropic Commercial ToS); FOSS path forbids proprietary SDKs |
+| S5-2 | `baseUrl` / `ANTHROPIC_BASE_URL` on session options | Pool mode via LiteLLM at 127.0.0.1; matches B6 baseUrlOverride |
+| S5-3 | Stub refuses `screen`/PTY | Sprint forbids PTY except behind screen flag; FOSS stub stays headless-only |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

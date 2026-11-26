@@ -157,3 +157,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 4)
 
 - `@iris/adapter-acp`: NDJSON JSON-RPC + FixtureAgent (stream/approval/cancel); `baseUrlOverride` on Iris capabilities.
+
+### Retrospective — 2026-11-25 (Iris Sprint 5)
+
+- `@iris/adapter-claude`: FOSS ClaudeRuntime/Stub (no proprietary Agent SDK); quota + baseUrlOverride.

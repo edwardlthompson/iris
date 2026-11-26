@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 5 — Claude adapter (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Agent SDK query + canUseTool approval + quota statusline — scope: packages/adapter-claude
+- ✅ [AGENT][LOCAL] Headless session tests; ANTHROPIC_BASE_URL / baseUrlOverride — scope: packages/adapter-claude
+
 ## Sprint 4 — ACP adapter (2026-11-25)
 
 - ✅ [AGENT][LOCAL] JSON-RPC stdio ACP: initialise, session, prompt, tools, cancel — scope: packages/adapter-acp
