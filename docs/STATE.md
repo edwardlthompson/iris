@@ -1,8 +1,8 @@
 # State
 
-Last completed: sprint 2 (host-daemon-pairing)
+Last completed: sprint 2 (host-daemon-pairing) — PR https://github.com/edwardlthompson/iris/pull/7
 Next: sprint 3 (lan-transport)
-Branch in progress: sprint/02-host-daemon
+Branch in progress: none
 Blockers: none (template `watch-agent-gates --scope auto` exit 2 on WSL web/typescript-linux-x64 — Iris uses `pnpm lint`/`pnpm test`)
 Notes for the next agent:
 - `@iris/host` (portunus): X25519 + 6-digit fingerprint pairing, MemoryKeyStore (OS keychain deferred), Supervisor maxConcurrent=4 / idleTtl=90s, SIGTERM shutdown, JSON logs, CLI `iris-host`.
