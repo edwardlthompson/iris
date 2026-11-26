@@ -66,7 +66,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 8 — Topology + pool layer
 
-> **Sprint 8** archived in COMPLETED_TASKS.md @ pending.
+> **Sprint 8** archived in COMPLETED_TASKS.md @ `5ca9cab`.
 
 ### Sprint 9 — Stage 1 classifier
 
