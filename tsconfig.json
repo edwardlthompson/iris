@@ -9,6 +9,7 @@
     { "path": "./packages/adapter-claude" },
     { "path": "./packages/thread" },
     { "path": "./packages/ledger" },
-    { "path": "./packages/pool" }
+    { "path": "./packages/pool" },
+    { "path": "./packages/router" }
   ]
 }

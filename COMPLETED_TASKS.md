@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 9 — Stage 1 classifier (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Regex/weights + repo signals; unsure emission; override ordering — scope: packages/router
+- ✅ [AGENT][LOCAL] Fixtures classify to preset; ambiguous emit unsure — scope: packages/router
+
 ## Sprint 8 — Topology + pool layer (2026-11-25)
 
 - ✅ [AGENT][LOCAL] chrysaor Pool/ModelCard, health probes, caps, LiteLLM on 127.0.0.1 — scope: packages/pool

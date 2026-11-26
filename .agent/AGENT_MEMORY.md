@@ -173,3 +173,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 8)
 
 - `@iris/pool` chrysaor: direct/pool, health, caps, LiteLLM 127.0.0.1 only.
+
+### Retrospective — 2026-11-25 (Iris Sprint 9)
+
+- `@iris/router` stage1 B1 weights, unsure, overrides + fixtures.

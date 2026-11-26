@@ -15,6 +15,7 @@ export default defineConfig({
       "@iris/thread": iris("thread"),
       "@iris/ledger": iris("ledger"),
       "@iris/pool": iris("pool"),
+      "@iris/router": iris("router"),
     },
   },
   test: {

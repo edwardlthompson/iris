@@ -74,6 +74,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S8-1 | `packages/pool` exports Chrysaor (chrysaor product name) | B4a naming; one package for topology + pool |
 | S8-2 | LiteLLM YAML uses `os.environ` key refs only | Pool keys never live in Iris |
 | S8-3 | Two failed probes → degraded; injectible probe for tests | Done-when without real HTTP in CI |
+## 2026-11-25 — Sprint 9 router stage1
+
+| # | Decision | Why |
+|---|---|---|
+| S9-1 | Sum all matching B1 weights (not stop at first) | Table says “first match wins, weights summed”; summing all matches matches score bands |
+| S9-2 | Unsure on opposing signs; empty/no-repo short prompts | B1; keep prompt-only docs/stack classifiable when files or signals exist |
+| S9-3 | Overrides after score→preset (pin first) | B7 ordering |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

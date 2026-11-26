@@ -1,11 +1,10 @@
 # State
 
-Last completed: sprint 8 (topology-pool)
-Next: sprint 9 (stage1-classifier)
-Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/13 (base: sprint/07-ledger)
+Last completed: sprint 9 (stage1-classifier)
+Next: sprint 10 (stage2-policy)
+Branch in progress: sprint/09-stage1-classifier
 Blockers: none
 Notes for the next agent:
-- `@iris/pool` (chrysaor): direct/pool route, health, caps, LiteLLM 127.0.0.1 YAML, stubPool.
-- Stack PRs: #5–#13. Merge order matters.
-- Next: `packages/router` stage 1. Branch `sprint/09-stage1-classifier` from `sprint/08-topology-pool` until #13 merges.
+- `@iris/router` stage1: B1 patterns, unsure, overrides; fixtures in `src/fixtures.ts`.
+- Stack through #13; this branch stacks on `sprint/08-topology-pool`.
+- Next: Venice stage 2 + policy gate in same package. Branch `sprint/10-stage2-policy`.
