@@ -1,11 +1,11 @@
 # State
 
-Last completed: sprint 13 (benchmark-refresh)
-Next: sprint 14 (antigravity-adapter)
-Branch in progress: none
-PR: https://github.com/edwardlthompson/iris/pull/18 (base: sprint/12-handoff-v1)
+Last completed: sprint 14 (antigravity-adapter)
+Next: sprint 15 (packaging)
+Branch in progress: sprint/14-antigravity
+PR: (open after push)
 Blockers: none
 Notes for the next agent:
-- MVP cut reached (sprints 0–13). `scripts/refresh-benchmarks.mjs`, weekly workflow, `docs/BENCHMARKS.md`.
-- Stack PRs: #5–#18. Merge order matters.
-- Post-MVP next: Antigravity adapter. Branch `sprint/14-antigravity` from `sprint/13-benchmark-refresh` until #18 merges.
+- `@iris/adapter-antigravity`: headless:false, IdeProbe, `ide_closed` disables leg; policyGate skips `available: false`.
+- Stack PRs: #5–#18 then #19 (this). Merge order matters.
+- Next: Sprint 15 packaging (Capacitor/APK/MSI/deb). Branch from `sprint/14-antigravity` until merged.

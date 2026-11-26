@@ -6,6 +6,10 @@ export type LegCandidacy = {
   quotaOk: boolean;
   /** From chrysaor health: healthy | degraded */
   poolHealth?: "healthy" | "degraded";
+  /** IDE/runtime availability; omit or true = eligible. False excludes the leg. */
+  available?: boolean;
+  /** Why available is false (e.g. ide_closed). Ignored by the filter. */
+  disabledReason?: string;
 };
 
 export type GateResult = { ok: true; legs: string[] } | { ok: false; reason: string };
@@ -22,6 +26,7 @@ export function policyGate(ctx: {
   const eligible = ctx.legs.filter((leg) => {
     if (!leg.hasCredentials) return false;
     if (!leg.quotaOk) return false;
+    if (leg.available === false) return false;
     if (ctx.topology === "pool" && leg.poolHealth === "degraded") return false;
     return true;
   });

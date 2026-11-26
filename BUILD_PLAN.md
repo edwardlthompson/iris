@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 10 · LOCAL 10 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **13 open**
+**Remaining:** AGENT 8 · LOCAL 8 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **11 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -92,8 +92,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 14 — Antigravity adapter
 
-1. 🔲 [AGENT][LOCAL] Custom IDE driver, headless:false, disabled-state when IDE closed — scope: packages/adapter-antigravity
-2. 🔲 [AGENT][LOCAL] Closed-IDE disables leg with reason; routing continues — scope: packages/adapter-antigravity
+> **Sprint 14** archived in COMPLETED_TASKS.md @ `pending`.
 
 ### Sprint 15 — Packaging
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 11 — Presets + cost chip | 2026-11-25 | Sprint 11 — Presets + cost chip |
 | Sprint 12 — Handoff v1 | 2026-11-25 | Sprint 12 — Handoff v1 |
 | Sprint 13 — Benchmark refresh | 2026-11-25 | Sprint 13 — Benchmark refresh |
+| Sprint 14 — Antigravity adapter | 2026-11-25 | Sprint 14 — Antigravity adapter |

@@ -28,6 +28,25 @@ describe("@iris/router policyGate", () => {
     });
     expect(r).toEqual({ ok: true, legs: ["c"] });
   });
+
+  it("excludes unavailable legs (e.g. IDE closed) and continues", () => {
+    const r = policyGate({
+      topology: "direct",
+      estUsd: 0.01,
+      capOk: true,
+      legs: [
+        {
+          id: "antigravity",
+          hasCredentials: true,
+          quotaOk: true,
+          available: false,
+          disabledReason: "ide_closed",
+        },
+        { id: "claude", hasCredentials: true, quotaOk: true },
+      ],
+    });
+    expect(r).toEqual({ ok: true, legs: ["claude"] });
+  });
 });
 
 describe("@iris/router stage2", () => {

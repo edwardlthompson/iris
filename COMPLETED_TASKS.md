@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 14 — Antigravity adapter (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Custom IDE driver, headless:false, disabled-state when IDE closed — scope: packages/adapter-antigravity
+- ✅ [AGENT][LOCAL] Closed-IDE disables leg with reason; routing continues — scope: packages/adapter-antigravity
+
 ## Sprint 13 — Benchmark refresh (2026-11-25)
 
 - ✅ [AGENT][LOCAL] refresh-benchmarks.mjs, weekly workflow, provenance, guardrails — scope: scripts/

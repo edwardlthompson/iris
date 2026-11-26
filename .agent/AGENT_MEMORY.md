@@ -193,3 +193,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 13 / MVP)
 
 - refresh-benchmarks.mjs + weekly workflow; BENCHMARKS.md seed; MVP cut 0–13.
+
+### Retrospective — 2026-11-25 (Iris Sprint 14)
+
+- `@iris/adapter-antigravity` headless:false; ide_closed → gate skips; routing continues.

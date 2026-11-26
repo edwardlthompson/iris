@@ -109,6 +109,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S13-1 | Core pure functions in `scripts/lib/refresh-benchmarks-core.mjs` | Testable without network; CLI wraps fetch |
 | S13-2 | Guardrail fail writes `BENCHMARKS.needs-review.md` + exit 2 | Appendix D needs-review PR path |
 | S13-3 | `gate_scope` maps benchmarks workflow → node | Avoid full 8-stack on Windows GP tooling gaps |
+## 2026-11-25 — Sprint 14 Antigravity
+
+| # | Decision | Why |
+|---|---|---|
+| S14-1 | Antigravity is a FOSS custom driver + injectable IdeProbe (not a proprietary SDK) | headless:false; IDE may be absent in CI |
+| S14-2 | Closed IDE → `available: false` + `disabledReason: ide_closed` on LegCandidacy | Policy gate skips the leg; routing continues |
+| S14-3 | Default probe matches process-name substrings `antigravity` | Simple, overridable; tests inject fixed probes |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.
