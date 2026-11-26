@@ -74,7 +74,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 10 — Stage 2 + policy gate
 
-> **Sprint 10** archived in COMPLETED_TASKS.md @ pending.
+> **Sprint 10** archived in COMPLETED_TASKS.md @ `bef46ab`.
 
 ### Sprint 11 — Presets + cost chip
 
