@@ -352,6 +352,23 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: bash scripts/check-license-compliance.sh node
 
+  iris:
+    name: Iris - Lint, Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - uses: actions/setup-node@v7
+        with:
+          # Template pin (see tests/test_node_pin.py). Product engines remain >=22.
+          node-version: "24.22.3"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test
+
   android-structure:
     name: Android - Structure Validation
     runs-on: ubuntu-latest
@@ -735,6 +752,7 @@ jobs:
       - upgrade-simulation-windows
       - validate-bootstrap
       - sanitize-fixtures
+      - iris
     steps:
       - name: Require core CI jobs
         env:
@@ -743,6 +761,7 @@ jobs:
           UW: ${{ needs.upgrade-simulation-windows.result }}
           VB: ${{ needs.validate-bootstrap.result }}
           SF: ${{ needs.sanitize-fixtures.result }}
+          IR: ${{ needs.iris.result }}
         run: |
           set -euo pipefail
           failed=()
@@ -751,6 +770,7 @@ jobs:
           [ "$UW" = "success" ] || failed+=("Template Upgrade Simulation (Windows) ($UW)")
           [ "$VB" = "success" ] || failed+=("Validate Bootstrap ($VB)")
           [ "$SF" = "success" ] || failed+=("Sanitizer fixture parity ($SF)")
+          [ "$IR" = "success" ] || failed+=("Iris ($IR)")
           {
             echo "## CI aggregate"
             if [ "${#failed[@]}" -eq 0 ]; then

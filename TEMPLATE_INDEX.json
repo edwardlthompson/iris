@@ -1,9 +1,9 @@
 {
   "template_version": "1.13.2",
   "project": {
-    "name": "agent-project-bootstrap",
-    "purpose": "GitHub Template for FOSS coding-agent projects",
-    "stack": "multi"
+    "name": "iris",
+    "purpose": "Self-hosted phone remote for coding agents, with cost-aware routing",
+    "stack": "node"
   },
   "entry_points": {
     "bootstrap": "docs/START_HERE.md",

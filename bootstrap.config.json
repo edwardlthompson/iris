@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "project_name": "agent-project-bootstrap",
-  "purpose": "GitHub Template for FOSS coding-agent projects",
-  "stack": "multi",
+  "project_name": "iris",
+  "purpose": "Self-hosted phone remote for coding agents, with cost-aware routing",
+  "stack": "node",
   "license": "MIT",
   "distribution_tier": "foss",
   "profile": "full",

@@ -25,7 +25,7 @@
     "license": "LICENSE",
     "design": "docs/DESIGN_GUIDE.md",
     "branding": "branding/BRANDING.md",
-    "github_repo": "edwardlthompson/agent-project-bootstrap"
+    "github_repo": "edwardlthompson/iris"
   },
   "badge": {
     "primary": "e94560",

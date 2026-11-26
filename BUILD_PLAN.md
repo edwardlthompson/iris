@@ -1,91 +1,55 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 1 · LOCAL 1 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **4 open**
+**Remaining:** AGENT 2 · LOCAL 2 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **5 open**
 <!-- /remaining-tally -->
 
-### Product (do not drift)
+**Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)  
+**Sprint state:** [`docs/STATE.md`](docs/STATE.md) · **Decisions:** [`docs/DECISIONS.md`](docs/DECISIONS.md)
 
-> Auto-managed from `AGENT.md` after init. Do not hand-edit inside markers. Read `AGENT.md` before any sprint row.
+Live board for the Iris product. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
 
-<!-- product-brief-sync:begin -->
-_Template maintainer: no product AGENT.md. Children write AGENT.md before init._
-<!-- product-brief-sync:end -->
-
-Live board for **this template repo**. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md). Child products use [`BUILD_PLAN_TEMPLATE.md`](BUILD_PLAN_TEMPLATE.md) (copied onto their `BUILD_PLAN.md` at init).
-
-**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts
-**Venue (AGENT only):** `[LOCAL]` This Computer · `[CLOUD]` Cursor Cloud — see [`docs/adr/0008-agent-venue.md`](docs/adr/0008-agent-venue.md)
+**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts  
+**Venue (AGENT only):** `[LOCAL]` This Computer · `[CLOUD]` Cursor Cloud  
 **State:** 🔲 open · ✅ done · ❌ blocked — reason
 
-Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix` (or `[CLOUD]`). Sequential `[AGENT]` first. Parallel scopes: [`docs/PARALLEL_AGENT_SCOPES.md`](docs/PARALLEL_AGENT_SCOPES.md). `/build` on This Computer picks LOCAL only; Cloud picks CLOUD only. HUMAN/ADB after automation → `HUMAN_BACKLOG.md`.
+Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix`. Sequential `[AGENT]` first.
 
 ## Smoke gate (hard stop)
 
-After every `[AGENT]` row: `python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto`
-
-After the **last** `[AGENT]`/`[AUTO]` row in a sprint is ✅, do **not** start the next sprint until this exits 0:
-
-```bash
-python3 scripts/agent-run.py smoke-sprint --require
-
-```
-
-That command re-smokes **every** ✅ row: no errors or crashes, plus startup time and load order. Details: [`docs/SPRINT_SMOKE.md`](docs/SPRINT_SMOKE.md). Fail → leave the last row open or ❌; fix; re-run. `/gates` wrap-up includes the same check.
+After every `[AGENT]` row: `pnpm lint` and `pnpm test` must pass (Iris stack). Template gates: `python3 scripts/agent-run.py watch-agent-gates --once --autofix --scope auto` when touching template paths.
 
 ---
 
-## Template Maintainer
+### Product (do not drift)
 
-**Now:** Board clear (v1.13.1 shipped). After Cloud work, `/resume`. Child model: [`BUILD_PLAN_TEMPLATE.md`](BUILD_PLAN_TEMPLATE.md).
+> Auto-managed from `AGENT.md`. Do not hand-edit inside markers. Read `AGENT.md` before any sprint row.
 
-> **News security sprint** (Local agent + Git floor) archived in COMPLETED_TASKS.md @ `a00d5e1` (working tree pending commit).
-> **M66** shape ecosystem + commercial GP + coverage + deep-upgrade — archived in COMPLETED_TASKS.md @ `08ac840`.
-> **M65** parent brand + child `/brand`/splash playbook — archived in COMPLETED_TASKS.md @ `08ac840`.
-> **v1.8.0** release archived in COMPLETED_TASKS.md @ `1cafc11`.
-> **M64** archived in COMPLETED_TASKS.md @ `86bc12c`.
-> **M63** archived in COMPLETED_TASKS.md @ `9b7870b`.
-> **v1.6.0** release archived in COMPLETED_TASKS.md @ `d4cb35b`.
-> **M62** archived in COMPLETED_TASKS.md @ `81d165b`.
-> **v1.5.0** release archived in COMPLETED_TASKS.md @ `9808229`.
-> **v1.4.0** release archived in COMPLETED_TASKS.md @ `f105c3b`.
-> **v1.3.0** release archived in COMPLETED_TASKS.md @ `7ca6dbf`.
-> **M61** archived in COMPLETED_TASKS.md @ `ca0edfb`.
-> **M60** archived in COMPLETED_TASKS.md @ `ca0edfb`.
-> **M59** archived in COMPLETED_TASKS.md @ `ca0edfb`.
-> **M58** archived in COMPLETED_TASKS.md @ `ca0edfb`.
-> **M57** archived in COMPLETED_TASKS.md @ `e65513d`. Nav smoke ADB archived 2026-09-10.
-> **Waiting HUMAN/ADB auto** archived in COMPLETED_TASKS.md @ `ca0edfb`.
+<!-- product-brief-sync:begin -->
+Self-hosted phone remote for coding agents with cost-aware routing (direct or pool).
+Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysaor
+<!-- product-brief-sync:end -->
 
-### UX & UI inventory
+### Sprint 0 — Bootstrap
 
-Complete list from construction gaps and `/ux-review`. Status is only planned / in_progress / done. `/build` does not execute these until `/ux-apply UX-NNN` (or a Sequential row).
+<!-- parallel_exception: sequential bootstrap; docs and monorepo share root package.json -->
 
-<!-- ux-inventory:begin -->
-_No UX inventory items._
-<!-- ux-inventory:end -->
+1. ✅ [AGENT][LOCAL] Create repo from agent-project-bootstrap; topics; clone — scope: .
+2. ✅ [AGENT][LOCAL] Replace README; write docs/BUILD_PLAN.md, STATE.md, DECISIONS.md — scope: docs/
+3. ✅ [AGENT][LOCAL] Scaffold pnpm monorepo (Node 22, vitest, eslint, prettier, tsup, zod) — scope: packages/workspace
+4. ✅ [AGENT][LOCAL] Add Iris CI job; keep template hygiene gates green — scope: .github/workflows/ci.yml
+5. ✅ [AUTO] Sprint 0 sign-off: `pnpm lint` · `pnpm test` · CI green on PR
 
-### Local agent (This Computer)
+### Sprint 1 — Protocol + schemas
 
-Standing queue for This Computer. Rows: `🔲 [AGENT][LOCAL] … — scope: path`. `/build` and `/feature` claim these only. Isolation: [`docs/adr/0008-agent-venue.md`](docs/adr/0008-agent-venue.md).
+<!-- parallel_exception: single package packages/protocol; see docs/BUILD_PLAN.md Sprint 1 -->
 
-<!-- local-agent-lane:begin -->
-- 🔲 [AGENT][LOCAL] Bump the Gradle wrapper 9.9.1 → 9.9.2 and commit the regenerated wrapper jar and distributionSha256Sum (4 High security fixes: SFTP host keys, snapshot dependency verification, TestKit temp dir, daemon registry) — scope: examples/android/gradle/wrapper/ (news P2, 2026-11-20) https://docs.gradle.org/9.9.2/release-notes.html
-<!-- local-agent-lane:end -->
-
-### Cloud agent (Cursor Cloud)
-
-Standing queue for Cursor Cloud Agents. Rows: `🔲 [AGENT][CLOUD] … — scope: path`. Cloud claims these only (`cursor/*` branches). Never edit Local lane or `[LOCAL]` rows.
-
-<!-- cloud-agent-lane:begin -->
-_No cloud agent items._
-<!-- cloud-agent-lane:end -->
+1. 🔲 [AGENT][LOCAL] Zod schemas for events, handoff.v1, ledger, capabilities, provenance, Pool, ModelCard — scope: packages/protocol
+2. 🔲 [AGENT][LOCAL] Round-trip + rejection tests; full-thread fixture — scope: packages/protocol
 
 ### Open PRs (synced)
 
-> Auto-managed. Do not hand-edit rows inside the markers. Run `python3 scripts/agent-run.py sync-open-prs-build-plan -- --apply` (or `/resume` / `/dependabot`).
->
-> **Triage 2026-11-19:** Dependabot #145/#147 and Release Please #148 (v1.13.1) merged — open-PRs lane empty.
+> Auto-managed. Do not hand-edit rows inside the markers.
 
 <!-- open-prs-sync:begin -->
 - 🔲 [AUTO] Merge Dependabot [#4](https://github.com/edwardlthompson/iris/pull/4) (Bump the github-actions group with 3 updates)
@@ -95,30 +59,40 @@ _No cloud agent items._
 
 ### Template gaps (synced)
 
-> Auto-managed Monday cron + `sync-template-gaps-build-plan`. Do not hand-edit inside markers. Plan-only — run `/upgrade` then name item numbers.
+> Auto-managed. Do not hand-edit inside markers.
 
 <!-- template-gaps-sync:begin -->
 _No template gaps; .template-version matches upstream (or template maintainer N/A)._
 <!-- template-gaps-sync:end -->
 
-### Waiting on a person
+### UX & UI inventory
 
-_None._ Lightroom stub smoke is `feature-gate --stack lightroom` (Lua/SDK), not Plug-in Manager. Raster icons are `blender-icons` QA, not a HUMAN export.
+<!-- ux-inventory:begin -->
+_No UX inventory items._
+<!-- ux-inventory:end -->
 
-Done on this board: **News security sprint** · **M66** shape/commercial/coverage/deep-upgrade · **M65** brand/splash · **v1.8.0** · **M64** cost/brevity · **M63** Local/Cloud venues · **v1.6.0** · **M62** UX/UI construction law · **v1.5.0** · **v1.4.0** · **v1.3.0** · **M61**–**M47** (see archive). Archive: `COMPLETED_TASKS.md`.
+### Local agent (This Computer)
+
+Standing queue for This Computer. Rows: `🔲 [AGENT][LOCAL] … — scope: path`.
+
+<!-- local-agent-lane:begin -->
+_No local agent items._
+<!-- local-agent-lane:end -->
+
+### Cloud agent (Cursor Cloud)
+
+Standing queue for Cursor Cloud. Rows: `🔲 [AGENT][CLOUD] … — scope: path`.
+
+<!-- cloud-agent-lane:begin -->
+_No cloud agent items._
+<!-- cloud-agent-lane:end -->
 
 ---
 
 ## Ongoing Maintenance
 
-Not a checklist. GitHub Monday 07:00 UTC (`.github/workflows/weekly-health-check.yml`) already runs CI wait, security triage, upgrade-sim (template) or parent template-gap BUILD_PLAN sync (child), radar, `update-deps` dry-run, Dependabot leftover list, open-PR BUILD_PLAN sync, and latest-release SBOM. `/ship` owns pre-release and the release tag.
-
-Open Dependabot / Release Please PRs are mirrored into **Open PRs (synced)** above; child catch-up rows land in **Template gaps (synced)** — allowed board automation, not standing chore rows. After Cloud Agents, use `/resume` on This Computer.
-
-If Monday cron is red: Cursor Automation `weekly-maintain`, then Grok Bot 4–5. Do not put those chores back on this board. [`docs/GROK_BOTS.md`](docs/GROK_BOTS.md) · [`docs/CURSOR_AUTOMATIONS.commercial.md`](docs/CURSOR_AUTOMATIONS.commercial.md)
-
----
+Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in `docs/BUILD_PLAN.md`.
 
 ## Archive
 
-Older sprints and releases: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
+Sprint completions land in [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).

@@ -1,0 +1,23 @@
+# Decisions
+
+Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choices go here with date and rationale.
+
+## 2026-11-25 — A2 bootstrap
+
+| # | Decision | Why |
+|---|---|---|
+| A2-1 | Product stack is TypeScript, Node 22, pnpm workspaces, vitest, eslint + prettier, tsup, zod | Locked in Part A2 of the build plan |
+| A2-2 | Keep agent-project-bootstrap hygiene/docs/CI scaffolding; product code lives under `packages/` and `apps/` | Template gates (`validate-bootstrap`, encoding, hygiene) stay useful; Iris is not the template |
+| A2-3 | Root `BUILD_PLAN.md` points at `docs/BUILD_PLAN.md` | Template requires root `BUILD_PLAN.md`; Iris plan is the verbatim work order in `docs/` |
+| A2-4 | Leave template `examples/*` golden paths in place for sprint 0 | Avoids rewriting every template CI job; Iris adds a root `pnpm` CI job on Node 22. Prune examples in a later hygiene pass if they fight the monorepo |
+| A2-5 | Repo created with `gh repo create` then cloned into the existing `Iris` workspace (no `--clone` into a nested dir) | Workspace path already existed empty |
+| A2-6 | Phone UI will be absorbed from `cursor-remote-lite` later; not copied in sprint 0 | Sprint 0 is repo + CI only |
+| A2-7 | `engines.node` is `>=22` (not `<23`); CI pins Node 22 via `.nvmrc` / workflow | Local tooling may be newer; product target remains 22 |
+| A2-8 | `@iris/workspace` is a sprint-0 smoke package only | Real packages start at sprint 1 (`packages/protocol`) |
+| A2-9 | Root `BUILD_PLAN.md` keeps template tally/parallel shape; Iris sprints live in `docs/BUILD_PLAN.md` | `validate-bootstrap` requires tally markers and Parallel tables |
+| A2-10 | Iris CI job uses Node `24.22.3` (template pin); `.nvmrc` / engines stay Node 22+ | `tests/test_node_pin.py` forbids `node-version: "22"` in workflows; 24.22.3 satisfies `engines: >=22` |
+| A2-11 | Keep template OpenSSF Best Practices badge (project 14564) on README for now | `tests/test_ci_refs.py` requires it; register Iris separately later |
+
+## Appendix F (imported)
+
+See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.
