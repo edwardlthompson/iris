@@ -2,6 +2,28 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 20 — Android APK and notifications (2026-11-26)
+
+- ✅ [AGENT][LOCAL] Unsigned Capacitor APK and `adb install` on connected devices — scope: apps/phone — Success on b5214fc6, 8bf09993, R52T10C5SEP
+- ✅ [AGENT][LOCAL] Android shade notification when an agent finishes or is waiting; tap opens the thread — scope: apps/phone
+
+## Phone UI absorb (2026-11-26)
+
+- ✅ [AGENT][LOCAL] Shell chrome + VS Code–dark CSS (header `.seg` Chat/Dual/Files; gate; sheets; footer composer) — scope: apps/phone
+- ✅ [AGENT][LOCAL] Chat transcript UI (bubbles, tools, load-earlier, to-bottom) wired to Iris thread/prompt events — scope: apps/phone
+- ✅ [AGENT][LOCAL] Approval + questionnaire + queue bars (`#actionBar`, `#qnBar`, `#queueBar`) — scope: apps/phone
+- ✅ [AGENT][LOCAL] Files / Dual pane (tabs, changed files, diff/md preview; forbid `#tabScreen`) — scope: apps/phone
+- ✅ [AGENT][LOCAL] Performance modes + Manual Grok ladder (Stage1 auto cap; Model chip only in Manual) — scope: apps/phone, packages/host, packages/adapter-cursor
+- ✅ [AGENT][LOCAL] Cost estimate chip from `@iris/remote` into composer dock — scope: apps/phone
+- ✅ [AGENT][LOCAL] Status/overflow sheets (connection, legs/windows, unpair, reload) — scope: apps/phone
+- ✅ [AGENT][LOCAL] PWA polish (manifest/theme `#1e1e1e`, SW cache, push deep links → approval sheet) — scope: apps/phone
+- ✅ [HUMAN] Side-by-side visual check vs cursor-remote-app / antigravity-remote-app on phone
+
+## Sprint 19 — stay paired off LAN (2026-11-26)
+
+- ✅ [AGENT][LOCAL] Device token after the first pair; phone reconnects without a new code — scope: packages/host, apps/phone
+- ✅ [AGENT][LOCAL] Transport ladder: LAN, then Tailscale, then tunnel; show the active rung — scope: packages/host, apps/phone
+
 ## Sprint 18 — Push + Capacitor (2026-11-25)
 
 - ✅ [AGENT][LOCAL] APNs/FCM, permission flow, deep link to approval sheet — scope: apps/

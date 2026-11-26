@@ -15,7 +15,7 @@
 ![python](https://img.shields.io/badge/python-stack-3776AB?style=flat-square)
 ![android](https://img.shields.io/badge/android-stack-3DDC84?style=flat-square)
 
-**Self-hosted phone remote for coding agents, with cost-aware routing.**
+**Self-hosted remote for coding agents, with cost-aware routing.** The desktop app is the main way to run it. The phone app and the PWA are the same screens when you are away from the desk.
 
 ## Pitch
 
@@ -26,6 +26,8 @@ Drive Claude, Codex, Cursor, and ACP-capable CLIs from your pocket. Iris runs on
 When you opt into pool topology, `chrysaor` fronts LiteLLM on `127.0.0.1` only. Pool keys never sit in Iris. Caps are counted locally. Routing stays transparent: leg, model, effort, estimate — one tap to override.
 
 ## Why Iris
+
+- **Desktop window** — the same screens as the phone, with no browser bars. It can start the host, Cursor, and Antigravity, sit in the tray, and show a reply after the window is closed. Windows and Linux share that shell. The PWA is the backup.
 
 - **Cheapest sufficient agent** — `proteus` picks the leg that can finish without overpaying
 - **Cost chip before send** — dollars and tokens labelled as estimates, always paired

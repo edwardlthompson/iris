@@ -1,0 +1,195 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: #1e1e1e; color: #d4d4d4; font: 15px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  body { position: fixed; left: 0; top: 0; width: 100%; height: 100dvh; display: flex; flex-direction: column; overflow: hidden;
+         padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  button, select, textarea, input { font: inherit; color: #e6e6e6; background: #2d2d2d; border: 1px solid #3c3c3c; border-radius: 8px; }
+  button { padding: 6px 12px; white-space: nowrap; cursor: pointer; }
+  button:active { filter: brightness(1.3); }
+  button.on, button.primary { background: #0e639c; border-color: #1177bb; color: #fff; }
+  button.ghost { background: #2d2d2d; border-color: #3c3c3c; color: #ddd; font-weight: 400; }
+  [hidden] { display: none !important; }
+
+  header { flex: none; display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: #252526; border-bottom: 1px solid #333; min-width: 0; }
+  #statusBell { position: relative; flex: none; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; color: #bbb; background: transparent; border: none; border-radius: 8px; }
+  #statusBell:active { background: #333; }
+  #statusBell.ok { color: #6c6; }
+  #statusBell.bad { color: #f77; }
+  #statusBell .badge { position: absolute; top: 2px; right: 2px; min-width: 10px; height: 10px; border-radius: 10px; background: #ff2a2a; box-shadow: 0 0 0 2px #111; display: none; }
+  #statusBell .badge.on { display: block; }
+  #statusBell .badge.err { background: #e55; min-width: 8px; }
+  .seg { display: flex; flex: 1; min-width: 0; border: 1px solid #3c3c3c; border-radius: 8px; overflow: hidden; justify-content: stretch; }
+  .seg button { border: none; border-radius: 0; padding: 5px 7px; background: #2d2d2d; font-size: 12.5px; flex: 1; }
+  .seg button.on { background: #0e639c; }
+  #menuBtn { flex: none; padding: 5px 10px; }
+
+  main { flex: 1; min-height: 0; position: relative; }
+  .view { position: absolute; inset: 0; display: none; flex-direction: column; min-width: 0; }
+  .view.active { display: flex; }
+
+  /* chat view */
+  #list { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 10px 12px 8px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  #older { display: block; margin: 0 auto 10px; font-size: 13px; color: #aaa; background: transparent; }
+  .msg { margin: 8px 0; min-width: 0; overflow-wrap: anywhere; }
+  .human { display: flex; justify-content: flex-end; }
+  .human .bubble { max-width: 88%; background: #264f78; color: #fff; padding: 8px 12px; border-radius: 14px 14px 4px 14px; white-space: pre-wrap; }
+  .assistant { padding: 2px 2px; white-space: pre-wrap; }
+  .assistant p { margin: 0 0 .6em; }
+  .assistant ul, .assistant ol { margin: 0 0 .6em; padding-left: 1.3em; }
+  .assistant h1, .assistant h2, .assistant h3, .assistant h4 { font-size: 1.05em; margin: .8em 0 .4em; }
+  .assistant code { background: #333; padding: 1px 4px; border-radius: 4px; font: 13px ui-monospace, Menlo, monospace; }
+  .assistant pre { background: #111; padding: 8px 10px; border-radius: 8px; overflow-x: auto; font: 12.5px/1.45 ui-monospace, Menlo, monospace; white-space: pre; }
+  .assistant table { border-collapse: collapse; display: block; overflow-x: auto; font-size: 13px; margin: 0 0 .6em; }
+  .assistant td, .assistant th { border: 1px solid #444; padding: 4px 6px; }
+  .assistant blockquote { margin: 0 0 .6em; padding-left: 10px; border-left: 3px solid #555; color: #aaa; }
+  .tool { font: 12.5px/1.4 ui-monospace, Menlo, monospace; color: #9da5b4; background: #252526; border: 1px solid #303030; border-radius: 8px; padding: 6px 9px; }
+  .tool .txt { white-space: pre-wrap; }
+  .thinking, .other { font-size: 12px; color: #777; padding-left: 2px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .btns button { font-size: 13px; padding: 5px 10px; }
+  .btns button.primary { font-weight: 600; }
+  #empty { color: #888; text-align: center; margin-top: 30vh; padding: 0 20px; }
+  #toBottom { position: fixed; right: 18px; bottom: calc(132px + env(safe-area-inset-bottom)); z-index: 16; width: 44px; height: 44px; border-radius: 22px; padding: 0; display: none; align-items: center; justify-content: center; background: #0e639c; border-color: #1177bb; color: #fff; font-size: 20px; box-shadow: 0 2px 8px #000a; }
+  #toBottom.show { display: flex; }
+  body.files-only #toBottom { display: none !important; }
+  #actionBar { flex: none; display: none; gap: 8px; flex-wrap: wrap; padding: 8px 12px; background: #2a2d2e; border-top: 1px solid #333; }
+  #actionBar.show { display: flex; }
+  #actionBar button { flex: 1; padding: 9px; font-weight: 600; }
+  #actionBar button.stop-gen,
+  #queueBar button[data-stop],
+  .btns button.stop-gen {
+    background: #a1260d !important; border-color: #e03e2f !important; color: #fff !important; font-weight: 700;
+    box-shadow: 0 0 0 1px #ff6b5a55;
+  }
+  .assistant code { color: inherit; text-decoration: none; }
+  .assistant code[data-file], .tool[data-file] { cursor: default; text-decoration: none; color: inherit; }
+  .tool[data-file] .txt::before { content: none; }
+  #queueBar { flex: none; display: none; flex-direction: column; gap: 6px; padding: 7px 12px; background: #23272e; border-top: 1px solid #333; max-height: 34vh; overflow-y: auto; }
+  #queueBar.show { display: flex; }
+  #qnBar { flex: none; display: none; flex-direction: column; gap: 8px; padding: 10px 12px; background: #2a2620; border-top: 2px solid #e5c07b; max-height: 48vh; overflow-y: auto; }
+  #qnBar.show { display: flex; }
+  #qnBar .qnHead { font-size: 12.5px; color: #e5c07b; font-weight: 600; }
+  #qnBar .qnQ { font-size: 14.5px; color: #eee; white-space: pre-wrap; }
+  #qnBar .qnOpts { display: flex; flex-direction: column; gap: 6px; }
+  #qnBar .qnOpt { text-align: left; font-size: 14px; padding: 8px 10px; display: flex; gap: 8px; }
+  #qnBar .qnOpt b { color: #999; flex: none; }
+  #qnBar .qnOpt.on { border-color: #e5c07b; background: #3a3220; }
+  #qnBar .qnOpt.on b { color: #e5c07b; }
+  #qnBar .qnFree { display: flex; gap: 6px; }
+  #qnBar .qnFree input { flex: 1; min-width: 0; font-size: 14px; }
+  #qnBar .qnFree.on input { border-color: #e5c07b; }
+  #qnBar .qnAct { display: flex; gap: 8px; justify-content: flex-end; }
+  #qnBar .qnAct button { padding: 7px 16px; }
+  #qnBar .qnAct .primary { background: #0e639c; border-color: #1177bb; color: #fff; font-weight: 600; }
+  #qnBar .qnAct .primary:disabled { opacity: .45; }
+  #queueBar .run { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #9cc8ff; }
+  #queueBar .run span { flex: 1; min-width: 0; }
+  #queueBar .run i { width: 8px; height: 8px; border-radius: 50%; background: #4af; flex: none; animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  #queueBar .qh { font-size: 12px; color: #999; }
+  #queueBar .qh.fold { background: none; border: none; padding: 2px 0; text-align: left; color: #9cc8ff; font-size: 12.5px; }
+  #queueBar .q { display: flex; align-items: center; gap: 6px; font-size: 13.5px; }
+  #queueBar .q .qt { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ccc; }
+  #queueBar .q .qt::before { content: "○ "; color: #777; }
+  #queueBar .q .qt.sa::before { content: "⇢ "; color: #4af; }
+  #queueBar .run.sub { color: #e5c07b; }
+  #queueBar button { font-size: 12px; padding: 3px 9px; flex: none; }
+
+  /* composer + collapsible dock */
+  footer { flex: none; background: #252526; border-top: 1px solid #333; padding: 6px 10px 8px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  #presenceBar { display: none; align-items: center; gap: 8px; padding: 6px 8px; margin: 0 -2px; border-radius: 8px; background: #3a2f1a; border: 1px solid #6b5420; font-size: 12.5px; color: #f0d78c; }
+  #presenceBar.show { display: flex; }
+  #presenceBar button { flex: none; font-size: 12px; padding: 4px 10px; }
+  /* Quick-prompt chips removed — use slash / recipes instead; frees footer space. */
+  #quickPrompts { display: none !important; }
+  #composerPanel { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  body.composer-collapsed #composerPanel { display: none !important; }
+  #chatTools { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+  #chatTools[hidden], .row.composer[hidden], #usageBar[hidden] { display: none !important; }
+  #chatTools::-webkit-scrollbar { display: none; }
+  #chatTools button { font-size: 12.5px; padding: 3px 10px; border-radius: 14px; flex: none; white-space: nowrap; }
+  #chatTools #pickModel { flex: 0 1 auto; min-width: 84px; overflow: hidden; text-overflow: ellipsis; }
+  
+  #composerDock { display: flex; align-items: center; gap: 8px; min-width: 0; padding-top: 2px; }
+  #uiBuild { flex: none; font-size: 11px; color: #777; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; padding: 0 2px; }
+  #usageBar { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0; min-width: 0; flex: 1; overflow-x: auto; scrollbar-width: none; }
+  #usageBar::-webkit-scrollbar { display: none; }
+  body.files-only #uiBuild { display: inline; }
+  .uChip { flex: 0 1 auto; display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px 3px 4px; min-height: 34px; border-radius: 17px; background: #2d2d30; border: 1px solid #3c3c40; color: #ddd; cursor: pointer; font-family: inherit; transition: border-color .18s ease, background .18s ease; }
+  .uChip:active { background: #36363b; }
+  .uChip svg { flex: none; width: 34px; height: 34px; display: block; }
+  .uChip .uMeta { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15; min-width: 0; }
+  .uChip .uName { font-size: 13px; font-weight: 750; color: #fff; letter-spacing: 0.01em; white-space: nowrap; }
+  .uChip .uNums { font-size: 13px; font-weight: 750; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .uOk { color: #7CFF6B; }
+  .uHot { color: #FFE14A; }
+  .uCrit { color: #FF5A1F; }
+  .uChip .uSep { color: #666; margin: 0 1px; }
+  @media (max-width: 420px) {
+    #usageBar { gap: 4px; }
+    .uChip { padding: 2px 6px 2px 3px; gap: 4px; }
+    .uChip svg { width: 24px; height: 24px; }
+    .uChip .uName { font-size: 13px; }
+    .uChip .uNums { font-size: 13px; }
+  }
+  .uSheetCard { background: #1e1e1e; border: 1px solid #333; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .uSheetHead { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .uSheetHead svg { width: 38px; height: 38px; flex: none; }
+  .uSheetTitle { font-size: 14px; font-weight: 600; color: #eee; }
+  .uSheetSub { font-size: 11.5px; color: #8c8c94; }
+  .uBarRow { display: grid; grid-template-columns: 28px 1fr 62px auto; align-items: center; gap: 8px; margin-top: 5px; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .uBarWin { color: #aaa; font-weight: 600; }
+  .uBarTrack { height: 7px; border-radius: 4px; background: #333; overflow: hidden; }
+  .uBarFill { height: 100%; border-radius: 4px; transition: width .25s ease, background .25s ease; }
+  .uBarPct { text-align: right; font-weight: 600; }
+  .uBarRst { font-size: 11px; color: #888; white-space: nowrap; }
+  #composerToggle { flex: none; width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; color: #bbb; border-radius: 8px; }
+  #composerToggle[aria-expanded="true"] { color: #9cc8ff; }
+  .row.composer { display: flex; flex-direction: column; gap: 8px; min-width: 0; align-items: stretch; }
+  .composer-actions { display: flex; gap: 8px; min-width: 0; align-items: center; }
+  .composer-actions .spacer { flex: 1; min-width: 0; }
+  footer.locked #composerPanel { opacity: 0.45; pointer-events: none; }
+  #diffView, #paneDiffBody { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 55dvh; overflow: auto; background: #1e1e1e; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+  #diffView .add, #paneDiffBody .add { color: #73c991; }
+  #diffView .del, #paneDiffBody .del { color: #f14c4c; }
+  #diffView .meta, #paneDiffBody .meta { color: #888; }
+  .row.composer textarea { flex: none; width: 100%; min-width: 0; height: 34px; max-height: 42vh; padding: 6px 10px; resize: none; font-size: 16px; line-height: 1.25; box-sizing: border-box; overflow-y: auto; background: #2d2d2d; }
+  #photoStrip { display: flex; gap: 8px; flex-wrap: wrap; }
+  #photoStrip:empty { display: none; }
+  #photoStrip figure { margin: 0; position: relative; }
+  #photoStrip img { display: block; height: 64px; width: 64px; object-fit: cover; border-radius: 8px; background: #111; }
+  #photoStrip button { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; padding: 0; border-radius: 11px; background: #111; color: #fff; }
+  #img { flex: none; height: 40px; width: 40px; padding: 0; display: flex; align-items: center; justify-content: center; color: #bbb; }
+  #mic { display: none; }
+  body.voice #mic { flex: none; height: 40px; width: 40px; padding: 0; display: flex; align-items: center; justify-content: center; color: #bbb; }
+  #mic.on { color: #fff; background: #c33; border-color: #e55; animation: pulse 1.2s ease-in-out infinite; }
+  #send { flex: none; height: 40px; padding: 0 16px; margin-left: auto; background: #0e639c; border-color: #1177bb; color: #fff; font-weight: 600; }
+  /* Clipboard icons stay in ⋯ menu on phones; show inline when there is room. */
+  @media (max-width: 520px) {
+    #clipPush, #clipPull { display: none; }
+  }
+  /* Files tab = reading only — no chat composer / History tools. Dock stays for usage. */
+  body.files-only footer #composerPanel,
+  body.files-only footer #presenceBar,
+  body.files-only footer #quickPrompts,
+  body.files-only footer #composerToggle { display: none !important; }
+  body.files-only footer { padding: 4px 10px; gap: 4px; border-top-color: #2a2a2a; }
+  body.files-only #composerDock { padding-top: 0; }
+  /* Status lines live in the bell sheet — keep #msg off-layout for a11y fallback. */
+  #msg { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .statusLog { font-size: 12.5px; color: #aaa; max-height: 40vh; overflow-y: auto; margin: 0 0 10px; padding: 0 4px; }
+  .statusLog .sl { padding: 6px 0; border-bottom: 1px solid #333; }
+  .statusLog .sl.err { color: #f99; }
+  .statusLog .sl .when { color: #666; margin-right: 6px; font-variant-numeric: tabular-nums; }
+  .statusConn { display: flex; align-items: center; gap: 8px; padding: 8px 10px; margin-bottom: 8px; border-radius: 8px; background: #2a2a2a; font-size: 13px; }
+  .statusConn i { width: 9px; height: 9px; border-radius: 50%; background: #c33; flex: none; }
+  .statusConn.ok i { background: #3c3; }
+
+  /* bottom sheet */
+  #shade { position: fixed; inset: 0; z-index: 30; background: #0008; display: none; }
+  #shade.open { display: block; }
+  #sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 31; background: #252526; border-radius: 14px 14px 0 0; padding: 12px 12px calc(14px + env(safe-area-inset-bottom)); max-height: 75dvh; overflow-y: auto; transform: translateY(105%); transition: transform .2s; }
+  #sheet.open { transform: none; }
+  #sheet h3 { margin: 2px 4px 10px; font-size: 15px; color: #ccc; font-weight: 600; }
+  .opt { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 11px 12px; margin-bottom: 6px; white-space: normal; }
+  .opt .lbl { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .opt .sub { display: block; font-size: 12px; color: #888; margin-top: 2px; }

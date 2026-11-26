@@ -8,6 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] — Desktop window and shared phone shell (2026-11-26)
+
+### Added
+
+* Windows desktop app (Tauri) with the same screens as the phone, tray, and pairing from the local host
+* Android Capacitor project and shared phone shell (Chat, Dual pane, Files)
+* Cursor and Antigravity CDP bridges, Claude CLI leg, model ladder, device token pairing, and turn notices
+* Build plan sprints 19–21: stay paired off LAN, Android APK with notifications, Antigravity live
+
+### Changed
+
+* Phone PWA absorbs Cursor/Antigravity Remote shell chrome (Chat / Dual pane / Files; no Screen)
+* Agent-active bar follows host busy state on every client
+* Cursor leg CDP bridge submits phone prompts into Cursor Agent (port 9222; replaces bridge_pending)
+* Phone chat mirrors Cursor agent-transcript history (pair/History/poll)
+* Legs sheet with connected dots + Add wizard; History chat picker; Performance then Model chips
+* Prompt path runs Stage1 classifier capped by Performance chip; maps to ranked Grok 4.7 efforts; Manual shows model sheet only
+* CDP best-effort selects Grok + effort before submit
+
 ## [0.1.0] — Iris product MVP + post-MVP (2026-11-26)
 
 ### Added

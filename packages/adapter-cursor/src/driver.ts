@@ -6,8 +6,20 @@ export type CursorBridge = {
   send(opts: {
     prompt: string;
     model: string;
+    effort?: string;
+    pickerLabel?: string;
     signal?: AbortSignal;
-  }): Promise<{ text: string; stopReason: string }>;
+    images?: { data: string; name?: string; type?: string }[];
+  }): Promise<{ text: string; stopReason: string; modelSelect?: string }>;
+};
+
+export type CursorRunOpts = {
+  prompt: string;
+  model?: string;
+  effort?: string;
+  pickerLabel?: string;
+  signal?: AbortSignal;
+  images?: { data: string; name?: string; type?: string }[];
 };
 
 export class CursorDriver {
@@ -21,12 +33,24 @@ export class CursorDriver {
     return probeCursorLeg(this.ide, this.credits);
   }
 
-  async run(prompt: string, signal?: AbortSignal) {
+  async run(promptOrOpts: string | CursorRunOpts, signal?: AbortSignal) {
+    const opts: CursorRunOpts =
+      typeof promptOrOpts === "string"
+        ? { prompt: promptOrOpts, signal }
+        : promptOrOpts;
     const status = await this.status();
     if (!status.enabled) {
       throw new Error(`cursor disabled: ${status.reason}`);
     }
-    const out = await this.bridge.send({ prompt, model: status.model, signal });
-    return { ...out, model: status.model, status };
+    const model = opts.model ?? status.model;
+    const out = await this.bridge.send({
+      prompt: opts.prompt,
+      model,
+      effort: opts.effort,
+      pickerLabel: opts.pickerLabel,
+      signal: opts.signal ?? signal,
+      images: opts.images,
+    });
+    return { ...out, model, status };
   }
 }

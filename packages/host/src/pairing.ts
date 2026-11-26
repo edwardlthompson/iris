@@ -33,7 +33,7 @@ export class PairingService {
     }
     // Re-pair allowed: phones reconnect; multi-device shares the host fingerprint.
     const session: PairingSession = {
-      sessionId: `pair_${Date.now().toString(36)}`,
+      sessionId: expected,
       fingerprint: expected,
       pairedAt: new Date().toISOString(),
     };

@@ -1,0 +1,80 @@
+/* Iris pairing gate — same chrome as cursor-remote pair screen. */
+#pair-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#pair-form #host {
+  font-size: 15px;
+  padding: 11px;
+}
+#pair-form #gateBtn {
+  width: 100%;
+  padding: 11px;
+}
+#gate b {
+  color: #eee;
+}
+#gateStatus {
+  color: #aaa;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+#gateStatus.err {
+  color: #f77;
+}
+#usageBar:not([hidden]) {
+  display: flex;
+}
+.msg {
+  margin: 8px 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.msg.human {
+  display: flex;
+  justify-content: flex-end;
+}
+.opt .dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #555;
+}
+.opt .dot.ok {
+  background: #3c3;
+  box-shadow: 0 0 0 2px #3c35;
+}
+#pickModel,
+#pickPreset {
+  max-width: 7.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#pickModel.auto {
+  color: #9cc8ff;
+}
+#costChip {
+  font-size: 11px;
+  color: #9cc8ff;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+#costChip.warn {
+  color: #e5c07b;
+}
+.opt.locked {
+  opacity: 0.42;
+  pointer-events: none;
+}
+.opt.locked.cur {
+  opacity: 1;
+  pointer-events: none;
+}
+.hint {
+  margin: 0 4px 10px;
+  font-size: 12.5px;
+  color: #999;
+  line-height: 1.4;
+}

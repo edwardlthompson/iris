@@ -79,6 +79,26 @@ describe("@iris/adapter-cursor", () => {
     expect(out.text).toBe("composer:hi");
   });
 
+  it("accepts explicit model/effort override on run", async () => {
+    const driver = new CursorDriver(
+      probe(true),
+      credits([{ id: "composer", remainingPct: 1, rank: 10 }]),
+      {
+        async send({ prompt, model, effort }) {
+          return { text: `${model}:${effort}:${prompt}`, stopReason: "end_turn" };
+        },
+      },
+    );
+    const out = await driver.run({
+      prompt: "hi",
+      model: "grok-4.7:high",
+      effort: "high",
+      pickerLabel: "Grok 4.7",
+    });
+    expect(out.text).toBe("grok-4.7:high:high:hi");
+    expect(out.model).toBe("grok-4.7:high");
+  });
+
   it("feeds policyGate and pickBestAvailable for Cursor-only inventory", async () => {
     const status = await probeCursorLeg(
       probe(true),

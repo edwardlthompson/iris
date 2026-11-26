@@ -10,8 +10,8 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean",
-    "test": "vitest run",
+    "build": "tsup src/index.ts --format esm --clean",
+    "test": "vitest run --config vitest.config.ts",
     "lint": "eslint src"
   },
   "dependencies": {

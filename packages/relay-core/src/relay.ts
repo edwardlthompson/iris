@@ -70,6 +70,10 @@ export class RelayServer {
       }
       try {
         const frame = decodeFrame(this.opts.key, new Uint8Array(buf));
+        if (frame.body?.trimStart().startsWith("{") && this.opts.onText) {
+          await this.opts.onText(ws, frame.body);
+          return;
+        }
         if (frame.kind === "ping" || frame.kind === "hello" || frame.kind === "data") {
           const reply: RelayFrame = {
             v: 1,

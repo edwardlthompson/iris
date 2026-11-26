@@ -8,6 +8,7 @@ export {
   type PermissionResult,
 } from "./runtime.js";
 export { StubClaudeRuntime, type StubScript } from "./stub.js";
+export { createCliClaudeRuntime, claudeCliStatus, claudeCommand } from "./cli-runtime.js";
 export {
   ClaudeSession,
   type ApprovalChannel,

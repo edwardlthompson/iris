@@ -17,5 +17,7 @@ describe("@iris/phone capacitor shell", () => {
     const html = readFileSync(join(root, "www", "index.html"), "utf8");
     expect(html).toMatch(/pair-form/);
     expect(html).toMatch(/manifest\.webmanifest/);
+    expect(html).toMatch(/theme-color" content="#1e1e1e"/);
   });
 });
+

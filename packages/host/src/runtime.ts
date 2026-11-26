@@ -19,6 +19,27 @@ export function lanIpv4(): string {
   return "127.0.0.1";
 }
 
+export type TransportRung = { rung: "lan" | "tailscale" | "tunnel"; ws: string };
+
+/** LAN first, then a Tailscale 100.x address, then IRIS_TUNNEL_WS if set. */
+export function listTransportRungs(port: number, env = process.env): TransportRung[] {
+  const rungs: TransportRung[] = [{ rung: "lan", ws: `ws://127.0.0.1:${port}` }];
+  const nets = networkInterfaces();
+  for (const entries of Object.values(nets)) {
+    for (const e of entries ?? []) {
+      if (e.family !== "IPv4" || e.internal) continue;
+      const rung = e.address.startsWith("100.") ? "tailscale" : "lan";
+      const ws = `ws://${e.address}:${port}`;
+      if (!rungs.some((r) => r.ws === ws)) rungs.push({ rung, ws });
+    }
+  }
+  const tunnel = env.IRIS_TUNNEL_WS;
+  if (tunnel && (tunnel.startsWith("ws://") || tunnel.startsWith("wss://"))) {
+    rungs.push({ rung: "tunnel", ws: tunnel });
+  }
+  return rungs;
+}
+
 export type HostRuntime = {
   relay: RelayServer;
   fingerprint: string;

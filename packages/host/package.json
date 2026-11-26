@@ -14,11 +14,13 @@
   },
   "scripts": {
     "build": "tsup src/index.ts src/cli.ts --format esm --clean",
-    "test": "vitest run",
+    "test": "vitest run --config vitest.config.ts",
     "lint": "eslint src",
     "start": "node dist/cli.js"
   },
   "dependencies": {
+    "@iris/adapter-antigravity": "workspace:*",
+    "@iris/adapter-claude": "workspace:*",
     "@iris/adapter-cursor": "workspace:*",
     "@iris/protocol": "workspace:*",
     "@iris/relay-core": "workspace:*",

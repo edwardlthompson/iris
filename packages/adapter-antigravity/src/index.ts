@@ -3,6 +3,13 @@ export { processNameProbe, REASON_IDE_CLOSED, type IdeProbe, type IdeClosedReaso
 export { probeLegStatus, candidacyFlags, type LegStatus } from "./status.js";
 export { AntigravityDriver, type IdeBridge, type DriverResult } from "./driver.js";
 export {
+  submitAntigravityPrompt,
+  listAntigravityHistory,
+  listAntigravityEditors,
+  focusAntigravityEditor,
+  scrapeAntigravityUsage,
+} from "./cdp-bridge.js";
+export {
   AntigravitySession,
   type AntigravitySessionOptions,
   type SessionResult,

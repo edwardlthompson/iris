@@ -1,6 +1,10 @@
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { requestPhoneApproval, settleApproval } from "./approvals.js";
 import { HostDaemon } from "./daemon.js";
-import { MemoryKeyStore } from "./keystore.js";
+import { FileKeyStore, MemoryKeyStore } from "./keystore.js";
 import { createLogger, type LogRecord } from "./logger.js";
 import { Supervisor } from "./supervisor.js";
 import { loadConfig } from "./config.js";
@@ -72,5 +76,27 @@ describe("@iris/host supervisor", () => {
       /maxConcurrent/,
     );
     await supervisor.shutdown();
+  });
+});
+
+describe("tool approval", () => {
+  it("resumes when the phone sends Allow", async () => {
+    const done = requestPhoneApproval("t1", () => {});
+    expect(settleApproval("t1", "Allow")).toBe(true);
+    await expect(done).resolves.toBe("Allow");
+  });
+});
+
+describe("FileKeyStore", () => {
+  it("keeps a key across two store instances", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "iris-keys-"));
+    try {
+      const first = new FileKeyStore(dir);
+      await first.set("host", new Uint8Array([1, 2, 3, 4]));
+      const second = new FileKeyStore(dir);
+      expect(Array.from((await second.get("host")) ?? [])).toEqual([1, 2, 3, 4]);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
   });
 });

@@ -1,5 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { describe, expect, it } from "vitest";
+import WebSocket from "ws";
 import { backoffMs } from "./backoff.js";
 import { MemoryDiscovery } from "./discovery.js";
 import { selectActiveRung } from "./ladder.js";
@@ -51,6 +52,27 @@ describe("@iris/relay-core paired WSS", () => {
     expect(again).toBe("after-drop");
 
     await client.close();
+    await server.stop();
+  });
+
+  it("delivers a sealed JSON control frame to the host handler", async () => {
+    const key = randomBytes(32);
+    const seen: string[] = [];
+    const discovery = new MemoryDiscovery();
+    const server = await new RelayServer({
+      key,
+      discovery,
+      fingerprint: "123456",
+      onText: (_ws, text) => {
+        seen.push(text);
+      },
+    }).start();
+    const ws = new WebSocket(`ws://127.0.0.1:${server.port}`);
+    await new Promise<void>((resolve) => ws.once("open", () => resolve()));
+    ws.send(encodeFrame(key, { v: 1, kind: "data", seq: 1, body: JSON.stringify({ type: "status" }) }));
+    await new Promise((r) => setTimeout(r, 80));
+    expect(seen[0]).toContain('"type":"status"');
+    ws.close();
     await server.stop();
   });
 });

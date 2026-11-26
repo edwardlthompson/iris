@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Iris",
+  "version": "0.1.0",
+  "identifier": "com.edwardlthompson.iris",
+  "build": {
+    "frontendDist": "../../phone/www",
+    "devUrl": "http://127.0.0.1:8787"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Iris",
+        "width": 1100,
+        "height": 800,
+        "minWidth": 720,
+        "minHeight": 560
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self' http://tauri.localhost https://tauri.localhost; connect-src 'self' ws: http: https: ipc: http://ipc.localhost; img-src 'self' data: blob: http://tauri.localhost https://tauri.localhost; style-src 'self' 'unsafe-inline' http://tauri.localhost https://tauri.localhost; script-src 'self' http://tauri.localhost https://tauri.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "deb", "appimage"],
+    "icon": ["icons/icon.png"]
+  }
+}

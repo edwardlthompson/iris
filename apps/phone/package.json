@@ -15,6 +15,9 @@
     "@iris/wizard": "workspace:*"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.6.3",
+    "@capacitor/cli": "^8.6.3",
+    "@capacitor/core": "^8.6.3",
     "vitest": "^2.1.8"
   }
 }

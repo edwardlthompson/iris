@@ -1,7 +1,7 @@
 # State
 
-Last completed: sprint 18 (push-capacitor) — all product sprints on `main`
-Next: none (board empty)
+Last completed: sprint 18 (push-capacitor) — product sprints 0–18 on `main`
+Next: sprint 19 (stay paired off LAN), then 20 (Android APK + notifications), then 21 (Antigravity live). Plan file: `BUILD_PLAN.md` (root).
 Branch in progress: none
 PR: none open
 Blockers: none
