@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 3 · LOCAL 3 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 1 · **4 open**
+**Remaining:** AGENT 3 · LOCAL 3 · CLOUD 0 · AUTO 1 · HUMAN 0 · ADB 1 · **5 open**
 <!-- /remaining-tally -->
 
 **Sprint state:** [`docs/STATE.md`](docs/STATE.md) · **Decisions:** [`docs/DECISIONS.md`](docs/DECISIONS.md)
@@ -146,7 +146,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 > Auto-managed. Do not hand-edit rows inside the markers.
 
 <!-- open-prs-sync:begin -->
-_No open Dependabot or Release Please PRs._
+- 🔲 [AUTO] Merge Dependabot [#24](https://github.com/edwardlthompson/iris/pull/24) (chore(deps): bump hono from 4.13.20 to 4.13.21 in /examples/node in the node-dependencies group)
 <!-- open-prs-sync:end -->
 
 ### Template gaps (synced)
