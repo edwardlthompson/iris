@@ -92,7 +92,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 14 — Antigravity adapter
 
-> **Sprint 14** archived in COMPLETED_TASKS.md @ `pending`.
+> **Sprint 14** archived in COMPLETED_TASKS.md @ `7061c04`.
 
 ### Sprint 15 — Packaging
 
