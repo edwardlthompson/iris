@@ -18,6 +18,15 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | A2-10 | Iris CI job uses Node `24.22.3` (template pin); `.nvmrc` / engines stay Node 22+ | `tests/test_node_pin.py` forbids `node-version: "22"` in workflows; 24.22.3 satisfies `engines: >=22` |
 | A2-11 | Keep template OpenSSF Best Practices badge (project 14564) on README for now | `tests/test_ci_refs.py` requires it; register Iris separately later |
 
+## 2026-11-25 — Sprint 1 protocol
+
+| # | Decision | Why |
+|---|---|---|
+| S1-1 | Thread events use `v: 1` envelope + discriminatedUnion on `type` | Appendix C; one parse entrypoint |
+| S1-2 | `pool_id` and ledger `pool_id` are nullable (null in direct topology) | Direct mode has no pool; schema must still validate |
+| S1-3 | `parseWithPath` returns the first Zod issue path | Done-when requires malformed rejection with a path |
+| S1-4 | `/build` continues to sprint 1 in the same session after sprint 0 | User invoked `/build`; Iris A1 one-sprint rule yields to explicit `/build` |
+
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

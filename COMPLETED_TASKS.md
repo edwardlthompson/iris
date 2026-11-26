@@ -2,6 +2,19 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 1 — Protocol + schemas (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Zod schemas for events, handoff.v1, ledger, capabilities, provenance, Pool, ModelCard — scope: packages/protocol
+- ✅ [AGENT][LOCAL] Round-trip + rejection tests; full-thread fixture — scope: packages/protocol
+
+## Sprint 0 — Bootstrap (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Create repo from agent-project-bootstrap; topics; clone — scope: .
+- ✅ [AGENT][LOCAL] Replace README; write docs/BUILD_PLAN.md, STATE.md, DECISIONS.md — scope: docs/
+- ✅ [AGENT][LOCAL] Scaffold pnpm monorepo (Node 22, vitest, eslint, prettier, tsup, zod) — scope: packages/workspace
+- ✅ [AGENT][LOCAL] Add Iris CI job; keep template hygiene gates green — scope: .github/workflows/ci.yml
+- ✅ [AUTO] Sprint 0 sign-off: `pnpm lint` · `pnpm test` · CI green on PR
+
 ## News security sprint — Local agent + Git floor (2026-11-19)
 
 - ✅ [AGENT][LOCAL] Unblock Dependabot #145/#147: fix Validate Bootstrap + Template Upgrade Simulation (Windows) — scope: README.md, scripts/, BUILD_PLAN.md (CI 2026-11-18: aggregate fails on those two jobs; CodeQL/Security Scan/Dependency Review pass)

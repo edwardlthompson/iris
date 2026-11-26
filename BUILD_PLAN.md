@@ -4,13 +4,13 @@
 **Remaining:** AGENT 2 · LOCAL 2 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **5 open**
 <!-- /remaining-tally -->
 
-**Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)  
+**Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
 **Sprint state:** [`docs/STATE.md`](docs/STATE.md) · **Decisions:** [`docs/DECISIONS.md`](docs/DECISIONS.md)
 
 Live board for the Iris product. Finished work: [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
 
-**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts  
-**Venue (AGENT only):** `[LOCAL]` This Computer · `[CLOUD]` Cursor Cloud  
+**Who:** `AGENT` code · `HUMAN` person · `ADB` device · `AUTO` CI/scripts
+**Venue (AGENT only):** `[LOCAL]` This Computer · `[CLOUD]` Cursor Cloud
 **State:** 🔲 open · ✅ done · ❌ blocked — reason
 
 Format: `🔲 [AGENT][LOCAL] Short task — scope: path/prefix`. Sequential `[AGENT]` first.
@@ -30,22 +30,15 @@ Self-hosted phone remote for coding agents with cost-aware routing (direct or po
 Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysaor
 <!-- product-brief-sync:end -->
 
-### Sprint 0 — Bootstrap
+> **Sprint 0 — Bootstrap** archived in COMPLETED_TASKS.md @ `sprint/01-protocol-schemas`.
+> **Sprint 1 — Protocol + schemas** archived in COMPLETED_TASKS.md @ `sprint/01-protocol-schemas`.
 
-<!-- parallel_exception: sequential bootstrap; docs and monorepo share root package.json -->
+### Sprint 2 — Host daemon + pairing
 
-1. ✅ [AGENT][LOCAL] Create repo from agent-project-bootstrap; topics; clone — scope: .
-2. ✅ [AGENT][LOCAL] Replace README; write docs/BUILD_PLAN.md, STATE.md, DECISIONS.md — scope: docs/
-3. ✅ [AGENT][LOCAL] Scaffold pnpm monorepo (Node 22, vitest, eslint, prettier, tsup, zod) — scope: packages/workspace
-4. ✅ [AGENT][LOCAL] Add Iris CI job; keep template hygiene gates green — scope: .github/workflows/ci.yml
-5. ✅ [AUTO] Sprint 0 sign-off: `pnpm lint` · `pnpm test` · CI green on PR
+<!-- parallel_exception: single package packages/host; see docs/BUILD_PLAN.md Sprint 2 -->
 
-### Sprint 1 — Protocol + schemas
-
-<!-- parallel_exception: single package packages/protocol; see docs/BUILD_PLAN.md Sprint 1 -->
-
-1. 🔲 [AGENT][LOCAL] Zod schemas for events, handoff.v1, ledger, capabilities, provenance, Pool, ModelCard — scope: packages/protocol
-2. 🔲 [AGENT][LOCAL] Round-trip + rejection tests; full-thread fixture — scope: packages/protocol
+1. 🔲 [AGENT][LOCAL] CLI entry, config, X25519 keypair/fingerprint, pairing handshake — scope: packages/host
+2. 🔲 [AGENT][LOCAL] Supervisor maxConcurrent/idleTtl, structured logs, SIGTERM clean — scope: packages/host
 
 ### Open PRs (synced)
 
@@ -95,4 +88,7 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 
 ## Archive
 
-Sprint completions land in [`COMPLETED_TASKS.md`](COMPLETED_TASKS.md).
+| Sprint | Complete | COMPLETED_TASKS.md |
+|---|---|---|
+| Sprint 0 — Bootstrap | 2026-11-25 | Sprint 0 — Bootstrap |
+| Sprint 1 — Protocol + schemas | 2026-11-25 | Sprint 1 — Protocol + schemas |

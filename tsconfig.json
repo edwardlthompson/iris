@@ -1,4 +1,7 @@
 {
   "files": [],
-  "references": [{ "path": "./packages/workspace" }]
+  "references": [
+    { "path": "./packages/workspace" },
+    { "path": "./packages/protocol" }
+  ]
 }
