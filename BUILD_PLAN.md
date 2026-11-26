@@ -62,7 +62,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 7 — Ledger + calibration
 
-> **Sprint 7** archived in COMPLETED_TASKS.md @ pending.
+> **Sprint 7** archived in COMPLETED_TASKS.md @ \2cb538a\.
 
 ### Sprint 8 — Topology + pool layer
 
