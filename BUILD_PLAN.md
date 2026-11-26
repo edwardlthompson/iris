@@ -78,7 +78,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 11 — Presets + cost chip
 
-> **Sprint 11** archived in COMPLETED_TASKS.md @ pending.
+> **Sprint 11** archived in COMPLETED_TASKS.md @ `07ffc99`.
 
 ### Sprint 12 — Handoff v1
 
