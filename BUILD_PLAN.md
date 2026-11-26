@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 16 · LOCAL 16 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **19 open**
+**Remaining:** AGENT 14 · LOCAL 14 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **17 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -78,8 +78,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 11 — Presets + cost chip
 
-1. 🔲 [AGENT][LOCAL] Preset policies, chip debounce/budget colour, pin, leg/topology/pool UI — scope: apps/
-2. 🔲 [AGENT][LOCAL] Chip shows leg/model/effort/estimate/pool; pin survives reload — scope: apps/
+> **Sprint 11** archived in COMPLETED_TASKS.md @ pending.
 
 ### Sprint 12 — Handoff v1
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 8 — Topology + pool layer | 2026-11-25 | Sprint 8 — Topology + pool layer |
 | Sprint 9 — Stage 1 classifier | 2026-11-25 | Sprint 9 — Stage 1 classifier |
 | Sprint 10 — Stage 2 + policy gate | 2026-11-25 | Sprint 10 — Stage 2 + policy gate |
+| Sprint 11 — Presets + cost chip | 2026-11-25 | Sprint 11 — Presets + cost chip |

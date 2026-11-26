@@ -88,6 +88,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S10-1 | Injectible `fetchImpl` on VeniceClient | CI without real Venice; FOSS OpenAI-compatible HTTP |
 | S10-2 | Timeout/malformed/low-confidence → `unclassified` | Done-when fallback; no second classifier endpoint |
 | S10-3 | Policy gate before Venice call | Exclude degraded pools / missing credentials early |
+## 2026-11-25 — Sprint 11 cost chip
+
+| # | Decision | Why |
+|---|---|---|
+| S11-1 | `apps/remote` holds chip logic + i18n before phone UI absorb | Scope is apps/; cursor-remote-lite comes later (B3) |
+| S11-2 | Semantic `budget-ok|warn|over` classes, no raw hex | DESIGN_GUIDE / ux-ui tokens |
+| S11-3 | 400 ms debounce + LocalStoragePinStore | Sprint done-when: pin survives reload |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

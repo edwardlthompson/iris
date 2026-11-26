@@ -181,3 +181,7 @@ Golden Path Settings/About/Feedback are a route stack, not three booleans. Web H
 ### Retrospective — 2026-11-25 (Iris Sprint 10)
 
 - Venice stage2 + policyGate; 400ms abort → unclassified.
+
+### Retrospective — 2026-11-25 (Iris Sprint 11)
+
+- `apps/remote` cost chip + B8 presets; pin survives storage reload.

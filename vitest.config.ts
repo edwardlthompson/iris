@@ -2,6 +2,7 @@ import path from "node:path";
 import { defineConfig } from "vitest/config";
 
 const iris = (pkg: string) => path.resolve(__dirname, `packages/${pkg}/src/index.ts`);
+const app = (name: string) => path.resolve(__dirname, `apps/${name}/src/index.ts`);
 
 export default defineConfig({
   resolve: {
@@ -16,6 +17,7 @@ export default defineConfig({
       "@iris/ledger": iris("ledger"),
       "@iris/pool": iris("pool"),
       "@iris/router": iris("router"),
+      "@iris/remote": app("remote"),
     },
   },
   test: {

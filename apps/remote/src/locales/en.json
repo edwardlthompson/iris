@@ -1,0 +1,11 @@
+{
+  "chip.aria": "Route cost chip",
+  "chip.ref": "ref. CursorBench",
+  "chip.pin": "Pin preset",
+  "chip.unpin": "Unpin preset",
+  "chip.topology.direct": "Direct",
+  "chip.topology.pool": "Pool",
+  "chip.mode.suggest": "Suggest",
+  "chip.empty": "Waiting for estimate",
+  "chip.primary": "Send with this route"
+}

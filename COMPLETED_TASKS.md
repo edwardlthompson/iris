@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 11 — Presets + cost chip (2026-11-25)
+
+- ✅ [AGENT][LOCAL] Preset policies, chip debounce/budget colour, pin, leg/topology/pool UI — scope: apps/
+- ✅ [AGENT][LOCAL] Chip shows leg/model/effort/estimate/pool; pin survives reload — scope: apps/
+
 ## Sprint 10 — Stage 2 + policy gate (2026-11-25)
 
 - ✅ [AGENT][LOCAL] Venice client, schema, cache, timeout/backoff/pause, unclassified — scope: packages/router
