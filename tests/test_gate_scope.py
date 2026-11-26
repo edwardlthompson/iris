@@ -38,6 +38,11 @@ class ClassifyTests(unittest.TestCase):
         self.assertEqual(d["mode"], "stacks")
         self.assertEqual(d["stacks"], ["node"])
 
+    def test_benchmarks_workflow_is_node(self) -> None:
+        d = classify([".github/workflows/benchmarks.yml", "scripts/refresh-benchmarks.mjs"])
+        self.assertEqual(d["mode"], "stacks")
+        self.assertEqual(d["stacks"], ["node"])
+
     def test_web_and_android(self) -> None:
         d = classify(["examples/web/src/a.ts", "examples/android/app/src/main/java/Foo.kt"])
         self.assertEqual(d["mode"], "stacks")

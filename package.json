@@ -12,7 +12,8 @@
   "scripts": {
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "test": "vitest run",
+    "test": "vitest run && node --test scripts/refresh-benchmarks.test.mjs",
+    "test:benchmarks": "node --test scripts/refresh-benchmarks.test.mjs",
     "typecheck": "tsc -b",
     "build": "pnpm -r run build"
   },

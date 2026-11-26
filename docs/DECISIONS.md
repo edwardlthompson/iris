@@ -102,6 +102,13 @@ Append-only log. Do not relitigate Appendix F of `docs/BUILD_PLAN.md`. New choic
 | S12-1 | `packages/handoff` wraps protocol HandoffV1Schema | Writer/trigger/resume stay out of protocol package |
 | S12-2 | Manual `confirmed` required before quota handoff | Sprint sheet: manual confirm |
 | S12-3 | Pool topology prefers `samePool` fallbacks | Model-only switch inside one pool |
+## 2026-11-25 — Sprint 13 benchmarks
+
+| # | Decision | Why |
+|---|---|---|
+| S13-1 | Core pure functions in `scripts/lib/refresh-benchmarks-core.mjs` | Testable without network; CLI wraps fetch |
+| S13-2 | Guardrail fail writes `BENCHMARKS.needs-review.md` + exit 2 | Appendix D needs-review PR path |
+| S13-3 | `gate_scope` maps benchmarks workflow → node | Avoid full 8-stack on Windows GP tooling gaps |
 ## Appendix F (imported)
 
 See `docs/BUILD_PLAN.md` Appendix F for product decisions 1–14 already made.

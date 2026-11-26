@@ -2,6 +2,11 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Sprint 13 — Benchmark refresh (2026-11-25)
+
+- ✅ [AGENT][LOCAL] refresh-benchmarks.mjs, weekly workflow, provenance, guardrails — scope: scripts/
+- ✅ [AGENT][LOCAL] Staleness badge; unchanged=no commit; shrink opens needs-review PR — scope: .github/workflows/
+
 ## Sprint 12 — Handoff v1 (2026-11-25)
 
 - ✅ [AGENT][LOCAL] handoff.v1 writer, quota-exhausted trigger, confirm, fallback target — scope: packages/protocol

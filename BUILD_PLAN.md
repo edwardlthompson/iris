@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 12 · LOCAL 12 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **15 open**
+**Remaining:** AGENT 10 · LOCAL 10 · CLOUD 0 · AUTO 3 · HUMAN 0 · ADB 0 · **13 open**
 <!-- /remaining-tally -->
 
 **Iris product work order:** [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md)
@@ -86,8 +86,7 @@ Keywords: iris, remote, pwa, routing, acp, e2ee, litellm, pool, proteus, chrysao
 
 ### Sprint 13 — Benchmark refresh
 
-1. 🔲 [AGENT][LOCAL] refresh-benchmarks.mjs, weekly workflow, provenance, guardrails — scope: scripts/
-2. 🔲 [AGENT][LOCAL] Staleness badge; unchanged=no commit; shrink opens needs-review PR — scope: .github/workflows/
+> **Sprint 13** archived in COMPLETED_TASKS.md @ pending.
 
 > **MVP cut line** — sprints 0–13 are the usable product. 14–18 are post-MVP.
 
@@ -179,3 +178,4 @@ Not a checklist. Monday cron and Dependabot own hygiene. Product sprints stay in
 | Sprint 10 — Stage 2 + policy gate | 2026-11-25 | Sprint 10 — Stage 2 + policy gate |
 | Sprint 11 — Presets + cost chip | 2026-11-25 | Sprint 11 — Presets + cost chip |
 | Sprint 12 — Handoff v1 | 2026-11-25 | Sprint 12 — Handoff v1 |
+| Sprint 13 — Benchmark refresh | 2026-11-25 | Sprint 13 — Benchmark refresh |

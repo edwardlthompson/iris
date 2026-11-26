@@ -14,6 +14,8 @@ HINTS = tuple((f"examples/{s}/", (s,)) for s in STACKS) + (
     ("branding/", ("web", "android")),
     ("packages/", ("node",)),
     ("apps/", ("node",)),
+    # Iris product workflow — keep scoped; avoid full 8-stack on Windows GP gaps
+    (".github/workflows/benchmarks", ("node",)),
 )
 WIDE_PREFIX = ("modules/", ".github/", ".cursor/hooks", ".cursor/agents", ".cursor-plugin/", ".cursor/plugin")
 LIGHT_PREFIX = ("scripts/", "tests/", "schemas/", ".cursor/rules/")
