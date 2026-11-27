@@ -1,7 +1,7 @@
 # Build Plan
 
 <!-- remaining-tally -->
-**Remaining:** AGENT 3 · LOCAL 3 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 1 · **4 open**
+**Remaining:** AGENT 5 · LOCAL 5 · CLOUD 0 · AUTO 0 · HUMAN 0 · ADB 1 · **6 open**
 <!-- /remaining-tally -->
 
 **Sprint state:** [`docs/STATE.md`](docs/STATE.md) · **Decisions:** [`docs/DECISIONS.md`](docs/DECISIONS.md)
@@ -170,6 +170,8 @@ Standing queue for This Computer. Rows: `🔲 [AGENT][LOCAL] … — scope: path
 <!-- local-agent-lane:begin -->
 - 🔲 [AGENT][LOCAL] Upgrade the workspaces from vitest 2.1.8 to vitest 5 so the lockfile drops unsupported vite 5.4.21 — scope: package.json,packages/,apps/,pnpm-lock.yaml (news P2, 2026-11-26) https://vite.dev/releases
 - 🔲 [AGENT][LOCAL] Bump the apps/phone Android Gradle wrapper 8.14.3 → 8.14.8 and commit the regenerated wrapper jar and distributionSha256Sum — scope: apps/phone/android/gradle/wrapper/ (news P2, 2026-11-26) https://docs.gradle.org/8.14.8/release-notes.html
+- 🔲 [AGENT][LOCAL] Move iris from pnpm 9.15.9 to a maintained pnpm (11.29.x or 12.x) in packageManager and ci.yml, with an explicit allowlist of deps that need build scripts — scope: package.json,.github/workflows/ci.yml,pnpm-lock.yaml,pnpm-workspace.yaml (news P2, 2026-11-27) https://github.com/pnpm/pnpm/security/advisories/GHSA-vq4v-j7r6-jq4m
+- 🔲 [AGENT][LOCAL] Set a LiteLLM floor of >=1.111.0 for pool mode (generated config, MSI/deb optional component, docs) and turn off client-supplied api_base and prompt/header logging in the generated config — scope: packages/pool/,packaging/,docs/ (news P2, 2026-11-27) https://github.com/BerriAI/litellm/security/advisories
 <!-- local-agent-lane:end -->
 
 ### Cloud agent (Cursor Cloud)
