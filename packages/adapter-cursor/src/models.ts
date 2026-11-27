@@ -89,8 +89,7 @@ export function pickForPreset(preset: string): CursorModelPick {
 }
 
 export type ResolveCursorModelInput =
-  | { mode: "manual"; modelId: string }
-  | { mode: "auto"; preset: string };
+  { mode: "manual"; modelId: string } | { mode: "auto"; preset: string };
 
 /** Resolve wire model + effort for Cursor CDP / status. */
 export function resolveCursorModel(input: ResolveCursorModelInput): CursorModelPick {

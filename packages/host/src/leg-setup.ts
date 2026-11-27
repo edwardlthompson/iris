@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
+import { homedir } from "node:os";
 import { join } from "node:path";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
@@ -33,12 +34,31 @@ export function setupLeg(id: string): string {
   if (id === "claude") {
     const claude = join(process.env.LOCALAPPDATA ?? "", "CursorRemoteLite", "node", "claude.cmd");
     const cmd = existsSync(claude) ? claude : "claude";
-    spawn(cmd, ["auth", "login", "--claudeai"], { detached: true, windowsHide: false, shell: true, stdio: "ignore" }).unref();
+    spawn(cmd, ["auth", "login", "--claudeai"], {
+      detached: true,
+      windowsHide: false,
+      shell: true,
+      stdio: "ignore",
+    }).unref();
     return "Opening Claude subscription login. Free plan uses cloud models.";
   }
   if (id === "codex") {
-    spawn("npm", ["install", "-g", "@openai/codex"], { detached: true, windowsHide: true, shell: true, stdio: "ignore" }).unref();
+    spawn("npm", ["install", "-g", "@openai/codex"], {
+      detached: true,
+      windowsHide: true,
+      shell: true,
+      stdio: "ignore",
+    }).unref();
     return "Installing the Codex CLI. Sign in when it finishes. https://github.com/openai/codex";
   }
-  return "LiteLLM is opt-in. Run the first-run wizard and set topology pool. https://docs.litellm.ai/";
+  if (id === "pool") {
+    const cfg = join(homedir(), ".iris", "litellm-config.yaml");
+    const script = ps1("start-litellm.ps1");
+    if (existsSync(cfg) && existsSync(script)) {
+      launch(script, []);
+      return "Starting LiteLLM pool on 127.0.0.1:4000";
+    }
+    return "Run packaging/windows/setup-litellm-pool.ps1 to configure Venice + Iris-Pool.";
+  }
+  return "LiteLLM is opt-in. Run setup-litellm-pool.ps1. https://docs.litellm.ai/";
 }

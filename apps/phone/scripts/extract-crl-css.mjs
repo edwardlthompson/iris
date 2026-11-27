@@ -9,7 +9,7 @@ const end = src.indexOf("</style>");
 if (start < 0 || end < 0) throw new Error("style block missing");
 let css = src.slice(start + 7, end).trim();
 // Drop live-screen / CDP banner chrome — Iris has no Screen tab.
-css = css.replace(/#liveBanner[\s\S]*?(?=\n  #composerDock)/, "");
+css = css.replace(/#liveBanner[\s\S]*?(?=\n {2}#composerDock)/, "");
 css = css.replace(/#dashStrip \{ display: none !important; \}\n/, "");
 
 const outDir = join(root, "www", "css");

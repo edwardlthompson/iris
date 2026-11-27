@@ -8,7 +8,14 @@ export {
   type PermissionResult,
 } from "./runtime.js";
 export { StubClaudeRuntime, type StubScript } from "./stub.js";
-export { createCliClaudeRuntime, claudeCliStatus, claudeCommand } from "./cli-runtime.js";
+export {
+  createCliClaudeRuntime,
+  claudeCliStatus,
+  claudeCommand,
+  claudeOauthUsage,
+  hasClaudeCredentials,
+} from "./cli-runtime.js";
+export { leftPct, parseClaudeUsageBody, type ClaudeUsageSnapshot } from "./oauth-usage.js";
 export {
   ClaudeSession,
   type ApprovalChannel,

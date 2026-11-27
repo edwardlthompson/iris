@@ -272,6 +272,13 @@
       "owner": "maintainer"
     },
     {
+      "path": ".github/workflows/benchmarks.yml",
+      "purpose": "Benchmarks refresh workflow",
+      "read_when": "release",
+      "update_when": "milestone_boundary",
+      "owner": "maintainer"
+    },
+    {
       "path": ".github/workflows/release-please-automerge.yml",
       "purpose": "Queue auto-merge for release-please PR branches",
       "read_when": "release",

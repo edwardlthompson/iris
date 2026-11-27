@@ -35,9 +35,7 @@ export class CursorDriver {
 
   async run(promptOrOpts: string | CursorRunOpts, signal?: AbortSignal) {
     const opts: CursorRunOpts =
-      typeof promptOrOpts === "string"
-        ? { prompt: promptOrOpts, signal }
-        : promptOrOpts;
+      typeof promptOrOpts === "string" ? { prompt: promptOrOpts, signal } : promptOrOpts;
     const status = await this.status();
     if (!status.enabled) {
       throw new Error(`cursor disabled: ${status.reason}`);

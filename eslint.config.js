@@ -7,6 +7,7 @@ export default tseslint.config(
   {
     ignores: [
       "**/dist/**",
+      "**/target/**",
       "**/coverage/**",
       "**/node_modules/**",
       "examples/**",
@@ -14,6 +15,7 @@ export default tseslint.config(
       "branding/**",
       "packaging/**",
       "apps/phone/www/**",
+      "apps/phone/android/**",
       "argus/**",
       "scripts/**",
       "state/**",

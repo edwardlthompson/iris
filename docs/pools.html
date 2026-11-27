@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pool comparison</title>
+<style>
+  body { margin: 0; background: #0c1220; color: #e8eef8; font: 15px/1.5 Segoe UI, sans-serif; }
+  main { max-width: 920px; margin: 0 auto; padding: 28px 22px 48px; }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  p { color: #93a0b5; margin: 0 0 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { border: 1px solid #243044; padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #141c2e; color: #f8fafc; }
+  .yes { color: #7CFF6B; font-weight: 650; }
+  .no { color: #ff8a7a; }
+  .bar { height: 8px; background: #243044; border-radius: 4px; margin-top: 6px; }
+  .bar i { display: block; height: 8px; border-radius: 4px; background: #7CFF6B; }
+  .note { font-size: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Which pool covers the efficient frontier</h1>
+  <p>One key, many models. The frontier Iris would route is Claude Haiku 5.5 max, Sonnet 5.5 xhigh, Opus 5.5 high, and Fable 5.2 max. Counts and fees were read from each vendor’s own pricing page, or from BenchLM’s host table dated 2026-11-23. Catalogs move.</p>
+  <table>
+    <thead>
+      <tr><th>Pool</th><th>Fee</th><th>Models</th><th>Frontier coverage</th><th>Fit</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>OpenRouter</td>
+        <td>5.5% when you buy credits. Inference is the provider’s list price.</td>
+        <td>600+ listed. BenchLM priced 435.</td>
+        <td class="yes">Fable 5.2 is the top model they measured there. Haiku, Sonnet, and Opus sit in the same catalog.</td>
+        <td>Best single pool<div class="bar"><i style="width:96%"></i></div></td>
+      </tr>
+      <tr>
+        <td>Venice</td>
+        <td>No router fee on the docs page. Pay the token price. Some models return 401 unless the account is Pro, Plus, or Max.</td>
+        <td>437 models, 141 of them text. Read from their models page.</td>
+        <td class="yes">Haiku 5.5, Sonnet 5.5, Opus 5.5, and Fable 5.2 are all listed. Claude calls are marked anonymized.</td>
+        <td>Same frontier, smaller catalog<div class="bar"><i style="width:88%"></i></div></td>
+      </tr>
+      <tr>
+        <td>DeepInfra</td>
+        <td>No router fee. You pay their token price.</td>
+        <td>92 priced.</td>
+        <td>Top measured model is Claude Opus 5, not Fable 5.2.</td>
+        <td>Wide open catalog, short of the top<div class="bar"><i style="width:62%"></i></div></td>
+      </tr>
+      <tr>
+        <td>Fireworks</td>
+        <td>No router fee. Serverless token price.</td>
+        <td>About 24 priced, 200+ hosted including image and audio.</td>
+        <td class="no">Top measured text model is Kimi, not the Claude frontier.</td>
+        <td>Open models only<div class="bar"><i style="width:34%"></i></div></td>
+      </tr>
+      <tr>
+        <td>Together</td>
+        <td>No router fee. $5 minimum purchase.</td>
+        <td>About 25 priced serverless.</td>
+        <td class="no">Top measured text model is Kimi, not the Claude frontier.</td>
+        <td>Open models only<div class="bar"><i style="width:30%"></i></div></td>
+      </tr>
+      <tr>
+        <td>Groq</td>
+        <td>No router fee. Narrow free tier.</td>
+        <td>About 4 to 8 production models.</td>
+        <td class="no">No Claude, no Grok, no Fable. Fast open models only.</td>
+        <td>Speed, not the frontier<div class="bar"><i style="width:12%"></i></div></td>
+      </tr>
+    </tbody>
+  </table>
+  <h1>Watch-list score</h1>
+  <p>Fifteen API families show up on CursorBench, Terminal-Bench 4.1, or SWE-bench: Fable 5.2, Opus 5.5, Sonnet 5.5, Haiku 5.5, Grok 4.7, Gemini 4 Argon, Carbon, and Neon, GPT-5.6 Sol, Terra, and Luna, GPT-6.2 Sol, DeepSeek V4.1 Flash, GLM-5.3, and Kimi K3.1 Pro. Copilot Fusion and Muse Spark 1.3 are on the boards and are not API rows in this count.</p>
+  <table>
+    <thead><tr><th>Pool</th><th>Listed</th><th>Score</th><th>Gap</th></tr></thead>
+    <tbody>
+      <tr><td>Venice</td><td class="yes">14 of 15</td><td>93</td><td>Muse Spark 1.3 is not listed under that name. Checked on the Venice models page.</td></tr>
+      <tr><td>OpenRouter</td><td class="yes">15 of 15</td><td>100</td><td>Checked against the public model list. 477 ids, including Muse Spark 1.3.</td></tr>
+      <tr><td>DeepInfra, Together, Fireworks, Groq</td><td class="no">No</td><td>Fail</td><td>None of these showed the full Claude frontier.</td></tr>
+    </tbody>
+  </table>
+  <p class="note">LiteLLM already speaks OpenRouter as <code>openrouter/&lt;model&gt;</code>. Venice is an OpenAI-compatible base URL, so the same proxy can point at it. Point it at <code>127.0.0.1</code> and keep the key in the LiteLLM config, not in Iris. Open benchmarks you can refresh without a paid feed: SWE-bench (MIT, princeton-nlp/SWE-bench) and Terminal-Bench (Apache-2.0, harbor-framework/terminal-bench, leaderboard on tbench.ai). CursorBench stays the first source. Artificial Analysis coding-agent rows stay behind a paid key.</p>
+</main>
+</body>
+</html>

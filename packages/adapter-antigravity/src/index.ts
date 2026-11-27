@@ -9,6 +9,7 @@ export {
   focusAntigravityEditor,
   scrapeAntigravityUsage,
 } from "./cdp-bridge.js";
+export { readAntigravityActiveModel, selectAntigravityModel } from "./model-picker-cdp.js";
 export {
   AntigravitySession,
   type AntigravitySessionOptions,

@@ -270,6 +270,20 @@ Read `docs/STATE.md`, then execute exactly one sprint from `docs/BUILD_PLAN.md`.
 
 Start here, then [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/START_HERE.md`](docs/START_HERE.md). In Cursor: `/tour` or `/coach`.
 
-## Licence
+## License
 
 MIT. Bootstrapped from [agent-project-bootstrap](https://github.com/edwardlthompson/agent-project-bootstrap).
+
+## Features
+
+- Phone remote for coding agents (PWA and Android)
+- Cost-aware routing, direct or pooled
+- Self-hosted, end-to-end encrypted pairing
+
+## Contributing
+
+Conventional Commits. Run `pnpm lint` and `pnpm test` before opening a PR.
+
+## Security
+
+Report vulnerabilities privately; see `SECURITY.md`.

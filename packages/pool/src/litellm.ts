@@ -16,7 +16,7 @@ export function generateLiteLLMConfig(pools: Pool[], listen = "127.0.0.1:4000"):
   for (const p of pools) {
     lines.push(`  - model_name: ${p.id}/*`);
     lines.push(`    litellm_params:`);
-    lines.push(`      model: openai/${p.id}`);
+    lines.push(`      model: ${p.id === "openrouter" ? "openrouter/*" : "openai/*"}`);
     lines.push(`      api_base: ${p.baseUrl}`);
     lines.push(`      api_key: os.environ/${envKey(p.auth.keyRef)}`);
   }

@@ -1,4 +1,12 @@
-import { existsSync, openSync, readSync, closeSync, readdirSync, readFileSync, statSync } from "node:fs";
+import {
+  existsSync,
+  openSync,
+  readSync,
+  closeSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+} from "node:fs";
 import { homedir } from "node:os";
 import { basename, join } from "node:path";
 
@@ -130,9 +138,7 @@ export function listConversations(limit = 20): ConversationRef[] {
 
 export function latestTranscriptPath(preferProject = "Iris"): string | null {
   const all = findTranscriptFiles();
-  const preferred = all.find((c) =>
-    c.project.toLowerCase().includes(preferProject.toLowerCase()),
-  );
+  const preferred = all.find((c) => c.project.toLowerCase().includes(preferProject.toLowerCase()));
   return (preferred ?? all[0])?.file ?? null;
 }
 
@@ -174,7 +180,11 @@ export function loadLatestChat(preferProject = "Iris"): {
   return { file, items: readTranscriptItems(file) };
 }
 
-export function loadChatById(id: string): { file: string | null; items: ChatItem[]; title: string } {
+export function loadChatById(id: string): {
+  file: string | null;
+  items: ChatItem[];
+  title: string;
+} {
   const conv = conversationById(id);
   if (!conv) return { file: null, items: [], title: "" };
   return {

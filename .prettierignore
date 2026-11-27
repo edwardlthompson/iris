@@ -1,7 +1,10 @@
 pnpm-lock.yaml
 **/dist/**
+**/target/**
 **/coverage/**
 **/node_modules/**
+apps/phone/www/**
+apps/phone/android/**
 examples/**
 modules/**
 branding/**

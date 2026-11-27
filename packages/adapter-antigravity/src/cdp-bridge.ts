@@ -1,3 +1,5 @@
+import { selectAntigravityModel } from "./model-picker-cdp.js";
+
 /** Drive Antigravity's composer over CDP. The IDE must be launched with --remote-debugging-port=9000. */
 
 const CDP_HTTP = "http://127.0.0.1:9000";
@@ -38,9 +40,19 @@ async function connect(wsUrl: string): Promise<Session> {
 async function listPages(cdpHttp: string): Promise<{ ws: string; title: string }[]> {
   const res = await fetch(`${cdpHttp}/json/list`);
   if (!res.ok) throw new Error(`Antigravity CDP list failed: ${res.status}`);
-  const rows = (await res.json()) as Array<{ type?: string; title?: string; url?: string; webSocketDebuggerUrl?: string }>;
+  const rows = (await res.json()) as Array<{
+    type?: string;
+    title?: string;
+    url?: string;
+    webSocketDebuggerUrl?: string;
+  }>;
   return rows
-    .filter((t) => t.type === "page" && t.webSocketDebuggerUrl && (/antigravity/i.test(t.title || "") || /:7881|workbench/i.test(t.url || "")))
+    .filter(
+      (t) =>
+        t.type === "page" &&
+        t.webSocketDebuggerUrl &&
+        (/antigravity/i.test(t.title || "") || /:7881|workbench/i.test(t.url || "")),
+    )
     .map((t) => ({ ws: t.webSocketDebuggerUrl!, title: t.title || "Antigravity" }));
 }
 
@@ -83,12 +95,16 @@ async function withPage<T>(cdpHttp: string, fn: (s: Session) => Promise<T>): Pro
 
 export async function listAntigravityHistory(cdpHttp = CDP_HTTP) {
   const rows = await withPage(cdpHttp, (s) => s.evaluate(HISTORY));
-  return Array.isArray(rows) ? rows as { id: string; title: string; project: string; mtimeMs: number }[] : [];
+  return Array.isArray(rows)
+    ? (rows as { id: string; title: string; project: string; mtimeMs: number }[])
+    : [];
 }
 
 export async function listAntigravityEditors(cdpHttp = CDP_HTTP) {
   const tabs = await withPage(cdpHttp, (s) => s.evaluate(TABS));
-  return Array.isArray(tabs) ? tabs as { name: string; label: string; active: boolean; dirty: boolean }[] : [];
+  return Array.isArray(tabs)
+    ? (tabs as { name: string; label: string; active: boolean; dirty: boolean }[])
+    : [];
 }
 
 export async function focusAntigravityEditor(name: string, cdpHttp = CDP_HTTP): Promise<boolean> {
@@ -105,7 +121,13 @@ export async function focusAntigravityEditor(name: string, cdpHttp = CDP_HTTP): 
     const pos = (await s.evaluate(expr)) as { x: number; y: number } | null;
     if (!pos) return false;
     for (const type of ["mousePressed", "mouseReleased"] as const) {
-      await s.send("Input.dispatchMouseEvent", { type, x: pos.x, y: pos.y, button: "left", clickCount: 1 });
+      await s.send("Input.dispatchMouseEvent", {
+        type,
+        x: pos.x,
+        y: pos.y,
+        button: "left",
+        clickCount: 1,
+      });
     }
     return true;
   });
@@ -151,7 +173,7 @@ function resetIn(iso: unknown): string | null {
 /** Google quota groups: Gemini, Claude/GPT, Argon, each with a 5h and 7d bucket. */
 export async function scrapeAntigravityUsage(cdpHttp = CDP_HTTP): Promise<AgProduct[]> {
   try {
-    const summary = await withPage(cdpHttp, (s) => s.evaluate(QUOTA)) as {
+    const summary = (await withPage(cdpHttp, (s) => s.evaluate(QUOTA))) as {
       groups?: Array<Record<string, unknown>>;
       response?: { groups?: Array<Record<string, unknown>> };
     } | null;
@@ -159,12 +181,24 @@ export async function scrapeAntigravityUsage(cdpHttp = CDP_HTTP): Promise<AgProd
     if (!Array.isArray(groups)) return [];
     return groups.map((g) => {
       const name = String(g.displayName || "Model group");
-      const buckets = Array.isArray(g.buckets) ? g.buckets as Array<Record<string, unknown>> : [];
-      const b7 = buckets.find((b) => b.window === "weekly" || /weekly/i.test(String(b.bucketId || b.displayName || "")));
-      const b5 = buckets.find((b) => b.window === "5h" || /5h/i.test(String(b.bucketId || b.displayName || "")));
+      const buckets = Array.isArray(g.buckets) ? (g.buckets as Array<Record<string, unknown>>) : [];
+      const b7 = buckets.find(
+        (b) => b.window === "weekly" || /weekly/i.test(String(b.bucketId || b.displayName || "")),
+      );
+      const b5 = buckets.find(
+        (b) => b.window === "5h" || /5h/i.test(String(b.bucketId || b.displayName || "")),
+      );
       const pct = (b: Record<string, unknown> | undefined) =>
-        b && b.remainingFraction != null ? Math.max(0, Math.min(100, Math.round(Number(b.remainingFraction) * 100))) : null;
-      const short = /argon/i.test(name) ? "Argon" : /claude|gpt/i.test(name) ? "Claude/GPT" : /gemini/i.test(name) ? "Gemini" : name.slice(0, 16);
+        b && b.remainingFraction != null
+          ? Math.max(0, Math.min(100, Math.round(Number(b.remainingFraction) * 100)))
+          : null;
+      const short = /argon/i.test(name)
+        ? "Argon"
+        : /claude|gpt/i.test(name)
+          ? "Claude/GPT"
+          : /gemini/i.test(name)
+            ? "Gemini"
+            : name.slice(0, 16);
       return {
         id: `ag-${short.toLowerCase().replace(/[^a-z0-9]+/g, "")}`,
         program: "antigravity" as const,
@@ -183,21 +217,40 @@ export async function scrapeAntigravityUsage(cdpHttp = CDP_HTTP): Promise<AgProd
   }
 }
 
-/** Type a prompt into the Antigravity composer and submit it. */
+/** Select model (when provided), type a prompt into the Antigravity composer, and submit it. */
 export async function submitAntigravityPrompt(
   prompt: string,
-  cdpHttp = CDP_HTTP,
-): Promise<{ text: string; stopReason: string }> {
+  optsOrHttp:
+    | string
+    | { cdpHttp?: string; pickerLabel?: string; effort?: string; expectRepo?: string } = CDP_HTTP,
+): Promise<{ text: string; stopReason: string; modelSelect?: string }> {
+  const cdpHttp = typeof optsOrHttp === "string" ? optsOrHttp : optsOrHttp.cdpHttp || CDP_HTTP;
+  const pickerLabel = typeof optsOrHttp === "string" ? undefined : optsOrHttp.pickerLabel;
+  const effort = typeof optsOrHttp === "string" ? undefined : optsOrHttp.effort;
+  let modelSelect: string | undefined;
+  if (pickerLabel) {
+    const sel = await selectAntigravityModel(
+      { pickerLabel, ...(effort ? { effort } : {}) },
+      cdpHttp,
+    );
+    modelSelect = sel.ok ? sel.detail : `soft_fail:${sel.detail}`;
+  }
+  const expectRepo = typeof optsOrHttp === "string" ? undefined : optsOrHttp.expectRepo;
   const pages = await listPages(cdpHttp);
   const page = pages[0];
   if (!page) throw new Error("antigravity disabled: ide_closed");
+  if (expectRepo && !page.title.toLowerCase().includes(expectRepo.toLowerCase())) {
+    throw new Error(
+      `Antigravity is open on "${page.title}", not ${expectRepo}. Prompt was not sent.`,
+    );
+  }
   const session = await connect(page.ws);
   try {
     const found = await session.evaluate(FOCUS);
     if (!found) throw new Error("antigravity composer not found");
     await session.send("Input.insertText", { text: prompt });
     await pressEnter(session);
-    return { text: "", stopReason: "submitted" };
+    return { text: "", stopReason: "submitted", ...(modelSelect ? { modelSelect } : {}) };
   } finally {
     session.close();
   }

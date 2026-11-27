@@ -7,6 +7,10 @@ export type QuotaInput = {
   groups: Record<string, number | null>;
   claudeOn: boolean;
   antiOn: boolean;
+  poolOn?: boolean;
+  poolLeft?: number | null;
+  poolModel?: string | null;
+  poolModels?: string[];
 };
 
 const OPEN: QuotaInput = { cursorLeft: 100, groups: {}, claudeOn: true, antiOn: true };
@@ -47,7 +51,7 @@ export function routePrompt(opts: {
   return {
     mode: "auto",
     preset,
-    pick: pickDownLadder(preset, quota),
+    pick: pickDownLadder(named === "max" ? "max" : preset, quota),
     stage1,
   };
 }

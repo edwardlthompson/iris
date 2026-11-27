@@ -20,4 +20,3 @@ describe("@iris/phone capacitor shell", () => {
     expect(html).toMatch(/theme-color" content="#1e1e1e"/);
   });
 });
-

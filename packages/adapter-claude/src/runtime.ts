@@ -24,6 +24,8 @@ export type QueryOptions = {
   screen?: boolean;
   signal?: AbortSignal;
   env?: NodeJS.ProcessEnv;
+  /** CLI alias (`haiku`, `sonnet`, `opus`, `fable`). */
+  model?: string;
 };
 
 /**

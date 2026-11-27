@@ -4,10 +4,10 @@ import { closeSheet, openSheet } from "./shell.js";
 const PRESETS = [
   { id: "auto", label: "Auto", hint: "Pick the model from the task" },
   { id: "manual", label: "Manual", hint: "Pick any model yourself" },
-  { id: "savings", label: "Savings", hint: "Auto → Grok · low" },
-  { id: "balanced", label: "Balanced", hint: "Auto → Grok · medium" },
-  { id: "performance", label: "Performance", hint: "Auto → Grok · high" },
-  { id: "max", label: "Max", hint: "Auto → Grok · xhigh" },
+  { id: "savings", label: "Savings", hint: "Through $1.58" },
+  { id: "balanced", label: "Balanced", hint: "Through $3.49" },
+  { id: "performance", label: "Performance", hint: "Through $4.69" },
+  { id: "max", label: "Max", hint: "Above $4.69" },
 ];
 
 /** Ranked Grok ladder fallback when host has not sent inventory yet. */
@@ -62,27 +62,41 @@ export function modelShortLabel(id) {
   const hit = GROK_MODELS.find((m) => m.id === id);
   if (hit) return `Grok · ${hit.effort}`;
   if (!id) return "model";
-  const m = /:(low|medium|high|xhigh)$/i.exec(id);
-  return m ? `Grok · ${m[1].toLowerCase()}` : id;
+  const s = String(id);
+  if (s.startsWith("ag:")) return `AG · ${s.slice(3).replace(/-/g, " ").replace(/:/g, " ")}`;
+  if (s.startsWith("pool:")) {
+    const raw = s.slice(5);
+    return raw.startsWith("venice/") ? `Venice · ${raw.slice(7)}` : raw;
+  }
+  if (s.startsWith("claude:")) return `Claude · ${s.slice(7)}`;
+  const m = /:(low|medium|high|xhigh)$/i.exec(s);
+  return m ? `Grok · ${m[1].toLowerCase()}` : s;
 }
 
 /** Model Performance mode would highlight (before/after Stage1). */
-export function autoModelForPreset(preset, lastAuto) {
-  if (lastAuto) return lastAuto;
-  if (preset === "auto") return "";
+export function autoModelForPreset(preset, lastAuto, _activeLeg, models) {
+  if (lastAuto && preset === "auto") return lastAuto;
+  const funded = (models || []).filter((m) => (m.remainingPct ?? 100) > 0);
+  if (preset === "auto") {
+    funded.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    return funded[0]?.id || "";
+  }
+  const exact = funded.filter((m) => m.level === preset).sort((a, b) => (b.score ?? 0) - (a.score ?? 0))[0];
+  if (exact) return exact.id;
   return PRESET_MODEL[preset] || PRESET_MODEL.balanced;
 }
 
-export function showLegsSheet(legs, { onAdd }) {
+export function showLegsSheet(legs, { activeLeg, onAdd }) {
   const rows = (legs || [])
     .map((l) => {
       const on = l.connected || l.enabled;
+      const isCur = l.id === activeLeg;
       const sub = on
         ? l.model
-          ? `Connected · ${l.model}`
-          : "Connected"
+          ? `${isCur ? "Active" : "Connected"} · ${l.model}`
+          : isCur ? "Active" : "Connected"
         : l.setup || "Not configured";
-      return `<button type="button" class="opt${on ? " cur" : ""}" data-leg="${esc(l.id)}"><span class="dot${on ? " ok" : ""}"></span><span class="lbl">${esc(l.label || l.id)}<span class="sub">${esc(sub)}</span></span>${on ? "" : '<span class="tag">Add</span>'}</button>`;
+      return `<button type="button" class="opt${isCur ? " cur" : ""}" data-leg="${esc(l.id)}"><span class="dot${on ? " ok" : ""}"></span><span class="lbl">${esc(l.label || l.id)}<span class="sub">${esc(sub)}</span></span>${on ? (isCur ? '<span class="tag">Active</span>' : "") : '<span class="tag">Add</span>'}</button>`;
     })
     .join("");
   openSheet(`<h3>Legs</h3>${rows || "<p class='hint'>No legs</p>"}<button type="button" class="opt" data-close>Close</button>`);
@@ -95,7 +109,7 @@ export function showAddWizard(leg) {
   );
 }
 
-export function showHistorySheet(conversations, activeId, { onPick, loading = false, error = "" } = {}) {
+export function showHistorySheet(conversations, activeId, { onPick, loading = false, error = "", repo = "" } = {}) {
   const rows = (conversations || [])
     .map((c) => {
       const cur = c.id === activeId ? " cur" : "";
@@ -106,9 +120,23 @@ export function showHistorySheet(conversations, activeId, { onPick, loading = fa
     ? "<p class='hint'>Loading chats…</p>"
     : error
       ? `<p class='hint'>${esc(error)}</p>`
-      : rows || "<p class='hint'>No agent chats found.</p>";
-  openSheet(`<h3>History</h3>${body}<button type="button" class="opt" data-close>Close</button>`);
+      : rows || "<p class='hint'>No chats for this repo.</p>";
+  const title = repo ? `History · ${repo}` : "History";
+  openSheet(`<h3>${esc(title)}</h3>${body}<button type="button" class="opt" data-close>Close</button>`);
   if (!loading) bindSheet("data-id", onPick);
+}
+
+export function showRepoSheet(repos, currentPath, { onPick } = {}) {
+  const rows = (repos || [])
+    .map((r) => {
+      const cur = r.path && currentPath && r.path === currentPath ? " cur" : "";
+      const sub = r.cloned ? (r.branch || r.path || "") : "On GitHub, not cloned";
+      const dis = r.cloned ? "" : " disabled";
+      return `<button type="button" class="opt${cur}" data-path="${esc(r.path || "")}"${dis}><span class="lbl">${esc(r.name)}<span class="sub">${esc(sub)}</span></span></button>`;
+    })
+    .join("");
+  openSheet(`<h3>Repository</h3>${rows || "<p class='hint'>No local repos.</p>"}<button type="button" class="opt" data-close>Close</button>`);
+  bindSheet("data-path", onPick);
 }
 
 export function showPresetSheet(current, { onPick }) {
@@ -127,33 +155,69 @@ export function showPresetSheet(current, { onPick }) {
  * @param picked highlighted id
  * @param {{ locked: boolean, onPick, onUnlockManual? }} opts
  */
-export function showModelSheet(models, picked, { locked = false, onPick, onUnlockManual } = {}) {
+export function showModelSheet(models, picked, { locked = false, activeLeg = "", onPick, onUnlockManual } = {}) {
   const list = (models || []).length ? models : GROK_MODELS;
   const ranked = [...list].sort((a, b) => (b.rank ?? 0) - (a.rank ?? 0) || (b.score ?? 0) - (a.score ?? 0));
-  const rows = ranked
-    .map((m) => {
-      const id = m.id || m;
-      const label = m.label || modelShortLabel(id);
-      const on = id === picked;
-      const parts = [];
-      if (typeof m.score === "number") parts.push(`${m.score}% bench`);
-      if (m.leg) parts.push(m.leg);
-      if (m.effort) parts.push(m.effort);
-      if (m.remainingPct === 0) parts.push("no quota");
-      if (typeof m.rank === "number") parts.push(`rank ${5 - m.rank}`);
-      const sub = locked
-        ? on
-          ? `${parts.join(" · ")} · active`
-          : `${parts.join(" · ")} · locked`
-        : parts.join(" · ");
-      const cls = ["opt", on && "cur", locked && "locked"].filter(Boolean).join(" ");
-      return `<button type="button" class="${cls}" data-model="${esc(id)}"${locked ? " disabled" : ""}><span class="lbl">${esc(label)}${sub ? `<span class="sub">${esc(sub)}</span>` : ""}</span></button>`;
-    })
-    .join("");
+  const rowHtml = (m) => {
+    const id = m.id || m;
+    const label = m.label || modelShortLabel(id);
+    const on = id === picked;
+    const parts = [];
+    if (typeof m.score === "number") parts.push(`${m.score}% bench`);
+    if (m.leg) parts.push(m.leg);
+    if (m.level) parts.push(m.level);
+    if (m.effort) parts.push(m.effort);
+    if (m.remainingPct === 0) parts.push("no quota");
+    const sub = locked
+      ? on
+        ? `${parts.join(" · ")} · active`
+        : `${parts.join(" · ")} · locked`
+      : parts.join(" · ");
+    const cls = ["opt", on && "cur", locked && "locked"].filter(Boolean).join(" ");
+    return `<button type="button" class="${cls}" data-model="${esc(id)}" data-leg-filter="${esc(m.leg || "")}"${locked ? " disabled" : ""}><span class="lbl">${esc(label)}${sub ? `<span class="sub">${esc(sub)}</span>` : ""}</span></button>`;
+  };
+  const legTabs = [
+    ["all", `All (${ranked.length})`],
+    ["antigravity", "Antigravity"],
+    ["cursor", "Cursor"],
+    ["claude", "Claude"],
+  ].map(([k, lbl]) => {
+    const cnt = k === "all" ? ranked.length : ranked.filter((m) => m.leg === k).length;
+    if (k !== "all" && cnt === 0) return "";
+    const saved = localStorage.getItem("iris.modelFilter") || "all";
+    const cur = saved === "all" || ranked.some((m) => m.leg === saved) ? k === saved : k === "all";
+    return `<button type="button" class="opt${cur ? " primary" : ""}" style="display:inline-flex;width:auto;padding:4px 10px;margin:2px" data-leg-pill="${k}">${lbl}${k === "all" ? "" : ` (${cnt})`}</button>`;
+  }).join("");
   const hint = locked
     ? `<p class="hint">Performance manages the model. Switch to Manual to unlock every option.</p><button type="button" class="opt primary" data-act="manual"><span class="lbl">Switch to Manual</span></button>`
     : "";
-  openSheet(`<h3>Model${locked ? " · Auto" : ""}</h3>${hint}${rows}<button type="button" class="opt" data-close>Close</button>`);
+  const controls = `<div style="margin:6px 0">${legTabs}</div><input id="modelSearchInput" type="search" placeholder="Search Claude, GPT-6.2, DeepSeek, Qwen, Gemini…" style="width:100%;margin:4px 0 8px;padding:7px 10px;border-radius:8px;border:1px solid #3c3c3c;background:#1e1e1e;color:#e5e5e5" />`;
+  openSheet(`<h3>Model${locked ? " · Auto" : ""}</h3>${hint}${controls}<div id="modelRowsWrap">${ranked.map(rowHtml).join("")}</div><button type="button" class="opt" data-close>Close</button>`);
+  const sheet = document.getElementById("sheet");
+  const savedFilter = localStorage.getItem("iris.modelFilter") || "all";
+  let curLeg = savedFilter === "all" || ranked.some((m) => m.leg === savedFilter) ? savedFilter : "all";
+  const applyFilter = () => {
+    const q = (document.getElementById("modelSearchInput")?.value || "").trim().toLowerCase();
+    const wrap = document.getElementById("modelRowsWrap");
+    if (!wrap) return;
+    const filtered = ranked.filter((m) => {
+      if (curLeg !== "all" && m.leg !== curLeg) return false;
+      if (!q) return true;
+      return `${m.id} ${m.label || ""} ${m.leg || ""}`.toLowerCase().includes(q);
+    });
+    wrap.innerHTML = filtered.map(rowHtml).join("") || "<p class='hint'>No matching models</p>";
+  };
+  applyFilter();
+  document.getElementById("modelSearchInput")?.addEventListener("input", applyFilter);
+  sheet?.querySelectorAll("[data-leg-pill]").forEach((btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      curLeg = btn.getAttribute("data-leg-pill") || "all";
+      localStorage.setItem("iris.modelFilter", curLeg);
+      sheet.querySelectorAll("[data-leg-pill]").forEach((b) => b.classList.toggle("primary", b === btn));
+      applyFilter();
+    });
+  });
   bindSheet("data-model", onPick, {
     onAct: (act, done) => {
       if (act === "manual") {
@@ -201,6 +265,21 @@ function quotaRingSvg(n5, n7, h5Disabled) {
   }</svg>`;
 }
 
+function appMark(key) {
+  const k = String(key || "");
+  const body =
+    k === "cursor"
+      ? `<path d="M6 5l13 5-5.2 1.2L11 17z" fill="currentColor"/>`
+      : k === "claude"
+        ? `<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/>`
+        : k === "antigravity"
+          ? `<circle cx="12" cy="12" r="2" fill="currentColor"/><ellipse cx="12" cy="12" rx="8" ry="3.2" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(28 12 12)"/><ellipse cx="12" cy="12" rx="8" ry="3.2" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(-28 12 12)"/>`
+          : k === "actions"
+            ? `<circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 8.5v7l6-3.5z" fill="currentColor"/>`
+            : `<path d="M12 4c3 3.2 5 5.4 5 8.2a5 5 0 0 1-10 0C7 9.4 9 7.2 12 4z" fill="currentColor"/>`;
+  return `<span class="uMark" aria-hidden="true"><svg viewBox="0 0 24 24">${body}</svg></span>`;
+}
+
 export function renderUsageBar(el, usage, { onOpen } = {}) {
   if (!el) return;
   const products = usage?.products;
@@ -212,10 +291,14 @@ export function renderUsageBar(el, usage, { onOpen } = {}) {
   el.hidden = false;
   const groups = [];
   for (const p of products) {
-    const key = p.program || p.id;
+    // Antigravity: two dials (Gemini, Claude); the Argon group stays in the sheet only.
+    const ag = p.program === "antigravity";
+    if (ag && !/gemini|claude/i.test(p.id)) continue;
+    const key = ag ? p.id : p.program || p.id;
     let g = groups.find((row) => row.key === key);
     if (!g) {
-      g = { key, label: p.label || key, items: [] };
+      const label = ag ? (/gemini/i.test(p.id) ? "Gemini" : "Claude") : p.label || key;
+      g = { key, mark: p.program || key, label, items: [] };
       groups.push(g);
     }
     g.items.push(p);
@@ -243,7 +326,7 @@ export function renderUsageBar(el, usage, { onOpen } = {}) {
           ? `<span class="uSep">—</span><span class="uSep">/</span><span class="${c7.cls}">${n7}</span>`
           : `<span class="${c5.cls}">${n5}</span><span class="uSep">/</span><span class="${c7.cls}">${n7}</span>`
         : `<span class="${c7.cls}">${n7}%</span>`;
-      return `<button type="button" class="uChip" data-usage-chip="${esc(g.key)}" title="${esc(title)}" aria-label="${esc(title)}">${quotaRingSvg(n5, n7, h5Dis)}<span class="uMeta"><span class="uName">${esc(g.label)}</span><span class="uNums">${nums}</span></span></button>`;
+      return `<button type="button" class="uChip" data-usage-chip="${esc(g.key)}" title="${esc(title)}" aria-label="${esc(title)}">${appMark(g.mark)}${quotaRingSvg(n5, n7, h5Dis)}<span class="uMeta"><span class="uName">${esc(g.label)}</span><span class="uNums">${nums}</span></span></button>`;
     })
     .join("");
   el.onclick = (ev) => {
@@ -252,13 +335,11 @@ export function renderUsageBar(el, usage, { onOpen } = {}) {
   };
 }
 
-export function showUsageSheet(usage, chipId) {
-  const all = usage?.products || [];
-  const products = chipId
-    ? all.filter((p) => p.id === chipId || p.program === chipId)
-    : all;
+export function showUsageSheet(usage) {
+  const products = usage?.products || [];
   if (!products.length) {
-    openSheet(`<h3>Usage</h3><p class="hint">No usage data yet. Pair with the host.</p><button type="button" class="opt" data-close>Close</button>`);
+    openSheet(`<p class="hint">No usage data yet. Pair with the host.</p><button type="button" class="opt" data-close>Close</button>`);
+    document.getElementById("sheet")?.classList.add("top");
     return;
   }
   const cards = products
@@ -271,7 +352,7 @@ export function showUsageSheet(usage, chipId) {
       const c7 = leftColor(n7 ?? 0);
       const row7 = n7 == null
         ? `<div class="uBarRow"><span class="uBarWin">plan</span><div class="uBarTrack"></div><span class="uBarPct">No meter</span></div>`
-        : `<div class="uBarRow"><span class="uBarWin">7d</span><div class="uBarTrack"><div class="uBarFill" style="width:${n7}%;background:${c7.stroke}"></div></div><span class="uBarPct ${c7.cls}">${n7}% left</span><span class="uBarRst">↻ ${esc(p.reset7d || "period")}</span></div>`;
+        : `<div class="uBarRow"><span class="uBarWin">${p.id === "actions" ? "min" : "7d"}</span><div class="uBarTrack"><div class="uBarFill" style="width:${n7}%;background:${c7.stroke}"></div></div><span class="uBarPct ${c7.cls}">${n7}% left</span><span class="uBarRst">↻ ${esc(p.reset7d || "period")}</span></div>`;
       const row5 = has5
         ? h5Dis
           ? `<div class="uBarRow" style="opacity:0.55"><span class="uBarWin">5h</span><div class="uBarTrack"><div class="uBarFill" style="width:0%;background:#6e6e73"></div></div><span class="uBarPct">Paused</span><span class="uBarRst">Weekly</span></div>`
@@ -280,8 +361,6 @@ export function showUsageSheet(usage, chipId) {
       return `<div class="uSheetCard"><div class="uSheetHead">${quotaRingSvg(n5, n7, h5Dis)}<div><div class="uSheetTitle">${esc(p.name || p.label)}</div><div class="uSheetSub">${esc(p.models || "Cursor")}</div></div></div>${row7}${row5}</div>`;
     })
     .join("");
-  const title = products[0]?.label || "Usage";
-  openSheet(
-    `<h3>${esc(title)}</h3><p class="hint">5h and 7d remaining for this program</p>${cards}<button type="button" class="opt" data-close>Close</button>`,
-  );
+  openSheet(`${cards}<button type="button" class="opt" data-close>Close</button>`);
+  document.getElementById("sheet")?.classList.add("top");
 }

@@ -14,8 +14,8 @@
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./icon-512.png" />
     <link rel="apple-touch-icon" href="./icon-512.png" />
-    <link rel="stylesheet" href="./css/remote-a.css?v=31" />
-    <link rel="stylesheet" href="./css/remote-b.css?v=31" />
+    <link rel="stylesheet" href="./css/remote-a.css?v=55" />
+    <link rel="stylesheet" href="./css/remote-b.css?v=39" />
     <link rel="stylesheet" href="./css/iris-gate.css" />
   </head>
   <body>
@@ -37,7 +37,7 @@
         </svg>
         <span class="badge" id="statusBadge"></span>
       </button>
-      <img id="brandMark" src="./icon-iris.jpg" alt="" width="28" height="28" />
+      <button type="button" id="repoChip" hidden>Repo</button>
       <span id="titleText" hidden>Connecting…</span>
       <div class="seg" role="tablist" aria-label="Workspace views">
         <button type="button" id="tabChat" class="on" role="tab" aria-selected="true">Chat</button>
@@ -49,6 +49,7 @@
 
     <main>
       <section id="chatView" class="view active" aria-label="Chat">
+        <div id="repoAlert" hidden></div>
         <div id="list">
           <button type="button" id="older" hidden>↑ Load earlier messages</button>
           <div id="items"></div>
@@ -108,6 +109,7 @@
             <div id="paneMdMode" aria-label="Markdown view">
               <button type="button" id="paneMdPreview" class="on">Preview</button>
               <button type="button" id="paneMdSource">Source</button>
+              <button type="button" id="paneSharePng" hidden>Share PNG</button>
             </div>
           </div>
           <div id="paneDiffBody"></div>
@@ -136,6 +138,11 @@
             id="text"
             rows="1"
             placeholder="Message Iris…"
+            spellcheck="true"
+            autocorrect="on"
+            autocapitalize="sentences"
+            autocomplete="on"
+            inputmode="text"
             enterkeyhint="send"
           ></textarea>
           <div class="composer-actions">
@@ -202,8 +209,7 @@
         </div>
       </div>
       <div id="composerDock">
-        <span id="uiBuild" title="App shell build">UI 9</span>
-        <div id="usageBar" hidden aria-label="Cursor usage quotas"></div>
+        <div id="usageBar" hidden aria-label="Usage"></div>
         <button
           type="button"
           id="composerToggle"
@@ -269,7 +275,7 @@
       <div id="gateInfo">ADB: adb reverse tcp:7842 tcp:7842 · phone PWA :8787</div>
     </div>
 
-    <script type="module" src="./shell.js?v=31"></script>
-    <script type="module" src="./boot.js?v=31"></script>
+    <script type="module" src="./shell.js?v=55"></script>
+    <script type="module" src="./boot.js?v=55"></script>
   </body>
 </html>

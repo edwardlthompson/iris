@@ -1,5 +1,5 @@
 /** Shell chrome: mode tabs, sheets, composer (no Screen). UI matches cursor-remote-lite. */
-export const UI_BUILD = 31;
+export const UI_BUILD = 56;
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) =>
@@ -15,6 +15,7 @@ let mode = (() => {
   const m = store.get("mode");
   return m === "pane" || m === "files" ? m : "chat";
 })();
+if (store.get("composer") === "collapsed") document.body.classList.add("composer-collapsed");
 
 function isLandscape() {
   return window.matchMedia("(orientation: landscape)").matches;
@@ -108,20 +109,42 @@ function bindComposerGrow() {
 export function setMode(next) {
   mode = next === "pane" || next === "files" ? next : "chat";
   store.set("mode", mode);
+  saveRepoState({ mode });
   applyViews();
+}
+
+export function setComposerCollapsed(collapsed) {
+  document.body.classList.toggle("composer-collapsed", Boolean(collapsed));
+  $("composerToggle")?.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  store.set("composer", collapsed ? "collapsed" : "open");
+  saveRepoState({ composer: collapsed ? "collapsed" : "open" });
+}
+
+function saveRepoState(patch) {
+  const key = store.get("repoKey") || "default";
+  let all = {};
+  try {
+    all = JSON.parse(localStorage.getItem("iris.workspace") || "{}") || {};
+  } catch {
+    all = {};
+  }
+  all[key] = { ...(all[key] || {}), ...patch };
+  localStorage.setItem("iris.workspace", JSON.stringify(all));
 }
 
 export function openSheet(html) {
   const sheet = $("sheet");
   const shade = $("shade");
   if (!sheet || !shade) return;
+  sheet.classList.remove("top");
   sheet.innerHTML = html;
   sheet.classList.add("open");
   shade.classList.add("open");
 }
 
 export function closeSheet() {
-  $("sheet")?.classList.remove("open");
+  const sheet = $("sheet");
+  sheet?.classList.remove("open", "top");
   $("shade")?.classList.remove("open");
 }
 
@@ -151,7 +174,7 @@ function showStatusSheet(info) {
   const connected = !!info?.connected;
   const legs = info?.legs?.length ? info.legs.map((n) => esc(n)).join(", ") : "none";
   openSheet(
-    `<h3>Status</h3><div class="statusConn ${connected ? "ok" : ""}"><i></i><span>${connected ? "Connected" : "Disconnected"}</span></div><p class="hint">${esc(info?.host || "No host")}</p><p class="hint">Legs: ${legs}</p><button type="button" class="opt" data-close>Close</button>`,
+    `<h3>Status</h3><div class="statusConn ${connected ? "ok" : ""}"><i></i><span>${connected ? "Connected" : "Disconnected"}</span></div><p class="hint">${esc(info?.host || "No host")}</p><p class="hint">Legs: ${legs}</p><p class="hint">UI ${UI_BUILD}</p><button type="button" class="opt" data-close>Close</button>`,
   );
 }
 
@@ -202,8 +225,7 @@ export function bindShell({ onUnpair, getConn, getOverflow, onLegs } = {}) {
   });
   $("menuBtn")?.addEventListener("click", () => showMainMenu(onUnpair, overflow(), onLegs));
   $("composerToggle")?.addEventListener("click", () => {
-    const collapsed = document.body.classList.toggle("composer-collapsed");
-    $("composerToggle")?.setAttribute("aria-expanded", collapsed ? "false" : "true");
+    setComposerCollapsed(!document.body.classList.contains("composer-collapsed"));
   });
 
   window.addEventListener("orientationchange", applyViews);

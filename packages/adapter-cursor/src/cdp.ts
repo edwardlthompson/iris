@@ -26,12 +26,7 @@ export async function listWorkbenchTargets(
     webSocketDebuggerUrl?: string;
   }>;
   return targets
-    .filter(
-      (t) =>
-        t.type === "page" &&
-        t.webSocketDebuggerUrl &&
-        /workbench/i.test(t.url || ""),
-    )
+    .filter((t) => t.type === "page" && t.webSocketDebuggerUrl && /workbench/i.test(t.url || ""))
     .map((t) => ({
       id: t.id,
       title: t.title || "Cursor",

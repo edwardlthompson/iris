@@ -1,8 +1,37 @@
 import { describe, expect, it } from "vitest";
 import { CLAUDE_CAPABILITIES } from "./capabilities.js";
+import { leftPct, parseClaudeUsageBody } from "./oauth-usage.js";
 import { QuotaStore } from "./quota.js";
 import { StubClaudeRuntime } from "./stub.js";
 import { ClaudeSession } from "./session.js";
+
+describe("@iris/adapter-claude oauth usage math", () => {
+  it("treats sub-percent utilization as 0..100 percent rather than 0..1 fraction", () => {
+    expect(leftPct({ utilization: 0 })).toBe(100);
+    expect(leftPct({ utilization: 0.4 })).toBe(100);
+    expect(leftPct({ utilization: 0.96 })).toBe(99);
+    expect(leftPct({ utilization: 4 })).toBe(96);
+    expect(leftPct({ utilization: 100 })).toBe(0);
+  });
+
+  it("parses session/weekly buckets with limits fallback and reset timers", () => {
+    const now = Date.parse("2026-11-28T12:00:00Z");
+    const parsed = parseClaudeUsageBody(
+      {
+        five_hour: { utilization: 0.8, resets_at: "2026-11-28T15:30:00Z" },
+        seven_day: { utilization: null, resets_at: null },
+        limits: [{ group: "weekly", percent: 12, resets_at: "2026-11-30T12:00:00Z" }],
+      },
+      now,
+    );
+    expect(parsed).toEqual({
+      sessionLeft: 99,
+      weekLeft: 88,
+      reset5h: "3h 30m",
+      reset7d: "2d 0h",
+    });
+  });
+});
 
 describe("@iris/adapter-claude capabilities", () => {
   it("advertises headless + baseUrlOverride + quotaReporting", () => {

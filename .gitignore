@@ -113,3 +113,4 @@ RELEASE_NOTES.md
 scratchpad.md
 .cursor/handoff-*.md
 packaging/.artifacts/
+apps/phone/www/pair-code.json

@@ -26,16 +26,18 @@ export function renderEditorTabs(tabs, { onFocus } = {}) {
   const cancel = document.getElementById("panePickCancel");
   for (const el of [pick, go, cancel]) if (el) el.disabled = false;
   if (empty && !changes?.querySelector(".dc") && list.length) {
-    empty.textContent = `${list.length} open on desktop. Tap a tab to focus it in Cursor.`;
+    empty.textContent = list.some((t) => t.disk)
+      ? `${list.length} files in the locked repo.`
+      : `${list.length} open on desktop. Tap a tab to focus it in Cursor.`;
   }
 }
 
-export function renderChangedFiles(files, { onDiff } = {}) {
+export function renderChangedFiles(files, { onOpen } = {}) {
   const box = document.getElementById("dashChanges");
   if (!box) return;
   const list = files || [];
   if (!list.length) {
-    box.innerHTML = `<div id="dashEmpty">No pending changes.<br>When the Agent edits files, they show up here.</div>`;
+    box.innerHTML = `<div id="dashEmpty">No pending changes.<br>Search the locked repo.</div>`;
     return;
   }
   box.innerHTML = list
@@ -47,7 +49,7 @@ export function renderChangedFiles(files, { onDiff } = {}) {
   box.onclick = (ev) => {
     const row = ev.target.closest("[data-chdiff]");
     if (!row) return;
-    onDiff?.(row.getAttribute("data-chdiff"));
+    onOpen?.(row.getAttribute("data-chdiff"));
   };
 }
 
@@ -81,6 +83,7 @@ let paneFile = null;
 let mdPreviewMode = localStorage.getItem("iris.mdPreview") !== "off";
 
 const isMarkdownFile = (name) => /\.(md|markdown|mdx)$/i.test(name || "");
+const isHtmlFile = (name) => /\.html?$/i.test(name || "");
 
 const safeUrl = (u) => (/^https?:\/\//i.test(u) ? u : "");
 const safeColor = (c) => (/^#[0-9a-f]{3,8}$/i.test(c || "") ? c : "");
@@ -132,6 +135,16 @@ function renderMarkdown(src) {
   s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_, alt, img) =>
     slot(`<img alt="${esc(alt)}" src="${esc(safeUrl(img))}">`));
   s = s.replace(/<table[\s\S]*?<\/table>/gi, (block) => slot(sanitizeTable(block)));
+  s = s.replace(/(?:^|\n)((?:\|.*\|\n?)+)/g, (block) => {
+    const lines = block.trim().split("\n").filter((line) => line.trim().startsWith("|"));
+    if (lines.length < 2) return block;
+    const cells = (line) =>
+      line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((cell) => cell.trim());
+    if (!cells(lines[1]).every((cell) => /^:?-+:?$/.test(cell))) return block;
+    const head = cells(lines[0]).map((cell) => `<th>${esc(cell)}</th>`).join("");
+    const body = lines.slice(2).map((line) => `<tr>${cells(line).map((cell) => `<td>${esc(cell)}</td>`).join("")}</tr>`).join("");
+    return `\n${slot(`<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`)}\n`;
+  });
   s = esc(s)
     .replace(/^######\s+(.+)$/gm, "<h6>$1</h6>")
     .replace(/^#####\s+(.+)$/gm, "<h5>$1</h5>")
@@ -157,14 +170,138 @@ function renderMarkdown(src) {
   return s.replace(/\u0000S(\d+)\u0000/g, (_, i) => slots[Number(i)] || "");
 }
 
+async function exportChartPng(file) {
+  const text = String(file?.text || "");
+  const svg = text.match(/<svg[\s\S]*?<\/svg>/)?.[0];
+  if (!svg) return;
+  const name = "iris-model-ladder.png";
+  let handle = null;
+  if (window.showSaveFilePicker) {
+    try {
+      handle = await window.showSaveFilePicker({
+        suggestedName: name,
+        types: [{ description: "PNG", accept: { "image/png": [".png"] } }],
+      });
+    } catch (err) {
+      if (err?.name === "AbortError") return;
+    }
+  }
+  const marked = svg.includes("xmlns=") ? svg : svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
+  const img = new Image();
+  const url = URL.createObjectURL(new Blob([marked], { type: "image/svg+xml" }));
+  const blob = await new Promise((resolve) => {
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1400;
+      canvas.height = 900;
+      const g = canvas.getContext("2d");
+      const plot = { x: 40, y: 64, w: 1320, h: 770 };
+      g.fillStyle = "#0b1020";
+      g.fillRect(0, 0, canvas.width, canvas.height);
+      g.drawImage(img, plot.x, plot.y, plot.w, plot.h);
+      const legend = [["#ff5d6c", "Grok"], ["#c084fc", "Anthropic"], ["#2dd4bf", "Google"], ["#4ade80", "OpenAI"], ["#94a3b8", "Other"]];
+      g.font = "14px Segoe UI, sans-serif";
+      let lx = 40;
+      legend.forEach(([color, label]) => {
+        g.fillStyle = color;
+        g.beginPath();
+        g.arc(lx + 6, 28, 6, 0, Math.PI * 2);
+        g.fill();
+        g.fillStyle = "#e7eefc";
+        g.fillText(label, lx + 18, 33);
+        lx += g.measureText(label).width + 40;
+      });
+      g.strokeStyle = "#d7e3f8";
+      g.setLineDash([5, 4]);
+      g.beginPath();
+      g.moveTo(lx, 28);
+      g.lineTo(lx + 22, 28);
+      g.stroke();
+      g.setLineDash([]);
+      g.fillText("Frontier", lx + 28, 33);
+      for (const hit of text.matchAll(/class="dot"[^>]*style="left:([\d.]+)%;top:([\d.]+)%;background:(#[0-9a-fA-F]+)"/g)) {
+        const x = plot.x + (Number(hit[1]) / 100) * plot.w;
+        const y = plot.y + (Number(hit[2]) / 100) * plot.h;
+        g.beginPath();
+        g.fillStyle = hit[3];
+        g.arc(x, y, 5.5, 0, Math.PI * 2);
+        g.fill();
+        g.lineWidth = 1;
+        g.strokeStyle = "rgba(0,0,0,.45)";
+        g.stroke();
+      }
+      const taken = [];
+      g.font = "12px Segoe UI, sans-serif";
+      for (const card of text.split('<div class="card"').slice(1)) {
+        const head = card.slice(0, 420);
+        if (!/Frontier:\s*Yes/.test(head)) continue;
+        const left = /left:([\d.]+)%/.exec(head);
+        const top = /top:([\d.]+)%/.exec(head);
+        const title = /<b>([^<]+)<\/b>/.exec(head);
+        if (!left || !top || !title) continue;
+        const x = plot.x + (Number(left[1]) / 100) * plot.w;
+        const y = plot.y + (Number(top[1]) / 100) * plot.h;
+        const label = title[1].replace(" · ", " ");
+        const wide = g.measureText(label).width;
+        let ly = y - 16;
+        const toLeft = x > plot.x + plot.w * 0.72;
+        while (taken.some((row) => Math.abs(row - ly) < 15)) ly -= 15;
+        taken.push(ly);
+        const tx = toLeft ? x - wide - 12 : x + 12;
+        g.strokeStyle = "#d7e3f8";
+        g.beginPath();
+        g.moveTo(x, y);
+        g.lineTo(toLeft ? x - 8 : x + 8, ly - 4);
+        g.stroke();
+        g.fillStyle = "#e7eefc";
+        g.fillText(label, tx, ly);
+      }
+      g.fillStyle = "#9fb0cc";
+      g.font = "13px Segoe UI, sans-serif";
+      g.fillText("https://github.com/edwardlthompson/iris/blob/main/docs/model-ladder.html", 40, 880);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(resolve);
+    };
+    img.src = url;
+  });
+  if (!blob) return;
+  if (handle) {
+    const writable = await handle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+    return;
+  }
+  const save = new File([blob], name, { type: "image/png" });
+  if (navigator.canShare?.({ files: [save] })) {
+    await navigator.share({ files: [save] });
+    return;
+  }
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+}
+
+function bindPngSave() {
+  if (bindPngSave.done) return;
+  bindPngSave.done = true;
+  document.getElementById("paneSharePng")?.addEventListener("click", () => exportChartPng(paneFile));
+  window.addEventListener("message", (event) => {
+    if (event.data?.type === "iris-save-begin") exportChartPng(paneFile);
+  });
+}
+
 function paintFile(file) {
   const body = document.getElementById("paneDiffBody");
   const mode = document.getElementById("paneMdMode");
   const preview = document.getElementById("paneMdPreview");
   const source = document.getElementById("paneMdSource");
   if (!body) return;
+  bindPngSave();
   const md = isMarkdownFile(file?.name || file?.path) && !file?.error;
-  mode?.classList.toggle("show", md);
+  const html = isHtmlFile(file?.name || file?.path) && !file?.error;
+  mode?.classList.toggle("show", md || html);
+  document.getElementById("paneSharePng")?.toggleAttribute("hidden", !html);
   preview?.classList.toggle("on", mdPreviewMode);
   source?.classList.toggle("on", !mdPreviewMode);
   if (file?.error) {
@@ -172,7 +309,17 @@ function paintFile(file) {
     body.textContent = file.error;
     return;
   }
-  if (md && mdPreviewMode) {
+  if ((md || html) && mdPreviewMode) {
+    if (html) {
+      body.className = "html-preview";
+      body.replaceChildren();
+      const frame = document.createElement("iframe");
+      frame.setAttribute("sandbox", "allow-scripts allow-downloads");
+      frame.title = file?.path || file?.name || "Preview";
+      frame.srcdoc = file?.text || "";
+      body.appendChild(frame);
+      return;
+    }
     body.className = "md-preview";
     body.innerHTML = renderMarkdown(file?.text || "");
     return;
@@ -219,16 +366,40 @@ export function hideWorkspaceFile() {
   document.getElementById("paneDiff")?.classList.remove("show");
 }
 
-export function renderFileHits(tabs, query, { onFocus } = {}) {
+function fuzzy(q, s) {
+  let i = 0;
+  for (const ch of s) if (ch === q[i] && ++i === q.length) return true;
+  return false;
+}
+
+/** Predictive ranking over the full repo inventory (same order as the host). */
+export function rankFiles(files, query, limit = 60) {
+  const q = (query || "").trim().toLowerCase();
+  if (!q) return files.slice(0, limit);
+  const scored = [];
+  for (const f of files) {
+    const lower = f.toLowerCase();
+    const base = lower.slice(lower.lastIndexOf("/") + 1);
+    const s = base.startsWith(q) ? 0 : base.includes(q) ? 1 : lower.includes(q) ? 2 : fuzzy(q, base) ? 3 : -1;
+    if (s >= 0) scored.push([s * 1000 + f.length, f]);
+  }
+  return scored.sort((a, b) => a[0] - b[0]).slice(0, limit).map((x) => x[1]);
+}
+
+export function renderFileHits(tabs, query, { onFocus, inventory = [] } = {}) {
   const box = document.getElementById("panePickHits");
   if (!box) return;
-  const q = (query || "").trim().toLowerCase();
-  const hits = (tabs || []).filter((t) => !q || t.name.toLowerCase().includes(q));
-  box.innerHTML = hits
-    .map(
-      (t) =>
-        `<button type="button" class="opt" data-file="${esc(t.name)}"><span class="lbl">${esc(t.name)}${t.active ? '<span class="sub">active on desktop</span>' : ""}</span></button>`,
-    )
+  const q = (query || "").trim();
+  const open = new Map((tabs || []).map((t) => [t.name, t]));
+  const names = q || !inventory.length
+    ? [...new Set([...rankFiles([...open.keys()], q), ...rankFiles(inventory, q)])].slice(0, 60)
+    : [...open.keys(), ...inventory.filter((f) => !open.has(f))].slice(0, 60);
+  box.classList.toggle("show", names.length > 0);
+  box.innerHTML = (inventory.length ? `<div class="dh"><span>${names.length} of ${inventory.length} files</span></div>` : "") + names
+    .map((name) => {
+      const t = open.get(name);
+      return `<button type="button" class="opt" data-file="${esc(name)}"><span class="lbl">${esc(name)}${t?.active ? '<span class="sub">active on desktop</span>' : ""}</span></button>`;
+    })
     .join("");
   box.onclick = (ev) => {
     const row = ev.target.closest("[data-file]");

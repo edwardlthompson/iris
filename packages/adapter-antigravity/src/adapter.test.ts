@@ -5,6 +5,7 @@ import { AntigravityDriver } from "./driver.js";
 import { processNameProbe, REASON_IDE_CLOSED, type IdeProbe } from "./ide.js";
 import { AntigravitySession } from "./session.js";
 import { candidacyFlags, probeLegStatus } from "./status.js";
+import { readAntigravityActiveModel, selectAntigravityModel } from "./model-picker-cdp.js";
 
 function fixedProbe(running: boolean): IdeProbe {
   return { isRunning: () => running };
@@ -91,5 +92,12 @@ describe("@iris/adapter-antigravity driver + routing", () => {
       ],
     });
     expect(gate).toEqual({ ok: true, legs: ["claude"] });
+  });
+});
+
+describe("@iris/adapter-antigravity model picker exports", () => {
+  it("exposes readAntigravityActiveModel and selectAntigravityModel", () => {
+    expect(typeof readAntigravityActiveModel).toBe("function");
+    expect(typeof selectAntigravityModel).toBe("function");
   });
 });

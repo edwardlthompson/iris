@@ -3,6 +3,8 @@ import {
   closeSheet,
   setConnOk,
   setGateOpen,
+  setMode,
+  setComposerCollapsed,
   setStatusMsg,
 } from "./shell.js";
 import { renderActionBar, renderQuestions, renderQueue } from "./bars-ui.js";
@@ -20,6 +22,7 @@ import {
   showLegsSheet,
   showModelSheet,
   showPresetSheet,
+  showRepoSheet,
   showUsageSheet,
 } from "./tools-ui.js";
 
@@ -81,8 +84,70 @@ let preset = (() => {
 let lastAutoModel = null;
 let activeChatId = null;
 let editorTabs = [];
+let fileInventory = [];
+let pickTimer = 0;
+const pickerQuery = () => document.getElementById("panePickInput")?.value || "";
+const paintPicker = () => renderFileHits(editorTabs, pickerQuery(), { onFocus: pickFile, inventory: fileInventory });
+function pickFile(name) {
+  rememberOpen(name);
+  document.getElementById("panePicker")?.classList.remove("show");
+  document.getElementById("panePickHits")?.classList.remove("show");
+  ws?.send(JSON.stringify({ type: "file", name }));
+  setStatusMsg(`Opening ${name}…`);
+}
+
+function paintOpenFiles() {
+  const names = loadOpenFiles();
+  editorTabs = names.map((name, i) => ({ name, label: name, disk: true, active: i === 0 }));
+  renderEditorTabs(editorTabs, { onFocus: focusEditor });
+}
+
+function normKey(path) {
+  return String(path || "default").replace(/\\/g, "/").replace(/\/+$/, "").toLowerCase();
+}
+
+function repoKey() {
+  return normKey(lockedRepo?.path || localStorage.getItem("iris.repoKey") || "default");
+}
+
+function workspaceMap() {
+  try {
+    const all = JSON.parse(localStorage.getItem("iris.workspace") || "{}");
+    return all && typeof all === "object" ? all : {};
+  } catch {
+    return {};
+  }
+}
+
+function workspace() {
+  return workspaceMap()[repoKey()] || {};
+}
+
+function saveWorkspace(patch) {
+  const all = workspaceMap();
+  all[repoKey()] = { ...(all[repoKey()] || {}), ...patch };
+  localStorage.setItem("iris.workspace", JSON.stringify(all));
+}
+
+function loadOpenFiles() {
+  const saved = workspace().files;
+  if (Array.isArray(saved)) return saved.filter((name) => typeof name === "string" && name);
+  try {
+    const list = JSON.parse(localStorage.getItem("iris.openFiles") || "[]");
+    return Array.isArray(list) ? list.filter((name) => typeof name === "string" && name) : [];
+  } catch {
+    return [];
+  }
+}
+
+function rememberOpen(name) {
+  const list = [name, ...loadOpenFiles().filter((n) => n !== name)].slice(0, 20);
+  saveWorkspace({ files: list });
+  paintOpenFiles();
+}
 let editorPoll = null;
 let pendingHistory = false;
+let pendingRepos = false;
 let activeLeg = localStorage.getItem("iris.leg") || "cursor";
 let activeRung = "lan";
 
@@ -115,7 +180,7 @@ function pushPrefs() {
 }
 
 function activeModelId() {
-  return isManual(preset) ? pickedModel : autoModelForPreset(preset, lastAutoModel);
+  return isManual(preset) ? pickedModel : autoModelForPreset(preset, lastAutoModel, activeLeg, models);
 }
 
 function syncChips() {
@@ -125,18 +190,13 @@ function syncChips() {
     pickPreset.title = "Performance mode";
   }
   if (pickModel) {
-    pickModel.hidden = false;
-    pickModel.style.display = "";
-    const mid = activeModelId();
-    if (isManual(preset)) {
+    const manual = isManual(preset);
+    pickModel.hidden = !manual;
+    pickModel.style.display = manual ? "" : "none";
+    if (manual) {
       pickModel.textContent = modelShortLabel(pickedModel);
       pickModel.title = "Manual model";
       pickModel.classList.remove("auto");
-    } else {
-      // Show the mapped model so Savings→low is visible immediately
-      pickModel.textContent = modelShortLabel(mid);
-      pickModel.title = `Auto · ${presetLabel(preset)} · ${modelShortLabel(mid)}`;
-      pickModel.classList.add("auto");
     }
   }
 }
@@ -160,16 +220,15 @@ function startChatPoll() {
   chatPoll = setInterval(() => {
     if (ws?.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({ type: "chat", id: activeChatId || undefined }));
-      ws.send(JSON.stringify({ type: "editors", leg: activeLeg }));
       ws.send(JSON.stringify({ type: "changes" }));
     }
   }, 2500);
 }
 
 function focusEditor(name) {
-  if (!ws || !name) return;
-  ws.send(JSON.stringify({ type: "editor_focus", name, leg: activeLeg }));
-  ws.send(JSON.stringify({ type: "file", name }));
+  if (!name) return;
+  rememberOpen(name);
+  ws?.send(JSON.stringify({ type: "file", name }));
   setStatusMsg(`Opening ${name}…`);
 }
 
@@ -183,13 +242,13 @@ function applySnap(payload) {
   refreshUsage();
 }
 
-function connect(wsUrl) {
+function connect(wsUrl, timeoutMs = 8000) {
   return new Promise((resolve, reject) => {
     const socket = new WebSocket(wsUrl);
     const t = setTimeout(() => {
       socket.close();
       reject(new Error("timeout"));
-    }, 8000);
+    }, timeoutMs);
     socket.addEventListener("open", () => {
       clearTimeout(t);
       resolve(socket);
@@ -277,10 +336,16 @@ function openModelSheet() {
   const locked = !isManual(preset);
   showModelSheet(models, activeModelId(), {
     locked,
+    activeLeg,
     onPick: (id) => {
       if (locked) return;
       pickedModel = id;
       localStorage.setItem("iris.model", id);
+      const pickedObj = (models || []).find((m) => (m.id || m) === id);
+      if (pickedObj?.leg) {
+        activeLeg = pickedObj.leg;
+        localStorage.setItem("iris.leg", activeLeg);
+      }
       syncChips();
       pushPrefs();
     },
@@ -294,6 +359,49 @@ function openModelSheet() {
   });
 }
 
+let lockedRepo = null;
+
+function paintRepo(lock) {
+  const prev = repoKey();
+  lockedRepo = lock || lockedRepo;
+  const chip = document.getElementById("repoChip");
+  if (!chip || !lockedRepo?.name) return;
+  const next = normKey(lockedRepo.path);
+  const all = workspaceMap();
+  if (prev === "default" && next !== "default" && !all[next]?.files?.length && all.default?.files?.length) {
+    all[next] = { ...(all[next] || {}), ...all.default, files: all.default.files };
+    localStorage.setItem("iris.workspace", JSON.stringify(all));
+  }
+  localStorage.setItem("iris.repoKey", next);
+  localStorage.setItem("iris.repoName", lockedRepo.name);
+  chip.hidden = false;
+  chip.textContent = lockedRepo.name;
+  chip.title = lockedRepo.path || lockedRepo.name;
+  const saved = workspace();
+  if (saved.mode) setMode(saved.mode);
+  if (saved.composer) setComposerCollapsed(saved.composer === "collapsed");
+  paintOpenFiles();
+  if (prev !== next) {
+    fileInventory = [];
+    ws?.send(JSON.stringify({ type: "file_index" }));
+  }
+}
+
+function applyPaired(msg) {
+  if (msg.token) localStorage.setItem("iris.deviceToken", msg.token);
+  setGateOpen(false);
+  applyShared(msg.prefs);
+  setStatusMsg(`Paired · ${activeRung}`);
+  if (typeof Notification !== "undefined" && Notification.permission === "default") {
+    Notification.requestPermission().catch(() => {});
+  }
+  startChatPoll();
+  ws?.send(JSON.stringify({ type: "chat" }));
+  ws?.send(JSON.stringify({ type: "repos" }));
+  ws?.send(JSON.stringify({ type: "file_index" }));
+  applySnap(msg);
+}
+
 function bindSocket(socket) {
   ws = socket;
   setConnOk(true);
@@ -305,16 +413,7 @@ function bindSocket(socket) {
       return;
     }
     if (msg.type === "paired") {
-      applySnap(msg);
-      if (msg.token) localStorage.setItem("iris.deviceToken", msg.token);
-      setGateOpen(false);
-      applyShared(msg.prefs);
-      setStatusMsg(`Paired · ${activeRung}`);
-      if (typeof Notification !== "undefined" && Notification.permission === "default") {
-        Notification.requestPermission().catch(() => {});
-      }
-      startChatPoll();
-      ws.send(JSON.stringify({ type: "chat" }));
+      applyPaired(msg);
     } else if (msg.type === "setup_result") {
       setStatusMsg(msg.detail || "Setting up leg");
     } else if (msg.type === "prefs") {
@@ -326,22 +425,53 @@ function bindSocket(socket) {
       setStatusMsg(msg.error ? msg.error : msg.path || msg.name);
     } else if (msg.type === "changes") {
       renderChangedFiles(msg.files || [], {
-        onDiff: (name) => ws?.send(JSON.stringify({ type: "diff", name })),
+        onOpen: (name) => ws?.send(JSON.stringify({ type: "file", name })),
       });
     } else if (msg.type === "diff") {
       showDiff(msg);
     } else if (msg.type === "editors") {
-      editorTabs = msg.tabs || [];
-      renderEditorTabs(editorTabs, { onFocus: focusEditor });
-      const q = document.getElementById("panePickInput")?.value || "";
-      renderFileHits(editorTabs, q, { onFocus: focusEditor });
+      if (pickerQuery().trim()) renderFileHits(msg.tabs || [], pickerQuery(), { onFocus: pickFile, inventory: fileInventory });
+    } else if (msg.type === "file_index") {
+      fileInventory = msg.files || [];
+      paintPicker();
+    } else if (msg.type === "repos") {
+      paintRepo(msg.lock);
+      if (pendingRepos) {
+        pendingRepos = false;
+        showRepoSheet(msg.repos || [], msg.lock?.path || "", {
+          onPick: (path) => {
+            if (!path) return;
+            ws?.send(JSON.stringify({ type: "repo_lock", path }));
+          },
+        });
+      }
+    } else if (msg.type === "repo_alert") {
+      const banner = document.getElementById("repoAlert");
+      if (!banner) return;
+      const rows = msg.mismatches || [];
+      if (!rows.length) {
+        banner.hidden = true;
+        banner.textContent = "";
+        return;
+      }
+      banner.hidden = false;
+      banner.textContent = rows
+        .map((row) => `${row.program} is open on “${row.title}”, not ${msg.repo || "the locked repo"}. That program will be skipped.`)
+        .join(" ");
+    } else if (msg.type === "tool_approval") {
+      renderActionBar(actionBar, ["Allow", "Deny"], (label) => {
+        ws.send(JSON.stringify({ type: "approval", id: msg.id, decision: label }));
+        renderActionBar(actionBar, []);
+      });
+      setStatusMsg(msg.summary || "Approve this step");
     } else if (msg.type === "history") {
       if (!pendingHistory) return;
       pendingHistory = false;
       showHistorySheet(msg.conversations || [], activeChatId, {
         error: msg.error || "",
+        repo: lockedRepo?.name || "",
         onPick: (id) => {
-          activeChatId = id;
+          activeChatId = id === "unified" ? null : id;
           ws.send(JSON.stringify({ type: "chat", id }));
           setStatusMsg("Loading chat…");
         },
@@ -390,15 +520,13 @@ function bindSocket(socket) {
         usage = msg.usage;
         refreshUsage();
       }
-      const autoHint =
-        !isManual(preset) && (msg.pickedModel || msg.model)
-          ? ` · ${modelShortLabel(msg.pickedModel || msg.model)}`
-          : "";
-      const dest = msg.leg === "antigravity" ? "Antigravity" : msg.leg === "claude" ? "Claude Code" : "Cursor Agent";
-      const doneText =
-        msg.stopReason === "submitted"
-          ? `Sent to ${dest}${autoHint}`
-          : msg.stopReason || "Done";
+      const dest =
+        msg.leg === "antigravity" ? "Antigravity"
+          : msg.leg === "pool" ? "Venice Pool"
+          : msg.leg === "claude" ? "Claude Code"
+          : "Cursor";
+      const effort = msg.effort ? ` · ${msg.effort}` : "";
+      const doneText = `${modelShortLabel(msg.pickedModel || msg.model || "Auto")}${effort} · ${dest}`;
       setStatusMsg(doneText);
       if (msg.stopReason === "submitted") {
         holdRun = true;
@@ -452,19 +580,24 @@ function bindSocket(socket) {
     }
     setGateOpen(false);
     setStatusMsg("Reconnecting…");
-    setTimeout(() => {
+    const again = () => {
       if (ws) return;
-      void walkRungs(savedRungs(), "", token);
-    }, 800);
+      void walkRungs(savedRungs(), "", token).then((ok) => {
+        if (!ok && !ws) setTimeout(again, 3000);
+      });
+    };
+    setTimeout(again, 800);
   });
 }
 
 function openLegs() {
   ws?.send(JSON.stringify({ type: "status" }));
   showLegsSheet(legs, {
+    activeLeg,
     onAdd: (id) => {
       activeLeg = id || "cursor";
       localStorage.setItem("iris.leg", activeLeg);
+      syncChips();
       pushPrefs();
       const leg = legs.find((l) => l.id === id);
       setStatusMsg(`Leg · ${leg?.label || activeLeg}`);
@@ -513,13 +646,19 @@ refreshUsage();
 
 document.getElementById("pickLegs")?.addEventListener("click", openLegs);
 
+document.getElementById("repoChip")?.addEventListener("click", () => {
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  pendingRepos = true;
+  ws.send(JSON.stringify({ type: "repos" }));
+});
+
 document.getElementById("pickHistory")?.addEventListener("click", () => {
   if (!ws || ws.readyState !== WebSocket.OPEN) {
     showHistorySheet([], null, { error: "Not paired. Pair with the host, then open History again." });
     return;
   }
   pendingHistory = true;
-  showHistorySheet([], activeChatId, { loading: true });
+  showHistorySheet([], activeChatId, { loading: true, repo: lockedRepo?.name || "" });
   ws.send(JSON.stringify({ type: "history", leg: activeLeg }));
 });
 
@@ -537,6 +676,7 @@ pickPreset?.addEventListener("click", () => {
 });
 
 pickModel?.addEventListener("click", () => {
+  if (!isManual(preset)) return;
   openModelSheet();
 });
 
@@ -574,16 +714,22 @@ async function tryPair(code, wsUrl, { silent = false, token = "" } = {}) {
     if (!silent) setStatusMsg("Host URL must start with ws:// or wss://", true);
     return false;
   }
-  localStorage.setItem("iris.ws", wsUrl);
-  localStorage.setItem("iris.pairCode", code);
+  if (code) localStorage.setItem("iris.pairCode", code);
   if (!silent) setStatusMsg("Connecting…");
   try {
+    const opened = await openPaired(wsUrl, code, savedToken, 8000);
+    if (!opened) {
+      if (!ws || ws.readyState !== WebSocket.OPEN) setConnOk(false);
+      return false;
+    }
     const old = ws;
-    ws = null;
-    old?.close();
-    const socket = await connect(wsUrl);
-    bindSocket(socket);
-    socket.send(JSON.stringify(savedToken ? { type: "pair", token: savedToken } : { type: "pair", code }));
+    if (old && old !== opened.socket) {
+      ws = null;
+      old.close();
+    }
+    bindSocket(opened.socket);
+    applyPaired(opened.msg);
+    localStorage.setItem("iris.ws", wsUrl);
     return true;
   } catch (e) {
     if (!silent) {
@@ -610,22 +756,105 @@ function savedRungs() {
   return [{ rung: "lan", ws: url }];
 }
 
-/** On a phone, loopback only works while adb reverse is up, so try it last. */
-function orderedRungs(rungs) {
-  if (!window.Capacitor) return rungs;
-  return [...rungs].sort((a, b) => {
-    const loop = (w) => String(w?.ws || "").includes("127.0.0.1");
-    return Number(loop(a)) - Number(loop(b));
-  });
+function isDesktop() {
+  return !!(
+    window.__TAURI_INTERNALS__ ||
+    window.__TAURI__ ||
+    location.hostname === "tauri.localhost"
+  );
+}
+
+function isTunnel(rung) {
+  return rung?.rung === "tunnel" || String(rung?.ws || "").startsWith("wss://");
+}
+
+/** Phones stay on the tunnel, then LAN. 127.0.0.1 is the USB reverse and dies when the cable comes out. */
+function remoteOrder(rungs) {
+  const usable = rungs.filter((r) => r?.ws && !String(r.ws).includes("172.31.") && !String(r.ws).includes("127.0.0.1"));
+  const tunnel = usable.filter(isTunnel);
+  const lan = usable.filter((r) => !isTunnel(r));
+  return [...tunnel, ...lan];
+}
+
+function openPaired(wsUrl, code, token, timeoutMs) {
+  return connect(wsUrl, timeoutMs).then(
+    (socket) =>
+      new Promise((resolve) => {
+        let settled = false;
+        let last = null;
+        const finish = (ok) => {
+          if (settled) return;
+          settled = true;
+          socket.removeEventListener("message", onMsg);
+          socket.removeEventListener("close", onClose);
+          if (!ok) socket.close();
+          resolve(ok ? { socket, msg: last } : null);
+        };
+        const onMsg = (ev) => {
+          try {
+            const msg = JSON.parse(String(ev.data));
+            last = msg;
+            if (msg.type === "paired") finish(true);
+            else if (msg.type === "error") finish(false);
+          } catch {
+            /* ignore non-json */
+          }
+        };
+        const onClose = () => finish(false);
+        socket.addEventListener("message", onMsg);
+        socket.addEventListener("close", onClose);
+        setTimeout(() => finish(false), timeoutMs);
+        socket.send(JSON.stringify(token ? { type: "pair", token } : { type: "pair", code }));
+      }),
+  );
+}
+
+/** Move off the tunnel only onto a real LAN address. Never onto 127.0.0.1. */
+async function upgradeFromTunnel(local, code, token) {
+  const held = ws;
+  for (const rung of local) {
+    if (!rung?.ws || String(rung.ws).includes("127.0.0.1") || ws !== held) continue;
+    try {
+      const opened = await openPaired(rung.ws, code, token, 2500);
+      if (!opened?.socket || ws !== held) {
+        opened?.socket?.close();
+        continue;
+      }
+      ws = null;
+      held.close();
+      activeRung = "lan";
+      bindSocket(opened.socket);
+      applyPaired(opened.msg);
+      localStorage.setItem("iris.ws", rung.ws);
+      setStatusMsg("Paired · lan");
+      return;
+    } catch {
+      /* stay on the tunnel */
+    }
+  }
 }
 
 async function walkRungs(rungs, code, token) {
   localStorage.setItem("iris.rungs", JSON.stringify(rungs));
-  for (const rung of orderedRungs(rungs)) {
+  const order = isDesktop() ? rungs.filter((r) => r?.ws) : remoteOrder(rungs);
+  if (!isDesktop()) {
+    const tunnel = order.find(isTunnel);
+    if (tunnel) {
+      activeRung = "tunnel";
+      if (await tryPair(code, tunnel.ws, { silent: true, token })) {
+        void upgradeFromTunnel(
+          order.filter((r) => r !== tunnel),
+          code,
+          token,
+        );
+        return true;
+      }
+    }
+  }
+  for (const rung of order) {
     if (!rung?.ws) continue;
-    activeRung = rung.rung || "lan";
-    const ok = await tryPair(code, rung.ws, { silent: true, token });
-    if (ok) return true;
+    activeRung = String(rung.ws).includes("127.0.0.1") ? "adb" : rung.rung || "lan";
+    if (await tryPair(code, rung.ws, { silent: true, token })) return true;
   }
   return false;
 }
@@ -647,7 +876,20 @@ async function walkRungs(rungs, code, token) {
       if (ladder.length && (await walkRungs(ladder, code, ""))) return;
     }
   } catch {
-    /* host may not have published yet */
+    /* bundled apps have no pair-code.json */
+  }
+  if (!/^\d{6}$/.test(code)) {
+    try {
+      const res = await fetch(`http://127.0.0.1:8787/pair-code.json?t=${Date.now()}`, { cache: "no-store" });
+      if (res.ok) {
+        const live = await res.json();
+        if (/^\d{6}$/.test(String(live.code || ""))) code = String(live.code);
+        const ladder = Array.isArray(live.rungs) ? live.rungs : [];
+        if (ladder.length && (await walkRungs(ladder, code, ""))) return;
+      }
+    } catch {
+      /* phone server is not on this machine */
+    }
   }
   if (await walkRungs(savedRungs(), code, localStorage.getItem("iris.deviceToken") || "")) return;
   if (codeEl && code) codeEl.value = code;
@@ -725,22 +967,45 @@ promptEl?.addEventListener("keydown", (ev) => {
 document.getElementById("paneOpen")?.addEventListener("click", () => {
   document.getElementById("panePicker")?.classList.add("show");
   document.getElementById("panePickInput")?.focus();
-  renderFileHits(editorTabs, "", { onFocus: focusEditor });
+  paintPicker();
+  ws?.send(JSON.stringify({ type: "file_index" }));
 });
-document.getElementById("panePickInput")?.addEventListener("input", (ev) => {
-  renderFileHits(editorTabs, ev.target.value, { onFocus: focusEditor });
+document.getElementById("panePickInput")?.addEventListener("input", () => {
+  paintPicker(); // instant, predictive: filter the cached inventory on every keystroke
+  clearTimeout(pickTimer);
+  if (!fileInventory.length) pickTimer = setTimeout(() => ws?.send(JSON.stringify({ type: "editors", leg: activeLeg, query: pickerQuery() })), 120);
+});
+document.getElementById("panePickInput")?.addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter") {
+    ev.preventDefault();
+    document.querySelector("#panePickHits [data-file]")?.click();
+  }
+});
+document.getElementById("panePickGo")?.addEventListener("click", () => {
+  const first = document.querySelector("#panePickHits [data-file]");
+  if (first) first.click();
+  else if (pickerQuery().trim()) pickFile(pickerQuery().trim());
 });
 document.getElementById("panePickCancel")?.addEventListener("click", () => {
   document.getElementById("panePicker")?.classList.remove("show");
 });
 document.getElementById("paneDiffBack")?.addEventListener("click", () => hideWorkspaceFile());
 document.getElementById("tabFiles")?.addEventListener("click", () => {
-  ws?.send(JSON.stringify({ type: "editors", leg: activeLeg }));
+  paintOpenFiles();
+  ws?.send(JSON.stringify({ type: "file_index" }));
   ws?.send(JSON.stringify({ type: "changes" }));
 });
 document.getElementById("tabPane")?.addEventListener("click", () => {
-  ws?.send(JSON.stringify({ type: "editors", leg: activeLeg }));
+  paintOpenFiles();
+  ws?.send(JSON.stringify({ type: "file_index" }));
   ws?.send(JSON.stringify({ type: "changes" }));
 });
 
 globalThis.__IRIS_PHONE_BOOT__ = true;
+const savedRepoName = localStorage.getItem("iris.repoName");
+const savedChip = document.getElementById("repoChip");
+if (savedChip && savedRepoName) {
+  savedChip.hidden = false;
+  savedChip.textContent = savedRepoName;
+}
+paintOpenFiles();

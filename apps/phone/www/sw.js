@@ -1,5 +1,5 @@
 /** Shell cache plus notification taps that open the approval sheet. */
-const CACHE = "iris-shell-v31";
+const CACHE = "iris-shell-v56";
 const ASSETS = [
   "./",
   "./index.html",

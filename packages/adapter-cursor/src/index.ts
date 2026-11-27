@@ -18,7 +18,11 @@ export {
 } from "./cdp.js";
 export { createCdpCursorBridge, type CdpBridgeOpts } from "./bridge-cdp.js";
 export { cursorAgentBusy, cdpAgentBusy } from "./busy-cdp.js";
-export { selectCursorModelEffort, listCursorModels, modelsFromMenuRows } from "./model-picker-cdp.js";
+export {
+  selectCursorModelEffort,
+  listCursorModels,
+  modelsFromMenuRows,
+} from "./model-picker-cdp.js";
 export { listEditorTabs, focusEditorTab, type EditorTab } from "./editors-cdp.js";
 export {
   scrapeCursorUsageChip,

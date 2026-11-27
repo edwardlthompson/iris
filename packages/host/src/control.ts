@@ -4,29 +4,40 @@ import {
   cdpAgentBusy,
   CursorDriver,
   focusEditorTab,
-  listConversations,
   listEditorTabs,
-  loadChatById,
-  loadLatestChat,
   processNameProbe as cursorProcessProbe,
 } from "@iris/adapter-cursor";
 import {
   focusAntigravityEditor,
   listAntigravityEditors,
-  listAntigravityHistory,
+  selectAntigravityModel,
   submitAntigravityPrompt,
 } from "@iris/adapter-antigravity";
 import { ClaudeSession, createCliClaudeRuntime } from "@iris/adapter-claude";
 import type { PairingService } from "./pairing.js";
 import { cursorCredits, listProcessNames, snapshotLegs } from "./legs.js";
 import { routePrompt } from "./route-prompt.js";
-import { settleApproval } from "./approvals.js";
+import { fallbackOrder, findLadderModel } from "./model-ladder.js";
+import { randomUUID } from "node:crypto";
+import { requestPhoneApproval, settleApproval } from "./approvals.js";
 import { deviceTokenOk, issueDeviceToken } from "./devices.js";
 import { setupLeg } from "./leg-setup.js";
-import { rememberTurn } from "./thread-handoff.js";
+import { rememberTurn, withHandoff } from "./thread-handoff.js";
 import { publishTurnNotice } from "./turn-notice.js";
 import { readPrefs, savePrefs } from "./prefs.js";
-import { listChanges, readDiff, readNamedFile } from "./workspace-file.js";
+import { lockedRepo, setLockedRepo } from "./workspace-lock.js";
+import { listRepoCatalog } from "./repo-catalog.js";
+import { ideWindowTitles, repoMismatches, blockingTitle } from "./ide-windows.js";
+import {
+  listChanges,
+  listRepoFiles,
+  readDiff,
+  readNamedFile,
+  searchRepoFiles,
+} from "./workspace-file.js";
+import { runPoolTurn } from "./pool-runtime.js";
+import { antigravityBrainBusy } from "./sources-antigravity.js";
+import { listAllHistory, loadChatView } from "./unified-chat.js";
 
 export type ControlDeps = {
   pairing: PairingService;
@@ -38,15 +49,25 @@ type InMsg =
   | { type: "status" }
   | { type: "chat"; id?: string }
   | { type: "history"; leg?: string }
-  | { type: "editors"; leg?: string }
+  | { type: "editors"; leg?: string; query?: string }
   | { type: "editor_focus"; name: string; leg?: string }
   | { type: "file"; name: string }
   | { type: "changes" }
+  | { type: "file_index" }
   | { type: "diff"; name: string }
-  | { type: "prompt"; text: string; model?: string; preset?: string; leg?: string; images?: { data: string; name?: string; type?: string }[] }
+  | {
+      type: "prompt";
+      text: string;
+      model?: string;
+      preset?: string;
+      leg?: string;
+      images?: { data: string; name?: string; type?: string }[];
+    }
   | { type: "approval"; id?: string; decision: string }
   | { type: "prefs"; preset?: string; model?: string; leg?: string }
-  | { type: "setup"; leg?: string };
+  | { type: "setup"; leg?: string }
+  | { type: "repos" }
+  | { type: "repo_lock"; path: string };
 
 function send(ws: WebSocket, obj: unknown): void {
   if (ws.readyState === ws.OPEN) ws.send(JSON.stringify(obj));
@@ -56,21 +77,19 @@ let turnsInFlight = 0;
 
 async function pushChat(ws: WebSocket, id?: string): Promise<void> {
   const busy =
-    turnsInFlight > 0 || (await cdpAgentBusy(9222)) || (await cdpAgentBusy(9000));
-  if (id) {
-    const loaded = loadChatById(id);
-    send(ws, {
-      type: "chat",
-      source: loaded.file ? "transcript" : "empty",
-      id,
-      title: loaded.title,
-      items: loaded.items,
-      busy,
-    });
-    return;
-  }
-  const { file, items } = loadLatestChat("Iris");
-  send(ws, { type: "chat", source: file ? "transcript" : "empty", items, busy });
+    turnsInFlight > 0 ||
+    antigravityBrainBusy() ||
+    (await cdpAgentBusy(9222)) ||
+    (await cdpAgentBusy(9000));
+  const view = loadChatView(id);
+  send(ws, {
+    type: "chat",
+    source: view.source,
+    id: view.id,
+    title: view.title,
+    items: view.items,
+    busy,
+  });
 }
 
 export function createControlHandler(deps: ControlDeps) {
@@ -127,7 +146,17 @@ export function createControlHandler(deps: ControlDeps) {
     }
 
     if (!paired.has(ws) && msg.type !== "status") {
-      if (msg.type === "prompt" || msg.type === "chat" || msg.type === "history" || msg.type === "editors" || msg.type === "editor_focus" || msg.type === "file" || msg.type === "changes" || msg.type === "diff") {
+      if (
+        msg.type === "prompt" ||
+        msg.type === "chat" ||
+        msg.type === "history" ||
+        msg.type === "editors" ||
+        msg.type === "editor_focus" ||
+        msg.type === "file" ||
+        msg.type === "file_index" ||
+        msg.type === "changes" ||
+        msg.type === "diff"
+      ) {
         send(ws, { type: "error", reason: "not_paired" });
         return;
       }
@@ -142,6 +171,34 @@ export function createControlHandler(deps: ControlDeps) {
     if (msg.type === "prefs") {
       const prefs = await savePrefs({ preset: msg.preset, model: msg.model, leg: msg.leg });
       broadcast({ type: "prefs", ...prefs });
+      if (msg.model?.startsWith("ag:") || msg.leg === "antigravity") {
+        const picked = msg.model?.startsWith("ag:")
+          ? findLadderModel(msg.model, {
+              cursorLeft: 100,
+              groups: {},
+              claudeOn: true,
+              antiOn: true,
+            })
+          : null;
+        void selectAntigravityModel({
+          pickerLabel: picked?.pickerLabel || "Claude Sonnet 5.5",
+          effort: picked?.effort || "medium",
+        })
+          .then(async () => {
+            const snap = await snapshotLegs();
+            broadcast({
+              type: "status",
+              paired: true,
+              fingerprint: deps.fingerprint,
+              bestLeg: snap.bestLeg,
+              legs: snap.legs,
+              models: snap.models,
+              usage: snap.usage,
+              pickedModel: snap.pickedModel,
+            });
+          })
+          .catch(() => {});
+      }
       return;
     }
 
@@ -161,8 +218,14 @@ export function createControlHandler(deps: ControlDeps) {
     }
 
     if (msg.type === "editors") {
-      const tabs = msg.leg === "antigravity" ? await listAntigravityEditors() : await listEditorTabs();
-      send(ws, { type: "editors", tabs });
+      const hits = await searchRepoFiles(msg.query?.trim() || "");
+      send(ws, { type: "editors", tabs: hits.map((name) => ({ name, label: name, disk: true })) });
+      return;
+    }
+
+    if (msg.type === "file_index") {
+      const files = await listRepoFiles();
+      send(ws, { type: "file_index", files, total: files.length });
       return;
     }
 
@@ -173,44 +236,60 @@ export function createControlHandler(deps: ControlDeps) {
 
     if (msg.type === "diff") {
       const text = await readDiff(msg.name);
-      send(ws, text != null
-        ? { type: "diff", name: msg.name, text }
-        : { type: "diff", name: msg.name, error: "no diff" });
+      send(
+        ws,
+        text != null
+          ? { type: "diff", name: msg.name, text }
+          : { type: "diff", name: msg.name, error: "no diff" },
+      );
       return;
     }
 
     if (msg.type === "file") {
       const file = await readNamedFile(msg.name);
-      send(ws, file
-        ? { type: "file", name: msg.name, path: file.path, text: file.text }
-        : { type: "file", name: msg.name, error: "not in workspace" });
+      send(
+        ws,
+        file
+          ? { type: "file", name: msg.name, path: file.path, text: file.text }
+          : { type: "file", name: msg.name, error: "not in workspace" },
+      );
       return;
     }
 
     if (msg.type === "editor_focus") {
-      const ok = msg.leg === "antigravity"
-        ? await focusAntigravityEditor(msg.name)
-        : await focusEditorTab(msg.name);
-      const tabs = msg.leg === "antigravity" ? await listAntigravityEditors() : await listEditorTabs();
+      const ok =
+        msg.leg === "antigravity"
+          ? await focusAntigravityEditor(msg.name)
+          : await focusEditorTab(msg.name);
+      const tabs =
+        msg.leg === "antigravity" ? await listAntigravityEditors() : await listEditorTabs();
       send(ws, { type: "editors", tabs, focused: ok ? msg.name : null });
+      return;
+    }
+
+    if (msg.type === "repos") {
+      const lock = lockedRepo();
+      send(ws, { type: "repos", lock, repos: listRepoCatalog(lock) });
+      return;
+    }
+
+    if (msg.type === "repo_lock") {
+      try {
+        const lock = setLockedRepo(msg.path);
+        send(ws, { type: "repos", lock, repos: listRepoCatalog(lock) });
+      } catch (err) {
+        send(ws, {
+          type: "error",
+          reason: "repo_lock",
+          detail: err instanceof Error ? err.message : String(err),
+        });
+      }
       return;
     }
 
     if (msg.type === "history") {
       try {
-        const cursorChats = listConversations(24).map((c) => ({
-          id: c.id,
-          title: c.title,
-          project: c.project || "Cursor",
-          mtimeMs: c.mtimeMs,
-        }));
-        const antiChats = (await listAntigravityHistory().catch(() => [])).map((c) => ({
-          id: `ag:${c.id}`,
-          title: c.title,
-          project: "Antigravity",
-          mtimeMs: c.mtimeMs || Date.now(),
-        }));
-        const conversations = [...antiChats, ...cursorChats];
+        const conversations = await listAllHistory();
         send(ws, { type: "history", conversations });
       } catch (err) {
         send(ws, { type: "history", conversations: [], error: String(err) });
@@ -219,18 +298,9 @@ export function createControlHandler(deps: ControlDeps) {
     }
 
     if (msg.type === "chat") {
-      if (msg.id?.startsWith("ag:")) {
-        send(ws, {
-          type: "chat",
-          source: "antigravity",
-          id: msg.id,
-          title: "Antigravity",
-          items: [{ role: "assistant", text: "This chat lives in Antigravity. Select the Antigravity leg to continue it there." }],
-        });
-        return;
-      }
-      if (msg.id) activeChat.set(ws, msg.id);
-      pushChat(ws, msg.id ?? activeChat.get(ws));
+      if (!msg.id || msg.id === "unified") activeChat.delete(ws);
+      else activeChat.set(ws, msg.id);
+      await pushChat(ws, activeChat.get(ws));
       return;
     }
 
@@ -249,120 +319,197 @@ export function createControlHandler(deps: ControlDeps) {
       const cursorLeft = snap.usage.products.find((p) => p.id === "cursor")?.d7Left ?? null;
       const groups: Record<string, number | null> = {};
       for (const p of snap.usage.products) {
-        if (p.id.startsWith("ag-")) groups[p.id] = p.h5Left ?? p.d7Left;
+        if (String(p.id).startsWith("ag-")) groups[p.id] = p.h5Left ?? p.d7Left;
       }
+      const poolLeg = snap.legs.find((l) => l.id === "pool" && l.connected);
+      const poolProd = snap.usage.products.find((p) => p.id === "pool");
+      const quota = {
+        cursorLeft,
+        groups,
+        claudeOn: snap.legs.some((l) => l.id === "claude" && l.connected),
+        antiOn: snap.legs.some((l) => l.id === "antigravity" && l.connected),
+        poolOn: Boolean(poolLeg),
+        poolLeft: poolProd?.d7Left ?? null,
+        poolModel: poolLeg?.model ?? null,
+        poolModels: snap.poolModels,
+      };
       const routed = routePrompt({
         text: msg.text,
         preset: msg.preset,
         model: msg.model,
         fallbackModel: snap.pickedModel ?? undefined,
-        quota: {
-          cursorLeft,
-          groups,
-          claudeOn: snap.legs.some((l) => l.id === "claude" && l.connected),
-          antiOn: snap.legs.some((l) => l.id === "antigravity" && l.connected),
-        },
+        quota,
       });
-      const { pick, mode } = routed;
-      const model = pick.id;
-      const leg = pick.leg;
-      const prompt = msg.text;
+      const { mode } = routed;
+      const prompt = withHandoff(msg.text);
+      const funded = fallbackOrder(
+        routed.preset === "manual" ? "max" : (routed.preset ?? "max"),
+        quota,
+      );
+      const baseOrder = [routed.pick, ...funded.filter((m) => m.id !== routed.pick.id)];
+      const order = baseOrder;
+      const dead = new Set<string>();
+      let lastErr = "No leg accepted the prompt";
+      const lock = lockedRepo();
+      const titles = await ideWindowTitles();
+      const mismatches = repoMismatches(lock.name, titles);
+      send(ws, { type: "repo_alert", repo: lock.name, mismatches });
       turnsInFlight += 1;
+      let sent = false;
       try {
-      if (leg === "claude") {
-        try {
-          const session = new ClaudeSession({ runtime: createCliClaudeRuntime() });
-          const out = await session.run(prompt);
-          rememberTurn("claude", msg.text, out.texts[0] || out.stopReason);
-          send(ws, {
-            type: "prompt_result",
-            leg: "claude",
-            model: "claude.ai",
-            stopReason: out.stopReason,
-            detail: out.texts.join("\n").slice(0, 4000) || "Submitted to Claude Code (cloud)",
-          });
-          publishTurnNotice("Iris · Claude Code", out.texts[0]?.slice(0, 180) || "Reply ready");
-        } catch (err) {
-          send(ws, {
-            type: "error",
-            reason: "claude_disabled",
-            detail: err instanceof Error ? err.message : String(err),
-          });
-        }
-        return;
-      }
-      if (leg === "antigravity") {
-        try {
-          const out = await submitAntigravityPrompt(prompt);
-          rememberTurn("antigravity", msg.text, out.stopReason);
-          send(ws, {
-            type: "prompt_result",
-            leg: "antigravity",
-            model,
-            stopReason: out.stopReason,
-            detail: "Submitted to Antigravity on CDP :9000",
-          });
-          publishTurnNotice("Iris · Antigravity", "Reply ready");
-        } catch (err) {
-          send(ws, {
-            type: "error",
-            reason: "antigravity_disabled",
-            detail: err instanceof Error ? err.message : String(err),
-          });
-        }
-        return;
-      }
-      try {
-        const driver = new CursorDriver(
-          cursorProcessProbe(listProcessNames),
-          cursorCredits(),
-          createCdpCursorBridge(),
-        );
-        const out = await Promise.race([
-          driver.run({
-            prompt,
-            model,
-            effort: pick.effort,
-            pickerLabel: pick.pickerLabel,
-            images: msg.images,
-          }),
-          new Promise<never>((_, reject) => {
-            setTimeout(() => reject(new Error("Cursor did not accept the prompt within 20s")), 20_000);
-          }),
-        ]);
-        rememberTurn("cursor", msg.text, out.stopReason);
-        send(ws, {
-          type: "prompt_result",
-          leg: "cursor",
-          model: out.model ?? model,
-          effort: pick.effort,
-          preset: routed.preset,
-          mode,
-          stage1: routed.stage1
-            ? {
-                kind: routed.stage1.kind,
-                preset: routed.stage1.kind === "preset" ? routed.stage1.preset : null,
-                score: routed.stage1.score,
+        for (const pick of order) {
+          if (dead.has(pick.leg) || pick.remainingPct <= 0) continue;
+          const model = pick.id;
+          const leg = pick.leg;
+          try {
+            if (leg === "pool") throw new Error("Venice and LiteLLM are disabled");
+            if (leg === "claude") {
+              const session = new ClaudeSession({
+                runtime: createCliClaudeRuntime(),
+                model: pick.id.slice(pick.id.indexOf(":") + 1),
+              });
+              const out = await session.run(prompt);
+              rememberTurn("claude", msg.text, out.texts[0] || out.stopReason, {
+                model: pick.label,
+                effort: pick.effort || pick.level,
+              });
+              send(ws, {
+                type: "prompt_result",
+                leg: "claude",
+                model: pick.label,
+                effort: pick.effort,
+                stopReason: out.stopReason,
+                detail: out.texts.join("\n").slice(0, 4000) || "Submitted to Claude Code (cloud)",
+              });
+              publishTurnNotice("Iris · Claude Code", out.texts[0]?.slice(0, 180) || "Reply ready");
+              void pushChat(ws, activeChat.get(ws));
+              setTimeout(() => void pushChat(ws, activeChat.get(ws)), 1500);
+              sent = true;
+              break;
+            }
+            if (leg === "pool") {
+              const out = await runPoolTurn(prompt, model, {
+                images: msg.images,
+                onApproval: (summary) =>
+                  new Promise((resolve) => {
+                    const id = randomUUID();
+                    void requestPhoneApproval(id, () => {
+                      send(ws, { type: "tool_approval", id, summary });
+                    }).then((decision) => resolve(/allow|accept|yes/i.test(decision)));
+                  }),
+              });
+              rememberTurn("pool", msg.text, out.text);
+              send(ws, {
+                type: "prompt_result",
+                leg: "pool",
+                model: out.model,
+                effort: pick.effort,
+                text: out.text,
+                stopReason: out.stopReason,
+                detail: out.text.slice(0, 4000),
+              });
+              publishTurnNotice("Iris · Pool", out.text.slice(0, 180) || "Reply ready");
+              void pushChat(ws, activeChat.get(ws));
+              sent = true;
+              break;
+            }
+            if (leg === "antigravity") {
+              const antiBlock = blockingTitle(titles.antigravity, lock.name);
+              if (antiBlock) {
+                throw new Error(
+                  `Antigravity is open on "${antiBlock}", not ${lock.name}. Prompt was not sent.`,
+                );
               }
-            : null,
-          text: out.text,
-          stopReason: out.stopReason,
-          modelSelect: out.modelSelect ?? null,
-          pickedModel: out.model ?? model,
-          usage: snap.usage,
-        });
-        publishTurnNotice("Iris · Cursor", (out.text || "Reply ready").slice(0, 180));
-        const chatId = activeChat.get(ws);
-        pushChat(ws, chatId);
-        setTimeout(() => pushChat(ws, chatId), 2000);
-      } catch (e) {
-        send(ws, {
-          type: "error",
-          reason: "cursor_bridge_failed",
-          detail: e instanceof Error ? e.message : String(e),
-          legs: snap.legs,
-        });
-      }
+              const out = await submitAntigravityPrompt(prompt, {
+                pickerLabel: pick.pickerLabel || "Claude Sonnet 5.5",
+                effort: pick.effort || "medium",
+                expectRepo: lock.name,
+              });
+              rememberTurn("antigravity", msg.text, out.stopReason, {
+                model: pick.label,
+                effort: pick.effort || pick.level,
+              });
+              send(ws, {
+                type: "prompt_result",
+                leg: "antigravity",
+                model,
+                pickedModel: model,
+                modelSelect: out.modelSelect ?? null,
+                stopReason: out.stopReason,
+                detail: "Submitted to Antigravity on CDP :9000",
+                effort: pick.effort,
+              });
+              publishTurnNotice("Iris · Antigravity", "Reply ready");
+              void pushChat(ws, activeChat.get(ws));
+              setTimeout(() => void pushChat(ws, activeChat.get(ws)), 1500);
+              setTimeout(() => void pushChat(ws, activeChat.get(ws)), 4500);
+              sent = true;
+              break;
+            }
+            const cursorBlock = blockingTitle(titles.cursor, lock.name);
+            if (cursorBlock) {
+              throw new Error(
+                `Cursor is open on "${cursorBlock}", not ${lock.name}. Prompt was not sent.`,
+              );
+            }
+            const driver = new CursorDriver(
+              cursorProcessProbe(listProcessNames),
+              cursorCredits(),
+              createCdpCursorBridge(),
+            );
+            const out = await Promise.race([
+              driver.run({
+                prompt,
+                model,
+                effort: pick.effort,
+                pickerLabel: pick.pickerLabel,
+                images: msg.images,
+              }),
+              new Promise<never>((_, reject) => {
+                setTimeout(
+                  () => reject(new Error("Cursor did not accept the prompt within 20s")),
+                  20_000,
+                );
+              }),
+            ]);
+            rememberTurn("cursor", msg.text, out.text || out.stopReason, {
+              model: pick.label,
+              effort: pick.effort || pick.level,
+            });
+            send(ws, {
+              type: "prompt_result",
+              leg: "cursor",
+              model: out.model ?? model,
+              effort: pick.effort,
+              preset: routed.preset,
+              mode,
+              stage1: routed.stage1
+                ? {
+                    kind: routed.stage1.kind,
+                    preset: routed.stage1.kind === "preset" ? routed.stage1.preset : null,
+                    score: routed.stage1.score,
+                  }
+                : null,
+              text: out.text,
+              stopReason: out.stopReason,
+              modelSelect: out.modelSelect ?? null,
+              pickedModel: out.model ?? model,
+              usage: snap.usage,
+            });
+            publishTurnNotice("Iris · Cursor", (out.text || "Reply ready").slice(0, 180));
+            const chatId = activeChat.get(ws);
+            pushChat(ws, chatId);
+            setTimeout(() => pushChat(ws, chatId), 2000);
+            sent = true;
+            break;
+          } catch (err) {
+            dead.add(leg);
+            lastErr = err instanceof Error ? err.message : String(err);
+          }
+        }
+        if (!sent) {
+          send(ws, { type: "error", reason: "no_available_leg", detail: lastErr, legs: snap.legs });
+        }
       } finally {
         turnsInFlight = Math.max(0, turnsInFlight - 1);
       }

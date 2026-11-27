@@ -69,7 +69,9 @@ describe("@iris/relay-core paired WSS", () => {
     }).start();
     const ws = new WebSocket(`ws://127.0.0.1:${server.port}`);
     await new Promise<void>((resolve) => ws.once("open", () => resolve()));
-    ws.send(encodeFrame(key, { v: 1, kind: "data", seq: 1, body: JSON.stringify({ type: "status" }) }));
+    ws.send(
+      encodeFrame(key, { v: 1, kind: "data", seq: 1, body: JSON.stringify({ type: "status" }) }),
+    );
     await new Promise((r) => setTimeout(r, 80));
     expect(seen[0]).toContain('"type":"status"');
     ws.close();

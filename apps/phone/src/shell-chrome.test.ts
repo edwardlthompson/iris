@@ -60,7 +60,7 @@ describe("@iris/phone shell chrome (remote absorb)", () => {
     expect(html).toMatch(/id="pickModel"[^>]*class="auto"/);
     expect(html).not.toMatch(/id="pickModel"[^>]*hidden/);
     expect(boot).toMatch(/Auto-pairing/);
-    expect(boot).toMatch(/modelShortLabel\(mid\)/);
+    expect(boot).toMatch(/modelShortLabel\((pickedModel)\)/);
     expect(boot).toMatch(/renderUsageBar/);
   });
 
@@ -83,7 +83,7 @@ describe("@iris/phone shell chrome (remote absorb)", () => {
     expect(files).toMatch(/export function renderChangedFiles/);
     expect(files).toMatch(/export function showDiff/);
     expect(boot).toMatch(/type: "changes"/);
-    expect(boot).toMatch(/type: "diff"/);
+    expect(boot).toMatch(/type === "diff"/);
     expect(html).not.toMatch(/id="tabScreen"/);
   });
 

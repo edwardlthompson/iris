@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] — Dual Antigravity dials, predictive file search, and pool runtime (2026-11-28)
+
+### Added
+
+* Separate Gemini and Claude dials for Antigravity on the usage bar, with a top-anchored full-height usage sheet
+* Full-repository file inventory (`file_index`) with instant predictive ranking and Enter/Open shortcuts in the Files picker
+* Unified cross-leg chat history, repository lock catalog, GitHub Actions minutes meter, and LiteLLM/Venice pool runtime with workspace tools
+
+### Fixed
+
+* Claude Code usage meter no longer drops out on OAuth rate limits or misreads sub-percent utilization as near-zero remaining quota
+
+### Changed
+
+* Upgraded workspace test runner to Vitest 5 and Android Gradle wrapper to 8.14.8; archived completed sprints from `BUILD_PLAN.md` into `COMPLETED_TASKS.md`
+
 ## [0.2.1] — Phone tunnel ladder (2026-11-26)
 
 ### Changed

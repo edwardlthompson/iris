@@ -23,6 +23,7 @@ export type ClaudeSessionOptions = {
   resume?: string;
   screen?: boolean;
   signal?: AbortSignal;
+  model?: string;
 };
 
 /** Headless Claude session: query + canUseTool → approvals + quota statusline. */
@@ -35,6 +36,7 @@ export class ClaudeSession {
   private readonly resume: string | undefined;
   private readonly screen: boolean;
   private readonly signal: AbortSignal | undefined;
+  private readonly model: string | undefined;
 
   constructor(opts: ClaudeSessionOptions) {
     this.runtime = opts.runtime;
@@ -44,6 +46,7 @@ export class ClaudeSession {
     this.resume = opts.resume;
     this.screen = opts.screen ?? false;
     this.signal = opts.signal;
+    this.model = opts.model;
   }
 
   async run(prompt: string): Promise<SessionResult> {
@@ -67,6 +70,7 @@ export class ClaudeSession {
       screen: this.screen,
       signal: this.signal,
       env,
+      model: this.model,
     };
 
     for await (const msg of this.runtime.query(prompt, options)) {

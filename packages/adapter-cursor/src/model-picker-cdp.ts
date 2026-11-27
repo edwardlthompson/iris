@@ -196,9 +196,10 @@ export async function selectCursorModelEffort(
         // Selecting the model may close the menu; reopen
         await ensureMenuOpen(session);
       }
-      const edit = (await session.evaluate(
-        `${HELPERS}.editAt(${JSON.stringify(row.id)})`,
-      )) as { x: number; y: number } | null;
+      const edit = (await session.evaluate(`${HELPERS}.editAt(${JSON.stringify(row.id)})`)) as {
+        x: number;
+        y: number;
+      } | null;
       if (edit) {
         await tap(session, edit.x, edit.y);
         await sleep(280);
@@ -250,7 +251,10 @@ export function modelsFromMenuRows(rows: { id?: string; label?: string }[]): Liv
     const effort = /grok\s*4\.7/i.test(label) ? effortOf(label) : null;
     const id = effort
       ? `grok-4.7:${effort}`
-      : (row.id || label).replace(/^model-item-/, "").replace(/\s+/g, "-").slice(0, 80);
+      : (row.id || label)
+          .replace(/^model-item-/, "")
+          .replace(/\s+/g, "-")
+          .slice(0, 80);
     if (out.some((m) => m.id === id)) continue;
     out.push({ id, label, rank: 0, ...(effort ? { effort } : {}) });
   }
@@ -260,8 +264,11 @@ export function modelsFromMenuRows(rows: { id?: string; label?: string }[]): Liv
 let modelCache: { at: number; models: LiveModelRow[] } | null = null;
 
 /** Read the desktop model menu once, then cache. Falls back to null so the Grok ladder stays. */
-export async function listCursorModels(cdpHttp = "http://127.0.0.1:9222"): Promise<LiveModelRow[] | null> {
-  if (modelCache && Date.now() - modelCache.at < 600_000 && modelCache.models.length) return modelCache.models;
+export async function listCursorModels(
+  cdpHttp = "http://127.0.0.1:9222",
+): Promise<LiveModelRow[] | null> {
+  if (modelCache && Date.now() - modelCache.at < 600_000 && modelCache.models.length)
+    return modelCache.models;
   try {
     const target = pickAgentsTarget(await listWorkbenchTargets(cdpHttp));
     if (!target) return null;
@@ -277,7 +284,10 @@ export async function listCursorModels(cdpHttp = "http://127.0.0.1:9222"): Promi
         await tap(session, auto.x, auto.y);
         await sleep(350);
       }
-      const rows = (await session.evaluate(`${HELPERS}.rows()`)) as { id?: string; label?: string }[];
+      const rows = (await session.evaluate(`${HELPERS}.rows()`)) as {
+        id?: string;
+        label?: string;
+      }[];
       if (auto?.checked) {
         const again = (await session.evaluate(`${HELPERS}.autoToggle()`)) as {
           x: number;

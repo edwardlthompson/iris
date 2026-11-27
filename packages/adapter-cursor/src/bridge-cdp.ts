@@ -73,7 +73,9 @@ async function attachImages(
   images: { data: string; name?: string; type?: string }[],
 ): Promise<void> {
   await session.send("DOM.enable").catch(() => {});
-  const doc = (await session.send("DOM.getDocument", { depth: 0 })) as { root?: { nodeId?: number } };
+  const doc = (await session.send("DOM.getDocument", { depth: 0 })) as {
+    root?: { nodeId?: number };
+  };
   const rootId = doc.root?.nodeId;
   if (!rootId) throw new Error("Cursor composer is not open");
   const selectors = [
@@ -84,7 +86,9 @@ async function attachImages(
   ];
   let nodeId = 0;
   for (const selector of selectors) {
-    const found = (await session.send("DOM.querySelector", { nodeId: rootId, selector })) as { nodeId?: number };
+    const found = (await session.send("DOM.querySelector", { nodeId: rootId, selector })) as {
+      nodeId?: number;
+    };
     if (found?.nodeId) {
       nodeId = found.nodeId;
       break;

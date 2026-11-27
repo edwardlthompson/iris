@@ -2,6 +2,160 @@
 
 > Archive of finished BUILD_PLAN items.
 
+## Real-device testing (Cursor first) (2026-11-28)
+
+1. ✅ [AGENT][LOCAL] Cursor IDE bridge — drive Composer/Agent from host (replace bridge_pending ack) — scope: packages/adapter-cursor
+2. ✅ [AGENT][LOCAL] Live Cursor credit/model inventory (API or UI scrape), replace static Grok ladder when unlocked — scope: packages/adapter-cursor
+3. ✅ [AGENT][LOCAL] End-to-end sealed relay frames on phone (shared key), drop plaintext control for production — scope: packages/relay-core
+4. ✅ [AGENT][LOCAL] Host tray app (Windows) with always-on relay + pairing QR/code — scope: packaging/windows
+5. ✅ [AGENT][LOCAL] Unsigned Android APK via Capacitor — scope: apps/phone — app-debug.apk built 2026-11-26 (SDK at %LOCALAPPDATA%\Android\Sdk, JDK 21)
+6. ✅ [AGENT][LOCAL] Tool-approval round-trip: Cursor canUseTool → phone Allow/Deny → resume — scope: packages/host
+7. ✅ [AGENT][LOCAL] Persist paired sessions across host restart (OS keychain, not MemoryKeyStore) — scope: packages/host
+8. ✅ [HUMAN] Confirm Cursor is signed in with remaining credits on this PC; note which models still have quota — confirmed 2026-11-26: Cursor and Antigravity are signed in
+
+## Audit fixes (2026-11-28)
+
+- ✅ [AGENT][LOCAL] Install python dev dependencies (hypothesis) so the python stack feature-gate collects tests/test_greet_properties.py and tests/test_openapi.py — scope: pyproject.toml,tests/ (audit F-004)
+- ✅ [AGENT][LOCAL] Add README sections Features, Contributing, Security, License and re-run check-readme-health — scope: README.md (audit F-003)
+- ✅ [AGENT][LOCAL] Fix remaining validate-bootstrap failures: the check-build-plan-parallel gate (no sprint has a ### Parallel table), then re-run validate-bootstrap --quick — scope: BUILD_PLAN.md,scripts/ (audit F-001/F-002)
+
+## Open PRs and local lane (2026-11-28)
+
+- ✅ [AUTO] Merge Dependabot [#25](https://github.com/edwardlthompson/iris/pull/25) (chore(deps): bump the github-actions group with 3 updates)
+- ✅ [AUTO] Merge Dependabot [#24](https://github.com/edwardlthompson/iris/pull/24) (chore(deps): bump hono from 4.13.20 to 4.13.21 in /examples/node in the node-dependencies group)
+- ✅ [AGENT][LOCAL] Iris reads, patches, and runs allowlisted commands in the locked repo without becoming an IDE — scope: packages/host,apps/phone/www
+- ✅ [AGENT][LOCAL] Upgrade the workspaces from vitest 2.1.8 to vitest 5 so the lockfile drops unsupported vite 5.4.21 — scope: package.json,packages/,apps/,pnpm-lock.yaml (news P2, 2026-11-26) https://vite.dev/releases
+- ✅ [AGENT][LOCAL] Bump the apps/phone Android Gradle wrapper 8.14.3 → 8.14.8 and commit the regenerated wrapper jar and distributionSha256Sum — scope: apps/phone/android/gradle/wrapper/ (news P2, 2026-11-26) https://docs.gradle.org/8.14.8/release-notes.html
+
+## Sprint sheets 1–20 (2026-11-28)
+
+### Sprint 1 — protocol and schemas
+
+**Goal:** typed events and validated boundaries.  
+**Build:** `packages/protocol` with `zod` schemas for every event, `handoff.v1`, ledger rows, capability flags, provenance block, `Pool` and `ModelCard`. Export inferred types. Round-trip and rejection tests.  
+**Done when:** a full-thread fixture validates, a malformed event is rejected with a path, tests green.  
+**Do not:** touch network or filesystem.
+
+### Sprint 2 — host daemon and pairing
+
+**Goal:** a daemon that starts, pairs, idles.  
+**Build:** `packages/host`. CLI entry, config, X25519 keypair in keychain, six-digit fingerprint, pairing handshake, supervisor with `maxConcurrent` and `idleTtl`, structured logs, graceful shutdown.  
+**Done when:** matching fingerprints pair, mismatched refused, children reaped, `SIGTERM` clean.  
+**Do not:** bind public or implement transport.
+
+### Sprint 3 — LAN transport
+
+**Goal:** the phone reaches the host on LAN.  
+**Build:** ladder rank 1 only, mDNS discovery, `packages/relay-core` framing over WSS with XSalsa20-Poly1305, reconnect with backoff, active-rung reporting.  
+**Done when:** a test client completes a paired round-trip and survives a dropped socket.  
+**Do not:** add ranks 2–4.
+
+### Sprint 4 — ACP adapter
+
+**Goal:** drive one external agent end to end.  
+**Build:** `packages/adapter-acp`. JSON-RPC over stdio, initialise, session setup, prompt turn, tool-call surfacing, elicitation, cancellation, capabilities including `baseUrlOverride`. Fixture agent for tests.  
+**Done when:** a scripted session against the fixture streams, requests approval, cancels cleanly.  
+**Do not:** hardcode one agent's quirks.
+
+### Sprint 5 — Claude adapter
+
+**Goal:** Claude Code runs headless.  
+**Build:** `packages/adapter-claude` on the Agent SDK `query()`, `canUseTool` to the approval channel, statusline `rate_limits` into the quota store, resume, `ANTHROPIC_BASE_URL` override for pool mode.  
+**Done when:** a session runs with no terminal, an approval round-trips, quota recorded, base URL override honoured.  
+**Do not:** use PTY except behind a `screen` flag.
+
+### Sprint 6 — thread store
+
+**Goal:** every session recorded and replayable.  
+**Build:** `packages/thread`. Append-only writer with `seq`, atomic flush, replay, redaction, rotation at 500 turns.  
+**Done when:** a fixture replays to identical state and holds no secret-shaped strings.
+
+### Sprint 7 — ledger
+
+**Goal:** real cost per task.  
+**Build:** `packages/ledger`. Row writer with `topology` and `pool_id`, calibration per leg, estimate-versus-actual, shadow flag.  
+**Done when:** a session produces a row whose actuals override the reference estimate for that leg.
+
+### Sprint 8 — topology and pool layer
+
+**Goal:** the user picks direct or pool, and both work.  
+**Build:** `packages/pool` (`chrysaor`). Topology enum on the repo config. `Pool` and `ModelCard` implementations, canonical reconciliation table, health probes with degraded marking, preference ordering, local monthly and per-turn cap accounting. LiteLLM launch and config generation bound to `127.0.0.1`. A stub pool for tests.  
+**Done when:** direct mode routes with no pool configured; pool mode routes through the stub; an over-cap turn stops; two failed probes mark a pool degraded and routing skips it; swapping the pool config requires no code change.  
+**Do not:** store a pool key in Iris; do not bind LiteLLM to `0.0.0.0`.
+
+### Sprint 9 — stage 1 classifier
+
+**Goal:** local difficulty judgement.  
+**Build:** `packages/router` stage 1 only. Regex table and weights per Appendix B, repo signals, `unsure` emission, override ordering.  
+**Done when:** fixtures classify to the expected preset and ambiguous ones emit `unsure`.
+
+### Sprint 10 — stage 2 and policy gate
+
+**Goal:** Venice routing with a working fallback.  
+**Build:** Venice client, schema-validated response, cache, timeout, backoff, pause, `unclassified` path. Gate filtering by credentials, quota, cap, topology and pool health.  
+**Done when:** a slow Venice is bypassed inside 400 ms, malformed output falls back, a leg without credentials or a degraded pool is excluded.
+
+### Sprint 11 — presets and cost chip
+
+**Goal:** price visible before send.  
+**Build:** preset policies from B8, chip with 400 ms debounce and budget colouring, pin, leg picker, topology toggle, pool indicator, `suggest` mode, `ref. CursorBench` label.  
+**Done when:** the chip shows leg, model, effort, estimate and pool, and a pin survives reload.
+
+### Sprint 12 — handoff v1
+
+**Goal:** survive quota exhaustion.  
+**Build:** `handoff.v1` writer, quota-exhausted trigger, manual confirm, target selection from configured fallbacks, resume at the next turn boundary. In pool mode, handoff may stay inside one pool and switch model only.  
+**Done when:** a killed host resumes on the target with goal, state, constraints and next step intact.
+
+### Sprint 13 — benchmark refresh
+
+**Goal:** a table that never goes stale silently.  
+**Build:** `scripts/refresh-benchmarks.mjs` per Appendix D, weekly workflow, provenance, guardrails, staleness and badge.  
+**Done when:** an unchanged page commits nothing, a shrunken page opens a `needs review` PR, a 31-day-old table shows the badge.
+
+### Sprint 14 — Antigravity adapter
+
+**Goal:** the leg with no Auto mode gets one.  
+**Build:** custom driver over the running IDE, `headless: false`, disabled-state handling.  
+**Done when:** with the IDE closed the leg is disabled with a reason and routing continues.
+
+### Sprint 15 — packaging
+
+**Goal:** installable.  
+**Build:** Capacitor wrapper, unsigned APK, MSI tray build, deb and systemd unit, first-run wizard, optional LiteLLM component.  
+**Done when:** each artifact installs and the wizard completes a pairing.
+
+### Sprint 16 — fit report
+
+**Goal:** buying recommendations.  
+**Build:** `packages/plutus` metrics, dominance, card, report, empty state, apply and keep-two. Per-pool and per-model reporting in pool mode.  
+**Done when:** the acceptance list in B9 passes.
+
+### Sprint 17 — shadow to auto
+
+**Goal:** automatic routing, earned.  
+**Build:** shadow logging, 20-prompt gate, auto mode, badge, override, escalation notes.  
+**Done when:** shadow produces paired rows and auto is offered only past the gate.
+
+### Sprint 18 — push and wrapper
+
+**Goal:** approvals that wake the phone.  
+**Build:** APNs and FCM, permission flow, deep link to the approval sheet, background socket.  
+**Done when:** a backgrounded app receives an approval push and lands on the right thread.
+
+### Sprint 19 — stay paired off LAN
+
+**Goal:** a paired phone stays paired, including when it leaves the LAN.  
+**Build:** host stores a device token after the first 6-digit pair (same host key, no new code on restart). Phone keeps that token and tries addresses in ladder order: LAN, Tailscale if the host has it, then Cloudflare quick tunnel, then a custom tunnel. First working path wins; the active rung is shown and pinnable. Reconnect with backoff. The host still does not listen on the public internet.  
+**Done when:** after one pair, killing the host or leaving Wi-Fi does not show the gate again, as long as one rung answers.
+
+### Sprint 20 — Android APK and notifications
+
+**Goal:** the connected phone runs Iris as an app and gets the same alerts as Cursor Remote and Antigravity Remote.  
+**Build:** unsigned Capacitor APK, `adb install` onto every authorized device (`adb devices`). Local Android notifications when an agent finishes or is waiting (shade alert with an Open action), including while the WebView is backgrounded. Deep link opens the matching thread. FCM stays optional; the local notify path is the one the other remotes use.  
+**Done when:** `adb install` succeeds on each connected device and a finished turn posts a notification that opens Iris.
+
+
 ## Sprint 20 — Android APK and notifications (2026-11-26)
 
 - ✅ [AGENT][LOCAL] Unsigned Capacitor APK and `adb install` on connected devices — scope: apps/phone — Success on b5214fc6, 8bf09993, R52T10C5SEP
