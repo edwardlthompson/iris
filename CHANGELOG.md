@@ -6,6 +6,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.0](https://github.com/edwardlthompson/iris/compare/v1.13.2...v1.14.0) (2026-11-28)
+
+
+### Added
+
+* **adapter-acp:** JSON-RPC stdio client and fixture agent for sprint 4 ([68f2fd3](https://github.com/edwardlthompson/iris/commit/68f2fd3e84ebae99c81e9d11e12d44750aff1da4))
+* **adapter-antigravity:** IDE driver with closed-IDE disable for sprint 14 ([7061c04](https://github.com/edwardlthompson/iris/commit/7061c04e18d4a376ce759212875e1cd2456c16f2))
+* **adapter-claude:** FOSS runtime stub with approvals and quota for sprint 5 ([3f33475](https://github.com/edwardlthompson/iris/commit/3f33475bd320b767052e17f7056aa966f3686f9e))
+* **benchmarks:** weekly CursorBench refresh with guardrails for sprint 13 ([83ac224](https://github.com/edwardlthompson/iris/commit/83ac22406b25000772c543982b8735bb24b0759f))
+* **cursor:** credit-aware Cursor leg, host LAN pair, phone PWA for v0.1.0 ([f03f32b](https://github.com/edwardlthompson/iris/commit/f03f32b18a05db4be3a132c9f273632041e71eba))
+* desktop window, Android shell, and shared agent bar ([8e24d70](https://github.com/edwardlthompson/iris/commit/8e24d7030ca0d3e1279fd6b8907564e62f927bf9))
+* **handoff:** quota-exhausted handoff.v1 writer and resume for sprint 12 ([79d3033](https://github.com/edwardlthompson/iris/commit/79d30338cdd13deafe2fe5ae04405ab3386c0750))
+* **host:** daemon pairing supervisor and SIGTERM for sprint 2 ([e2bb2e5](https://github.com/edwardlthompson/iris/commit/e2bb2e5448183c1627609ee075f0862035e72d07))
+* **host:** real JSON pair/session control + Cursor leg status for device testing ([f1ce319](https://github.com/edwardlthompson/iris/commit/f1ce319edb94c9280706cf884f782f320b49c312))
+* **ledger:** row writer and per-leg calibration for sprint 7 ([2cb538a](https://github.com/edwardlthompson/iris/commit/2cb538a2e2eeffb85d7b50f6421f0276de5ef94c))
+* **packaging:** Capacitor phone shell, dry-run artifacts, first-run wizard for sprint 15 ([02c46ac](https://github.com/edwardlthompson/iris/commit/02c46aceaf889c3aa41a8f628faa83c51a71426e))
+* **plutus:** fit report metrics, dominance, and B9 cards for sprint 16 ([36d3020](https://github.com/edwardlthompson/iris/commit/36d30207c21244d681ab391474bcae2d435e8d1c))
+* **pool:** chrysaor topology, health, caps, and LiteLLM front for sprint 8 ([5ca9cab](https://github.com/edwardlthompson/iris/commit/5ca9cab3e084af9ee579ceb1d4d88bfddc95c916))
+* **protocol:** zod schemas and round-trip tests for sprint 1 ([b2d84c9](https://github.com/edwardlthompson/iris/commit/b2d84c9b0c3b3eeb76482d7520fc971f47b0c9d9))
+* **push:** APNs/FCM stubs, deep link, background approvals for sprint 18 ([93ba74f](https://github.com/edwardlthompson/iris/commit/93ba74f203f02f9fbe970659a93758d06832d29b))
+* **relay-core:** LAN WSS framing, discovery stub, and reconnect for sprint 3 ([c2d5ffe](https://github.com/edwardlthompson/iris/commit/c2d5ffe47c8f0926b788dc6c5dc542e07cb1b623))
+* **release:** ship v0.3.0 with stabilized Claude meter, dual dials, and file search ([9ea156e](https://github.com/edwardlthompson/iris/commit/9ea156e2f54e13bf174734180c3348497dcb14b5))
+* **remote:** B8 presets and debounced cost chip for sprint 11 ([07ffc99](https://github.com/edwardlthompson/iris/commit/07ffc99563fcdbf716df7cfc78bd83da917247fa))
+* **router:** shadow logging and gated auto mode for sprint 17 ([a0e11fa](https://github.com/edwardlthompson/iris/commit/a0e11fafb69c506ea65f9a00dea29454e407a50e))
+* **router:** stage 1 classifier with B1 weights and unsure for sprint 9 ([d010bae](https://github.com/edwardlthompson/iris/commit/d010baeaff44e481723564c7b84592d0b66e3366))
+* **router:** Venice stage 2 client and policy gate for sprint 10 ([bef46ab](https://github.com/edwardlthompson/iris/commit/bef46ab03653b2f140745853400a8412d4454fd0))
+* **thread:** append-only NDJSON store with redaction and rotation for sprint 6 ([9949e36](https://github.com/edwardlthompson/iris/commit/9949e36e7ace7196389d497cd97b42565404c299))
+
+
+### Fixed
+
+* **phone:** keep pairing after adb reverse drops ([d1c692b](https://github.com/edwardlthompson/iris/commit/d1c692b095bb576fa240cb0073b1934f003a672a))
+
 ## [Unreleased]
 
 ## [0.3.0] — Dual Antigravity dials, predictive file search, and pool runtime (2026-11-28)
